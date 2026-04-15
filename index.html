@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>代理渠道延保分润系统 · 产品原型 V1.3</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+
+/* ── 顶部导航 ── */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #fff; border-bottom: 1px solid #e8e8e8;
+  display: flex; align-items: center; height: 52px; padding: 0 16px; gap: 0;
+}
+.logo { font-size: 14px; font-weight: 800; color: #1677ff; margin-right: 20px; white-space: nowrap; }
+.nav-tabs { display: flex; gap: 2px; flex: 1; overflow-x: auto; }
+.nav-tab {
+  padding: 6px 13px; border-radius: 6px; font-size: 12.5px; cursor: pointer;
+  white-space: nowrap; color: #555; transition: all .15s; border: none; background: none;
+}
+.nav-tab:hover { background: #f0f5ff; color: #1677ff; }
+.nav-tab.active { background: #1677ff; color: #fff; }
+.role-badge {
+  margin-left: 12px; padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+}
+.badge-mgr { background: #fff0f0; color: #cf1322; }
+.badge-sales { background: #fff7e6; color: #d46b08; }
+.badge-agent { background: #e6f7ff; color: #0958d9; }
+.badge-none { background: #f5f5f5; color: #888; }
+
+/* ── 布局 ── */
+.main { margin-top: 52px; padding: 20px; display: flex; justify-content: center; }
+.page { display: none; width: 100%; max-width: 1160px; }
+.page.active { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+
+/* ── 手机外壳 ── */
+.phone-wrap { flex: 0 0 375px; }
+.phone {
+  width: 375px; background: #fff; border-radius: 36px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.15), 0 0 0 8px #1a1a1a, 0 0 0 9px #333;
+  overflow: hidden; display: flex; flex-direction: column; min-height: 700px;
+}
+.phone-status { background: #f7f8fa; padding: 10px 20px 4px; display: flex; justify-content: space-between; font-size: 11px; color: #888; }
+
+/* ── 手机头部 ── */
+.hd { padding: 16px 16px 22px; color: #fff; }
+.hd .role-tag { font-size: 11px; opacity: .75; background: rgba(255,255,255,.2); display: inline-block; padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
+.hd .title { font-size: 18px; font-weight: 800; }
+.hd .sub { font-size: 12px; opacity: .7; margin-top: 3px; }
+.hd .amount { font-size: 32px; font-weight: 800; margin: 6px 0 2px; }
+.hd-mgr { background: linear-gradient(135deg,#cf1322 0%,#ff4d4f 100%); }
+.hd-sales { background: linear-gradient(135deg,#d46b08 0%,#fa8c16 100%); }
+.hd-agent { background: linear-gradient(135deg,#1677ff 0%,#4096ff 100%); }
+.hd-dark { background: linear-gradient(135deg,#141414 0%,#434343 100%); }
+
+/* ── 手机内容区 ── */
+.phone-body { flex: 1; overflow-y: auto; background: #f7f8fa; padding: 12px; }
+
+/* ── 底部 Tab ── */
+.phone-footer { border-top: 1px solid #f0f0f0; background: #fff; display: flex; padding: 8px 0 14px; }
+.tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font-size: 10px; color: #888; transition: color .15s; }
+.tab-btn.on { color: #1677ff; }
+.tab-btn svg { width: 22px; height: 22px; }
+
+/* ── 卡片 ── */
+.card { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.card-t { font-size: 12px; color: #888; margin-bottom: 8px; font-weight: 600; }
+
+/* ── 统计格子 ── */
+.stat-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.stat-box { flex: 1; background: #f7f8fa; border-radius: 10px; padding: 10px 8px; text-align: center; }
+.stat-box .sv { font-size: 18px; font-weight: 800; }
+.stat-box .sl { font-size: 10px; color: #888; margin-top: 2px; }
+.blue { color: #1677ff; } .green { color: #52c41a; } .orange { color: #fa8c16; } .red { color: #ff4d4f; }
+
+/* ── 代理列表行 ── */
+.agent-row {
+  background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05); cursor: pointer; transition: box-shadow .15s;
+}
+.agent-row:hover { box-shadow: 0 3px 10px rgba(0,0,0,.1); }
+.agent-row .ar-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.agent-row .ar-name { font-size: 13px; font-weight: 700; }
+.agent-row .ar-tag { font-size: 10px; }
+.agent-row .ar-stats { display: flex; gap: 6px; }
+.agent-row .ar-stat { flex: 1; text-align: center; background: #f7f8fa; border-radius: 6px; padding: 5px 0; }
+.agent-row .ar-stat .n { font-size: 14px; font-weight: 700; }
+.agent-row .ar-stat .l { font-size: 10px; color: #888; margin-top: 1px; }
+.prog { height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; margin-top: 6px; }
+.prog-fill { height: 100%; border-radius: 2px; }
+.fill-blue { background: #1677ff; } .fill-green { background: #52c41a; } .fill-orange { background: #fa8c16; }
+
+/* ── 流水列表 ── */
+.flow-item { background: #fff; border-radius: 10px; padding: 11px 13px; margin-bottom: 7px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+.fi-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.ic-blue { background: #e6f4ff; } .ic-green { background: #f6ffed; } .ic-orange { background: #fff7e6; } .ic-red { background: #fff1f0; }
+.fi-info { flex: 1; min-width: 0; }
+.fi-title { font-size: 12.5px; font-weight: 600; }
+.fi-desc { font-size: 11px; color: #888; margin-top: 2px; }
+.fi-right { text-align: right; flex-shrink: 0; }
+.fi-amt { font-size: 13px; font-weight: 700; }
+.fi-time { font-size: 10px; color: #bbb; margin-top: 2px; }
+
+/* ── 标签 ── */
+.tag { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.t-blue { background: #e6f4ff; color: #1677ff; }
+.t-green { background: #f6ffed; color: #52c41a; }
+.t-orange { background: #fff7e6; color: #fa8c16; }
+.t-red { background: #fff1f0; color: #ff4d4f; }
+.t-gray { background: #f5f5f5; color: #888; }
+.t-purple { background: #f9f0ff; color: #722ed1; }
+
+/* ── 按钮 ── */
+.btn { display: block; width: 100%; padding: 13px; border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
+.btn-primary { background: #1677ff; color: #fff; }
+.btn-ghost { background: #f0f5ff; color: #1677ff; }
+.btn-sm { display: inline-block; padding: 5px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; width: auto; }
+.btn-warning { background: #fff7e6; color: #d46b08; }
+
+/* ── 输入 ── */
+.inp-g { margin-bottom: 12px; }
+.inp-g label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; }
+.inp-g input, .inp-g select { width: 100%; padding: 10px 12px; border: 1.5px solid #e8e8e8; border-radius: 8px; font-size: 14px; outline: none; }
+.inp-g input:focus, .inp-g select:focus { border-color: #1677ff; }
+.inp-big { font-size: 30px; font-weight: 800; border: none; border-bottom: 2px solid #e8e8e8; padding: 8px 0; width: 100%; outline: none; }
+.inp-big:focus { border-bottom-color: #1677ff; }
+
+/* ── 权限警告 ── */
+.perm-warn { background: #fff7e6; border: 1px solid #ffd591; border-radius: 8px; padding: 10px 12px; font-size: 11.5px; color: #873800; margin-bottom: 10px; }
+.perm-block { background: #f5f5f5; border-radius: 10px; padding: 24px; text-align: center; margin-top: 10px; }
+
+/* ── 分割线/节标题 ── */
+.sec-t { font-size: 11.5px; color: #888; font-weight: 600; margin-bottom: 8px; }
+.divider { height: 1px; background: #f0f0f0; margin: 10px 0; }
+.info-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+.info-row:last-child { border-bottom: none; }
+.info-row .lbl { color: #888; }
+
+/* ── 步骤条 ── */
+.steps { display: flex; align-items: center; margin: 10px 0; }
+.step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.step-dot { width: 20px; height: 20px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.sd-done { background: #52c41a; color: #fff; }
+.sd-now  { background: #1677ff; color: #fff; }
+.sd-wait { background: #f0f0f0; color: #bbb; }
+.step-label { font-size: 10px; color: #888; margin-top: 4px; }
+.step-line { flex: 1; height: 2px; }
+.sl-done { background: #52c41a; }
+.sl-wait { background: #f0f0f0; }
+
+/* ── 角色选择卡 ── */
+.role-card { border: 2px solid #e8e8e8; border-radius: 12px; padding: 14px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all .15s; }
+.role-card:hover, .role-card.sel { border-color: #1677ff; background: #f0f5ff; }
+.role-card .ri { font-size: 26px; }
+.role-card .rn { font-size: 14px; font-weight: 700; }
+.role-card .rd { font-size: 11.5px; color: #888; margin-top: 2px; }
+
+/* ── 右侧面板 ── */
+.side-panel { flex: 1; min-width: 320px; }
+.panel-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px; }
+.panel-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: #1a1a1a; border-left: 3px solid #1677ff; padding-left: 8px; }
+
+/* ── 后台 ── */
+.admin-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.admin-tbl th { background: #f7f8fa; padding: 9px 12px; text-align: left; border-bottom: 2px solid #e8e8e8; font-weight: 600; color: #555; white-space: nowrap; }
+.admin-tbl td { padding: 9px 12px; border-bottom: 1px solid #f5f5f5; color: #333; vertical-align: middle; }
+.admin-tbl tr:hover td { background: #fafafa; }
+
+/* ── 权限表 ── */
+.perm-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.perm-tbl th { background: #f7f8fa; padding: 9px 12px; text-align: left; border-bottom: 2px solid #e8e8e8; font-weight: 600; color: #555; }
+.perm-tbl td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; }
+.perm-tbl tr:hover td { background: #fafafa; }
+.perm-tbl td:nth-child(2),.perm-tbl td:nth-child(3),.perm-tbl td:nth-child(4) { text-align: center; }
+.py { color: #52c41a; font-weight: 700; }
+.pn { color: #d9d9d9; }
+.pp { color: #fa8c16; font-weight: 600; }
+.perm-group td:first-child { background: #f7f8fa; font-weight: 600; color: #555; font-size: 11px; padding: 7px 12px; }
+
+/* ── 时序图 ── */
+.flow-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.flow-tab { padding: 5px 13px; border-radius: 16px; font-size: 12px; cursor: pointer; background: #f0f2f5; color: #555; border: none; }
+.flow-tab.on { background: #1677ff; color: #fff; }
+.mermaid-wrap { overflow-x: auto; padding: 8px 0; background: #fafafa; border-radius: 8px; padding: 12px; }
+.flow-section { flex: 1; min-width: 0; }
+
+/* ── 层级树 ── */
+.tree { background: #f7f8fa; border-radius: 10px; padding: 16px; font-size: 13px; line-height: 2; }
+.tree .node { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 12px; font-weight: 700; font-size: 12px; }
+.n-mgr { background: #fff0f0; color: #cf1322; }
+.n-sales { background: #fff7e6; color: #d46b08; }
+.n-agent { background: #e6f7ff; color: #0958d9; }
+.tree-line { margin-left: 20px; border-left: 2px solid #e8e8e8; padding-left: 12px; }
+
+/* ── 高亮框 ── */
+.hl-blue { background: #e6f4ff; border: 1px solid #bae0ff; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.hl-red  { background: #fff1f0; border: 1px solid #ffa39e; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.hl-orange { background: #fff7e6; border: 1px solid #ffd591; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+
+code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ── 顶部导航 ── -->
+<nav class="top-nav">
+  <div class="logo">🔐 小万延保分润 V1.3</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="go('login')">角色登录</button>
+    <button class="nav-tab" onclick="go('mgr')">主管视图</button>
+    <button class="nav-tab" onclick="go('sales')">销售视图</button>
+    <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
+    <button class="nav-tab" onclick="go('admin')">后台管理端</button>
+    <button class="nav-tab" onclick="go('perm')">权限对比</button>
+    <button class="nav-tab" onclick="go('flow')">业务时序图</button>
+  </div>
+  <div class="role-badge badge-none" id="badge">未登录</div>
+</nav>
+
+<div class="main">
+
+<!-- ══════════════════════════════
+     页面 1：角色登录
+══════════════════════════════ -->
+<div class="page active" id="page-login">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="hd hd-dark">
+        <div class="role-tag">小万出行 · 代理联盟</div>
+        <div class="title">选择登录身份</div>
+        <div class="sub">不同角色对应不同数据范围</div>
+      </div>
+      <div class="phone-body">
+        <div class="inp-g"><label>手机号</label><input value="135****8888"/></div>
+        <div class="inp-g"><label>验证码</label><input placeholder="请输入验证码"/></div>
+        <div class="sec-t" style="margin-top:4px;">选择您的身份</div>
+        <div class="role-card sel" onclick="selRole(this,'mgr')">
+          <div class="ri">🏢</div>
+          <div><div class="rn">主管</div><div class="rd">查看所有代理渠道的库存、进销存与分润数据</div></div>
+        </div>
+        <div class="role-card" onclick="selRole(this,'sales')">
+          <div class="ri">👔</div>
+          <div><div class="rn">主管下的销售</div><div class="rd">查看自己负责的代理渠道的库存、进销存与分润数据</div></div>
+        </div>
+        <div class="role-card" onclick="selRole(this,'agent')">
+          <div class="ri">🏪</div>
+          <div><div class="rn">一级代理</div><div class="rd">查看本渠道库存、进销存与分润，可申请提现</div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="doLogin()">登录进入</button>
+        <div style="background:#f7f8fa;border-radius:10px;padding:12px;margin-top:12px;font-size:11.5px;color:#888;line-height:1.8;">
+          ⚠️ <strong>提现功能仅一级代理账号支持</strong>，主管与销售为公司内部角色，不通过小程序提现
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="panel-card">
+      <h3>三角色层级架构（V1.1）</h3>
+      <div class="tree">
+        <span class="node n-mgr">主管</span>
+        <span style="color:#888;font-size:12px;margin-left:8px;">数据范围：所有代理渠道 · 典型：郑秉倩/宁总</span>
+        <div class="tree-line">
+          <div style="margin-bottom:6px;">
+            <span class="node n-sales">销售 A</span>
+            <span style="color:#888;font-size:12px;margin-left:8px;">数据范围：负责的代理</span>
+            <div class="tree-line">
+              <span class="node n-agent">代理 甲</span>
+              <span style="color:#888;font-size:11px;margin-left:6px;">← Sales A 负责</span><br>
+              <span class="node n-agent" style="margin-top:4px;display:inline-block;">代理 乙</span>
+              <span style="color:#888;font-size:11px;margin-left:6px;">← Sales A 负责</span>
+            </div>
+          </div>
+          <div>
+            <span class="node n-sales">销售 B</span>
+            <span style="color:#888;font-size:12px;margin-left:8px;">数据范围：负责的代理</span>
+            <div class="tree-line">
+              <span class="node n-agent">代理 丙</span>
+              <span style="color:#888;font-size:11px;margin-left:6px;">← Sales B 负责</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:12.5px;color:#555;line-height:1.9;">
+        <strong>关键规则：</strong><br>
+        · 销售与代理的归属关系由<strong>后台运营统一配置</strong>，变更立即生效<br>
+        · 一个销售可负责多个代理；一个代理只归属一个销售<br>
+        · <strong>提现权限仅一级代理持有</strong>，主管与销售无提现入口<br>
+        · 分润以 <strong>SN 号</strong>为唯一标识匹配代理渠道，上限 80%
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>各角色数据范围速览</h3>
+      <table class="admin-tbl">
+        <tr><th>角色</th><th>库存/进销存</th><th>分润数据</th><th>提现</th></tr>
+        <tr><td><span class="node n-mgr" style="font-size:11px;">主管</span></td><td>所有代理</td><td>所有代理</td><td style="color:#d9d9d9;">✗</td></tr>
+        <tr><td><span class="node n-sales" style="font-size:11px;">销售</span></td><td>负责代理</td><td>负责代理</td><td style="color:#d9d9d9;">✗</td></tr>
+        <tr><td><span class="node n-agent" style="font-size:11px;">代理</span></td><td>本渠道</td><td>本渠道</td><td style="color:#52c41a;font-weight:700;">✅</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 2：主管视图
+══════════════════════════════ -->
+<div class="page" id="page-mgr">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="hd hd-mgr">
+        <div class="role-tag">🏢 主管视图 · 全部代理</div>
+        <div class="title">代理渠道总览</div>
+        <div style="font-size:11px;opacity:.75;margin-top:3px;">郑秉倩 · 数据范围：所有代理渠道</div>
+      </div>
+      <div class="phone-body" style="padding:0;position:relative;">
+
+        <!-- ▸ Tab: 总览 -->
+        <div class="tab-panel" id="mgr-tab-home" style="padding:12px;">
+          <div class="card">
+            <div class="card-t">全渠道汇总（本月）</div>
+            <div class="stat-row">
+              <div class="stat-box"><div class="sv blue">23</div><div class="sl">代理总数</div></div>
+              <div class="stat-box"><div class="sv blue">18,432</div><div class="sl">总库存</div></div>
+              <div class="stat-box"><div class="sv green">12,108</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">6,324</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv" style="color:#722ed1;">¥58,320</div><div class="sl">本月总分润</div></div>
+              <div class="stat-box"><div class="sv green">3,241</div><div class="sl">延保订单</div></div>
+              <div class="stat-box"><div class="sv orange">5</div><div class="sl">待审核提现</div></div>
+            </div>
+          </div>
+          <div class="sec-t">代理渠道列表 <span style="color:#bbb;font-weight:400;">可按激活率/分润排序</span></div>
+          <div class="agent-row" onclick="alert('下钻代理详情：黄石新捷顺名车\n主管可查看全量数据')">
+            <div class="ar-top">
+              <div><div class="ar-name">黄石新捷顺名车</div><div style="font-size:11px;color:#888;margin-top:2px;">负责销售：张明 · 进货 2024-10</div></div>
+              <span class="tag t-green">激活率 65.6%</span>
+            </div>
+            <div class="ar-stats">
+              <div class="ar-stat"><div class="n blue">2,000</div><div class="l">库存</div></div>
+              <div class="ar-stat"><div class="n green">1,312</div><div class="l">已激活</div></div>
+              <div class="ar-stat"><div class="n orange">688</div><div class="l">未激活</div></div>
+              <div class="ar-stat"><div class="n" style="color:#722ed1;">¥3,286</div><div class="l">分润余额</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+          </div>
+          <div class="agent-row" onclick="alert('下钻代理详情：飞鱼科技渠道')">
+            <div class="ar-top">
+              <div><div class="ar-name">飞鱼科技渠道</div><div style="font-size:11px;color:#888;margin-top:2px;">负责销售：李华 · 进货 2024-12</div></div>
+              <span class="tag t-orange">激活率 31%</span>
+            </div>
+            <div class="ar-stats">
+              <div class="ar-stat"><div class="n blue">1,000</div><div class="l">库存</div></div>
+              <div class="ar-stat"><div class="n green">310</div><div class="l">已激活</div></div>
+              <div class="ar-stat"><div class="n orange">690</div><div class="l">未激活</div></div>
+              <div class="ar-stat"><div class="n" style="color:#722ed1;">¥920</div><div class="l">分润余额</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-orange" style="width:31%"></div></div>
+          </div>
+          <div class="agent-row" onclick="alert('下钻代理详情：石新元汽配')">
+            <div class="ar-top">
+              <div><div class="ar-name">石新元汽配</div><div style="font-size:11px;color:#888;margin-top:2px;">负责销售：张明 · 进货 2025-01</div></div>
+              <span class="tag t-blue">激活率 82%</span>
+            </div>
+            <div class="ar-stats">
+              <div class="ar-stat"><div class="n blue">500</div><div class="l">库存</div></div>
+              <div class="ar-stat"><div class="n green">410</div><div class="l">已激活</div></div>
+              <div class="ar-stat"><div class="n orange">90</div><div class="l">未激活</div></div>
+              <div class="ar-stat"><div class="n" style="color:#722ed1;">¥1,640</div><div class="l">分润余额</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-blue" style="width:82%"></div></div>
+          </div>
+          <div style="text-align:center;color:#bbb;font-size:12px;padding:8px 0;">共 23 个代理渠道 · 上拉加载更多</div>
+        </div>
+
+        <!-- ▸ Tab: 库存 -->
+        <div class="tab-panel" id="mgr-tab-stock" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">全渠道库存汇总</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv blue">18,432</div><div class="sl">进货总量</div></div>
+              <div class="stat-box"><div class="sv green">12,108</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">6,324</div><div class="sl">未激活</div></div>
+            </div>
+          </div>
+          <div class="sec-t">各代理库存明细</div>
+          <!-- 代理1 -->
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">黄石新捷顺名车</div>
+              <span class="tag t-green">激活率 65.6%</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:8px;">负责销售：张明 · 最近进货：2024-10-08</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">2,000</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">1,312</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">688</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+            <div style="font-size:10px;color:#888;margin-top:4px;">SN 段：XW2024****0001 ~ 2000</div>
+          </div>
+          <!-- 代理2 -->
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">飞鱼科技渠道</div>
+              <span class="tag t-orange">激活率 31%</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:8px;">负责销售：李华 · 最近进货：2024-12-01</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">1,000</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">310</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">690</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-orange" style="width:31%"></div></div>
+            <div style="font-size:10px;color:#888;margin-top:4px;">SN 段：XW2024****5001 ~ 6000</div>
+          </div>
+          <!-- 代理3 -->
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">石新元汽配</div>
+              <span class="tag t-blue">激活率 82%</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:8px;">负责销售：张明 · 最近进货：2025-01-10</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">500</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">410</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">90</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-blue" style="width:82%"></div></div>
+            <div style="font-size:10px;color:#888;margin-top:4px;">SN 段：XW2025****9001 ~ 9500</div>
+          </div>
+          <div style="text-align:center;color:#bbb;font-size:12px;padding:6px 0;">共 23 个代理 · 上拉加载更多</div>
+        </div>
+
+        <!-- ▸ Tab: 分润 -->
+        <div class="tab-panel" id="mgr-tab-commission" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">全渠道分润汇总（本月）</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv" style="color:#722ed1;">¥58,320</div><div class="sl">本月分润总额</div></div>
+              <div class="stat-box"><div class="sv green">3,241</div><div class="sl">计费订单数</div></div>
+              <div class="stat-box"><div class="sv blue">¥5,746</div><div class="sl">已提现</div></div>
+            </div>
+          </div>
+          <!-- 各代理分润余额 -->
+          <div class="sec-t">各代理分润余额</div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;align-items:center;padding:10px 13px;border-bottom:1px solid #f5f5f5;gap:10px;">
+              <div style="flex:1;font-size:13px;font-weight:700;">黄石新捷顺名车</div>
+              <div style="font-size:12px;color:#722ed1;font-weight:700;">¥3,286.50</div>
+              <span class="tag t-green">20%</span>
+            </div>
+            <div style="display:flex;align-items:center;padding:10px 13px;border-bottom:1px solid #f5f5f5;gap:10px;">
+              <div style="flex:1;font-size:13px;font-weight:700;">飞鱼科技渠道</div>
+              <div style="font-size:12px;color:#722ed1;font-weight:700;">¥920.00</div>
+              <span class="tag t-orange">15%</span>
+            </div>
+            <div style="display:flex;align-items:center;padding:10px 13px;gap:10px;">
+              <div style="flex:1;font-size:13px;font-weight:700;">石新元汽配</div>
+              <div style="font-size:12px;color:#722ed1;font-weight:700;">¥1,640.00</div>
+              <span class="tag t-blue">20%</span>
+            </div>
+          </div>
+          <!-- 最新分润流水 -->
+          <div class="sec-t" style="margin-top:10px;">最新分润流水（全渠道）</div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">黄石新捷顺名车</div><div class="fi-desc">SN: XW2024****8832 · 延保¥29.9 · 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div class="fi-time">今天 14:32</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">石新元汽配</div><div class="fi-desc">SN: XW2025****9320 · 延保¥59.9 · 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥11.98</div><div class="fi-time">今天 11:05</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-orange">↩</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">退款补偿 · SN: XW2024****6001 · 延保¥29.9</div>
+              <div style="margin-top:3px;"><span class="tag t-orange">退款补偿</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-amt" style="color:#fa8c16;">+¥23.92</div><div class="fi-time">昨天 09:12</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">飞鱼科技渠道</div><div class="fi-desc">SN: XW2024****5460 · 延保¥19.9 · 15%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥2.99</div><div class="fi-time">昨天 08:48</div></div>
+          </div>
+        </div>
+
+        <!-- ▸ Tab: 提现记录 -->
+        <div class="tab-panel" id="mgr-tab-withdraw" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">提现申请汇总</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv orange">5</div><div class="sl">待审核</div></div>
+              <div class="stat-box"><div class="sv green">18</div><div class="sl">本月已通过</div></div>
+              <div class="stat-box"><div class="sv blue">¥5,746</div><div class="sl">本月已打款</div></div>
+            </div>
+          </div>
+          <div class="sec-t">最新提现申请</div>
+          <!-- 待审核 -->
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">申请金额：¥1,500.00 · 灵工平台</div>
+              <div style="margin-top:4px;"><span class="tag t-orange">待审核</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">今天 10:21</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-info">
+              <div class="fi-title">石新元汽配</div>
+              <div class="fi-desc">申请金额：¥800.00 · 灵工平台</div>
+              <div style="margin-top:4px;"><span class="tag t-orange">待审核</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">昨天 16:44</div></div>
+          </div>
+          <!-- 已打款 -->
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">打款金额：¥2,000.00 · 审核通过</div>
+              <div style="margin-top:4px;"><span class="tag t-green">已打款</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-info">
+              <div class="fi-title">飞鱼科技渠道</div>
+              <div class="fi-desc">打款金额：¥500.00 · 审核通过</div>
+              <div style="margin-top:4px;"><span class="tag t-green">已打款</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">2026-04-07</div></div>
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;font-size:11px;color:#888;margin-top:6px;">🔒 主管仅可查看提现记录，审核操作请前往后台管理端</div>
+        </div>
+
+        <!-- ▸ Tab: 我的 -->
+        <div class="tab-panel" id="mgr-tab-profile" style="display:none;padding:16px;">
+          <div style="text-align:center;padding:20px 0 16px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#cf1322,#ff4d4f);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;">🏢</div>
+            <div style="font-size:17px;font-weight:800;margin-bottom:4px;">郑秉倩</div>
+            <div><span class="tag t-red">主管</span></div>
+          </div>
+          <div class="card">
+            <div class="info-row"><span class="lbl">登录手机号</span><span style="font-weight:600;font-family:monospace;">135****8888</span></div>
+            <div class="info-row"><span class="lbl">角色权限</span><span>所有代理渠道（只读）</span></div>
+            <div class="info-row"><span class="lbl">账号状态</span><span class="tag t-green">正常</span></div>
+            <div class="info-row" style="border:none;"><span class="lbl">系统版本</span><span style="color:#bbb;">V1.3</span></div>
+          </div>
+          <button class="btn" style="background:#fff1f0;color:#cf1322;border:1.5px solid #ffa39e;margin-top:16px;font-size:14px;" onclick="doLogout()">退出登录</button>
+        </div>
+
+      </div>
+      <div class="phone-footer" style="padding:6px 0 12px;">
+        <div class="tab-btn on" onclick="switchTab('mgr','home',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>总览</div>
+        <div class="tab-btn" onclick="switchTab('mgr','stock',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.53 15.62 1 13.5 1c-1.23 0-2.34.58-3.13 1.47L10 3.88l-.37-.41C8.84 2.58 7.73 2 6.5 2 4.38 2 2 3.53 2 6c0 .48.11.92.18 1.36H0v2h24V8h-4V6zm-7.5-3c1.12 0 2.5.72 2.5 1.64.0.48-.17.92-.5 1.36H9.5C9.17 5.56 9 5.12 9 4.64 9 3.72 10.38 3 11.5 3zM4 10v10h16V10H4z"/></svg>库存</div>
+        <div class="tab-btn" onclick="switchTab('mgr','commission',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>分润</div>
+        <div class="tab-btn" onclick="switchTab('mgr','withdraw',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>提现记录</div>
+        <div class="tab-btn" onclick="switchTab('mgr','profile',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>135****8888</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="panel-card">
+      <h3>主管视图 · 权限说明</h3>
+      <div class="hl-blue">
+        <div style="font-size:13px;color:#0958d9;font-weight:700;margin-bottom:6px;">✅ 主管可查看的数据</div>
+        <div style="font-size:12px;color:#444;line-height:2;">
+          · 所有代理渠道的库存 / 进货 / 已激活 / 未激活数量<br>
+          · 所有代理渠道的分润账户余额及流水<br>
+          · 所有代理渠道的延保订单明细<br>
+          · 所有代理渠道的提现申请记录<br>
+          · 点击任意代理可下钻查看完整详情
+        </div>
+      </div>
+      <div class="hl-red">
+        <div style="font-size:13px;color:#cf1322;font-weight:700;margin-bottom:6px;">🚫 主管无权操作</div>
+        <div style="font-size:12px;color:#888;line-height:2;">
+          · 申请提现（主管为公司内部角色，不通过小程序提现）<br>
+          · 修改分润比例（后台运营权限）<br>
+          · SN 号段绑定/解绑（后台运营权限）
+        </div>
+      </div>
+      <div style="font-size:12.5px;color:#555;line-height:1.9;margin-top:4px;">
+        <strong>交互特点：</strong>代理列表支持按激活率/分润金额排序，点击任意代理行进入该代理详情页（含进销存+分润账户+延保订单全量数据）
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>代理详情下钻页示意</h3>
+      <div style="background:#f7f8fa;border-radius:10px;padding:12px;font-size:12.5px;line-height:2;color:#555;">
+        点击代理列表某行后进入详情页，内容包含：<br>
+        📦 <strong>进销存</strong>：进货批次列表 / 已激活数 / 未激活数<br>
+        💰 <strong>分润账户</strong>：余额 / 历史流水 / 提现记录<br>
+        📋 <strong>延保订单</strong>：SN / 金额 / 时间 / 分润金额<br>
+        <span style="color:#888;font-size:11px;">主管在详情页仅有只读权限，无提现/配置操作</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 3：销售视图
+══════════════════════════════ -->
+<div class="page" id="page-sales">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="hd hd-sales">
+        <div class="role-tag">👔 销售视图 · 负责代理</div>
+        <div class="title">我负责的代理</div>
+        <div style="font-size:11px;opacity:.75;margin-top:3px;">张明 · 负责 2 个代理渠道</div>
+      </div>
+      <div class="phone-body" style="padding:0;">
+
+        <!-- ▸ Tab: 总览 -->
+        <div class="tab-panel" id="sales-tab-home" style="padding:12px;">
+          <div class="perm-warn">⚠️ <strong>销售账号</strong>仅可查看您负责的代理数据，其他代理数据不可见；提现功能不开放</div>
+          <div class="card">
+            <div class="card-t">我负责的代理汇总</div>
+            <div class="stat-row">
+              <div class="stat-box"><div class="sv blue">2,500</div><div class="sl">总库存</div></div>
+              <div class="stat-box"><div class="sv green">1,722</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">778</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv" style="color:#722ed1;">¥4,926</div><div class="sl">合计分润余额</div></div>
+              <div class="stat-box"><div class="sv green">658</div><div class="sl">延保订单</div></div>
+            </div>
+          </div>
+          <div class="sec-t">我负责的代理（2个）</div>
+          <div class="agent-row" onclick="alert('下钻：黄石新捷顺名车\n您有权查看此代理完整数据')">
+            <div class="ar-top">
+              <div><div class="ar-name">黄石新捷顺名车</div><div style="font-size:11px;color:#888;margin-top:2px;">进货 2024-10 · SN: XW2024****0001~2000</div></div>
+              <span class="tag t-green">激活率 65.6%</span>
+            </div>
+            <div class="ar-stats">
+              <div class="ar-stat"><div class="n blue">2,000</div><div class="l">库存</div></div>
+              <div class="ar-stat"><div class="n green">1,312</div><div class="l">已激活</div></div>
+              <div class="ar-stat"><div class="n orange">688</div><div class="l">未激活</div></div>
+              <div class="ar-stat"><div class="n" style="color:#722ed1;">¥3,286</div><div class="l">分润余额</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+          </div>
+          <div class="agent-row" onclick="alert('下钻：石新元汽配\n您有权查看此代理完整数据')">
+            <div class="ar-top">
+              <div><div class="ar-name">石新元汽配</div><div style="font-size:11px;color:#888;margin-top:2px;">进货 2025-01 · SN: XW2025****0001~0500</div></div>
+              <span class="tag t-blue">激活率 82%</span>
+            </div>
+            <div class="ar-stats">
+              <div class="ar-stat"><div class="n blue">500</div><div class="l">库存</div></div>
+              <div class="ar-stat"><div class="n green">410</div><div class="l">已激活</div></div>
+              <div class="ar-stat"><div class="n orange">90</div><div class="l">未激活</div></div>
+              <div class="ar-stat"><div class="n" style="color:#722ed1;">¥1,640</div><div class="l">分润余额</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-blue" style="width:82%"></div></div>
+          </div>
+          <div class="perm-block">
+            <div style="font-size:22px;margin-bottom:6px;">🔒</div>
+            <div style="font-size:13px;font-weight:600;color:#555;">飞鱼科技渠道</div>
+            <div style="font-size:11px;color:#bbb;margin-top:4px;">该代理不在您的负责范围内，无权查看</div>
+          </div>
+        </div>
+
+        <!-- ▸ Tab: 库存 -->
+        <div class="tab-panel" id="sales-tab-stock" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">我负责代理库存汇总</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv blue">2,500</div><div class="sl">进货总量</div></div>
+              <div class="stat-box"><div class="sv green">1,722</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">778</div><div class="sl">未激活</div></div>
+            </div>
+          </div>
+          <div class="sec-t">各代理库存明细</div>
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">黄石新捷顺名车</div>
+              <span class="tag t-green">激活率 65.6%</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:8px;">最近进货：2024-10-08 · 批次数：2</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">2,000</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">1,312</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">688</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+            <div style="font-size:10px;color:#888;margin-top:4px;">SN 段：XW2024****0001 ~ 2000</div>
+          </div>
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">石新元汽配</div>
+              <span class="tag t-blue">激活率 82%</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:8px;">最近进货：2025-01-10 · 批次数：1</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">500</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">410</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">90</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-blue" style="width:82%"></div></div>
+            <div style="font-size:10px;color:#888;margin-top:4px;">SN 段：XW2025****9001 ~ 9500</div>
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;font-size:11px;color:#888;">🔒 销售仅可查看负责代理库存，无法查看其他代理</div>
+        </div>
+
+        <!-- ▸ Tab: 分润 -->
+        <div class="tab-panel" id="sales-tab-commission" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">我负责代理的分润汇总（本月）</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv" style="color:#722ed1;">¥4,926</div><div class="sl">合计余额</div></div>
+              <div class="stat-box"><div class="sv green">658</div><div class="sl">计费订单</div></div>
+              <div class="stat-box"><div class="sv blue">¥2,000</div><div class="sl">已提现</div></div>
+            </div>
+          </div>
+          <div class="sec-t">各代理分润余额</div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;align-items:center;padding:10px 13px;border-bottom:1px solid #f5f5f5;gap:10px;">
+              <div style="flex:1;font-size:13px;font-weight:700;">黄石新捷顺名车</div>
+              <div style="font-size:12px;color:#722ed1;font-weight:700;">¥3,286.50</div>
+              <span class="tag t-green">20%</span>
+            </div>
+            <div style="display:flex;align-items:center;padding:10px 13px;gap:10px;">
+              <div style="flex:1;font-size:13px;font-weight:700;">石新元汽配</div>
+              <div style="font-size:12px;color:#722ed1;font-weight:700;">¥1,640.00</div>
+              <span class="tag t-blue">20%</span>
+            </div>
+          </div>
+          <div class="sec-t" style="margin-top:10px;">最新分润流水</div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">黄石新捷顺名车</div><div class="fi-desc">SN: XW2024****8832 · 延保¥29.9 · 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div class="fi-time">今天 14:32</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">石新元汽配</div><div class="fi-desc">SN: XW2025****9320 · 延保¥59.9 · 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥11.98</div><div class="fi-time">今天 11:05</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-orange">↩</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">退款补偿 · SN: XW2024****6001 · 延保¥29.9</div>
+              <div style="margin-top:3px;"><span class="tag t-orange">退款补偿</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-amt" style="color:#fa8c16;">+¥23.92</div><div class="fi-time">昨天 09:12</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">黄石新捷顺名车</div><div class="fi-desc">SN: XW2024****7741 · 延保¥19.9 · 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥3.98</div><div class="fi-time">昨天 08:48</div></div>
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;font-size:11px;color:#888;margin-top:6px;">🔒 销售仅可查看分润数据，不可操作提现</div>
+        </div>
+
+        <!-- ▸ Tab: 提现记录 -->
+        <div class="tab-panel" id="sales-tab-withdraw" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">我负责代理的提现汇总</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv orange">2</div><div class="sl">待审核</div></div>
+              <div class="stat-box"><div class="sv green">10</div><div class="sl">本月已通过</div></div>
+              <div class="stat-box"><div class="sv blue">¥2,000</div><div class="sl">本月已打款</div></div>
+            </div>
+          </div>
+          <div class="sec-t">最新提现申请</div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">申请金额：¥1,500.00 · 灵工平台</div>
+              <div style="margin-top:4px;"><span class="tag t-orange">待审核</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">今天 10:21</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-info">
+              <div class="fi-title">黄石新捷顺名车</div>
+              <div class="fi-desc">打款金额：¥2,000.00 · 已到账</div>
+              <div style="margin-top:4px;"><span class="tag t-green">已打款</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-info">
+              <div class="fi-title">石新元汽配</div>
+              <div class="fi-desc">申请金额：¥800.00 · 灵工平台</div>
+              <div style="margin-top:4px;"><span class="tag t-orange">待审核</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">昨天 16:44</div></div>
+          </div>
+          <div style="background:#f5f5f5;border-radius:8px;padding:10px 12px;font-size:11px;color:#888;margin-top:6px;">🔒 销售仅可查看提现记录，审核操作由后台运营处理</div>
+        </div>
+
+        <!-- ▸ Tab: 我的 -->
+        <div class="tab-panel" id="sales-tab-profile" style="display:none;padding:16px;">
+          <div style="text-align:center;padding:20px 0 16px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#d46b08,#fa8c16);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;">👔</div>
+            <div style="font-size:17px;font-weight:800;margin-bottom:4px;">张明</div>
+            <div><span class="tag t-orange">主管下的销售</span></div>
+          </div>
+          <div class="card">
+            <div class="info-row"><span class="lbl">登录手机号</span><span style="font-weight:600;font-family:monospace;">138****6688</span></div>
+            <div class="info-row"><span class="lbl">员工ID</span><span>SM-2023-0082</span></div>
+            <div class="info-row"><span class="lbl">负责代理数</span><span class="blue" style="font-weight:700;">2 个</span></div>
+            <div class="info-row"><span class="lbl">账号状态</span><span class="tag t-green">正常</span></div>
+            <div class="info-row" style="border:none;"><span class="lbl">系统版本</span><span style="color:#bbb;">V1.3</span></div>
+          </div>
+          <button class="btn" style="background:#fff1f0;color:#cf1322;border:1.5px solid #ffa39e;margin-top:16px;font-size:14px;" onclick="doLogout()">退出登录</button>
+        </div>
+
+      </div>
+      <div class="phone-footer" style="padding:6px 0 12px;">
+        <div class="tab-btn on" onclick="switchTab('sales','home',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>总览</div>
+        <div class="tab-btn" onclick="switchTab('sales','stock',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.53 15.62 1 13.5 1c-1.23 0-2.34.58-3.13 1.47L10 3.88l-.37-.41C8.84 2.58 7.73 2 6.5 2 4.38 2 2 3.53 2 6c0 .48.11.92.18 1.36H0v2h24V8h-4V6zm-7.5-3c1.12 0 2.5.72 2.5 1.64.0.48-.17.92-.5 1.36H9.5C9.17 5.56 9 5.12 9 4.64 9 3.72 10.38 3 11.5 3zM4 10v10h16V10H4z"/></svg>库存</div>
+        <div class="tab-btn" onclick="switchTab('sales','commission',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>分润</div>
+        <div class="tab-btn" onclick="switchTab('sales','withdraw',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>提现记录</div>
+        <div class="tab-btn" onclick="switchTab('sales','profile',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>138****6688</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="panel-card">
+      <h3>销售视图 · 权限说明</h3>
+      <div class="hl-orange">
+        <div style="font-size:13px;color:#d46b08;font-weight:700;margin-bottom:6px;">✅ 销售可查看的数据</div>
+        <div style="font-size:12px;color:#444;line-height:2;">
+          · 后台配置中<strong>归属于自己</strong>的代理渠道列表<br>
+          · 各负责代理的库存 / 进货 / 已激活 / 未激活数量<br>
+          · 各负责代理的分润账户余额及流水<br>
+          · 各负责代理的延保订单明细<br>
+          · 点击负责代理可下钻查看完整详情
+        </div>
+      </div>
+      <div class="hl-red">
+        <div style="font-size:13px;color:#cf1322;font-weight:700;margin-bottom:6px;">🚫 销售无权访问</div>
+        <div style="font-size:12px;color:#888;line-height:2;">
+          · <strong>其他销售负责的代理数据</strong>（越权访问返回「无权限」）<br>
+          · 全渠道汇总数据（主管专属）<br>
+          · 申请提现（公司内部员工不通过小程序提现）<br>
+          · 修改分润比例 / SN 绑定（后台运营权限）
+        </div>
+      </div>
+      <div style="font-size:12.5px;color:#555;line-height:1.9;margin-top:4px;">
+        <strong>归属关系说明：</strong>销售能看到哪些代理，由<strong>后台运营在管理端配置</strong>，变更后立即生效，销售无法自行修改。若某代理未分配给任何销售，仅主管可见。
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>销售负责代理 · 对账场景示例</h3>
+      <div style="font-size:12.5px;color:#555;line-height:2;">
+        销售张明打开小程序，查看「黄石新捷顺名车」的分润流水，
+        核对本月延保订单共 <strong>165 笔</strong>、分润合计 <strong>¥986.70</strong>，
+        截图发给代理确认后，代理在小程序申请提现。<br>
+        <span style="color:#888;font-size:11px;">销售全程只读，不操作提现，由代理自行在小程序提交提现申请</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 4：一级代理视图
+══════════════════════════════ -->
+<div class="page" id="page-agent">
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="hd hd-agent">
+        <div class="role-tag">🏪 一级代理 · 本渠道</div>
+        <div style="font-size:13px;opacity:.85;">黄石新捷顺名车 · 分润账户余额</div>
+        <div class="amount">¥ 3,286.<span style="font-size:18px;">50</span></div>
+        <div style="font-size:11.5px;opacity:.7;">本月新增 ¥1,240 · 累计提现 ¥8,500</div>
+      </div>
+      <div class="phone-body" style="padding:0;">
+
+        <!-- ▸ Tab: 首页 -->
+        <div class="tab-panel" id="agent-tab-home" style="padding:12px;">
+          <div class="stat-row">
+            <div class="stat-box" style="cursor:pointer;" onclick="switchTab('agent','account',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(3)'))">
+              <div style="font-size:20px;">💳</div><div class="sl" style="font-size:12px;">提现</div>
+            </div>
+            <div class="stat-box" style="cursor:pointer;" onclick="switchTab('agent','stock',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(2)'))">
+              <div style="font-size:20px;">📦</div><div class="sl" style="font-size:12px;">库存</div>
+            </div>
+            <div class="stat-box" style="cursor:pointer;" onclick="switchTab('agent','orders',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(4)'))">
+              <div style="font-size:20px;">📋</div><div class="sl" style="font-size:12px;">订单</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-t">本渠道库存</div>
+            <div class="stat-row" style="margin-bottom:8px;">
+              <div class="stat-box"><div class="sv blue">2,000</div><div class="sl">进货总量</div></div>
+              <div class="stat-box"><div class="sv green">1,312</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">688</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+            <div style="font-size:11px;color:#888;margin-top:5px;">激活率 65.6%</div>
+          </div>
+          <div style="background:#fff7e6;border:1px solid #ffd591;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:11.5px;color:#873800;">
+            💡 如需退款，请联系客服处理，不支持自助退款
+          </div>
+          <div class="sec-t">最近分润流水</div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">SN: XW2024****8832</div><div class="fi-desc">延保 29.9元 · 分润比例 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div class="fi-time">今天 14:32</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">SN: XW2024****7741</div><div class="fi-desc">延保 59.9元 · 分润比例 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥11.98</div><div class="fi-time">今天 11:05</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-orange">↩</div>
+            <div class="fi-info">
+              <div class="fi-title">SN: XW2024****6001</div>
+              <div class="fi-desc">退款补偿 · 延保¥29.9 · 补偿¥23.92</div>
+              <div style="margin-top:3px;"><span class="tag t-orange">退款补偿</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-amt" style="color:#fa8c16;">+¥23.92</div><div class="fi-time">昨天 09:12</div></div>
+          </div>
+          <div class="flow-item">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info"><div class="fi-title">SN: XW2024****6620</div><div class="fi-desc">延保 19.9元 · 分润比例 20%</div></div>
+            <div class="fi-right"><div class="fi-amt green">+¥3.98</div><div class="fi-time">昨天 08:48</div></div>
+          </div>
+        </div>
+
+        <!-- ▸ Tab: 库存 -->
+        <div class="tab-panel" id="agent-tab-stock" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">本渠道库存汇总</div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue">2,000</div><div class="sl">进货总量</div></div>
+              <div class="stat-box"><div class="sv green">1,312</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange">688</div><div class="sl">未激活</div></div>
+            </div>
+            <div class="prog"><div class="prog-fill fill-green" style="width:65.6%"></div></div>
+            <div style="font-size:11px;color:#888;margin-top:5px;">激活率 65.6% · SN段：XW2024****0001 ~ 2000</div>
+          </div>
+          <div class="sec-t">进货批次列表</div>
+          <!-- 批次1 -->
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">第1批 · 2024-10-08</div>
+              <span class="tag t-green">激活率 70.4%</span>
+            </div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">1,000</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">704</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">296</div><div class="sl">未激活</div></div>
+            </div>
+            <div style="font-size:10px;color:#888;">SN：XW2024****0001 ~ 1000 · 分润比例 20%</div>
+          </div>
+          <!-- 批次2 -->
+          <div class="card" style="margin-bottom:8px;padding:11px 13px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">第2批 · 2024-11-15</div>
+              <span class="tag t-orange">激活率 60.8%</span>
+            </div>
+            <div class="stat-row" style="margin-bottom:6px;">
+              <div class="stat-box"><div class="sv blue" style="font-size:15px;">1,000</div><div class="sl">进货量</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:15px;">608</div><div class="sl">已激活</div></div>
+              <div class="stat-box"><div class="sv orange" style="font-size:15px;">392</div><div class="sl">未激活</div></div>
+            </div>
+            <div style="font-size:10px;color:#888;">SN：XW2024****1001 ~ 2000 · 分润比例 20%</div>
+          </div>
+          <div style="background:#e6f4ff;border:1px solid #bae0ff;border-radius:8px;padding:10px 12px;font-size:11px;color:#0958d9;">📦 如需新增进货，请联系您的负责销售：张明</div>
+        </div>
+
+        <!-- ▸ Tab: 账户 -->
+        <div class="tab-panel" id="agent-tab-account" style="display:none;padding:12px;">
+          <div class="card" style="border:1.5px solid #bae0ff;">
+            <div class="card-t" style="color:#1677ff;">💳 分润账户</div>
+            <div style="font-size:13px;color:#555;margin-bottom:4px;">可提现余额</div>
+            <div style="font-size:30px;font-weight:800;color:#1677ff;margin-bottom:10px;">¥3,286.<span style="font-size:18px;">50</span></div>
+            <div style="display:flex;gap:8px;font-size:11px;color:#888;margin-bottom:14px;">
+              <span>本月新增 <strong style="color:#52c41a;">¥1,240</strong></span>
+              <span>·</span>
+              <span>累计提现 <strong>¥8,500</strong></span>
+            </div>
+            <div class="inp-g" style="margin-bottom:8px;"><label>提现金额</label><input class="inp-big" placeholder="0.00" value="1500.00" style="font-size:24px;padding:6px 0;"/></div>
+            <button class="btn btn-primary" style="padding:11px;" onclick="alert('提现申请已提交\n预计1-3工作日到账\n灵工平台审核中')">申请提现</button>
+            <div style="font-size:11px;color:#888;margin-top:8px;line-height:1.7;">提现后 1-3 工作日到账 · 首次需完成灵工平台实名认证</div>
+          </div>
+          <div class="sec-t" style="margin-top:4px;">提现记录</div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-info">
+              <div class="fi-title">申请金额：¥2,000.00</div>
+              <div class="fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
+              <div style="margin-top:3px;"><span class="tag t-green">已到账</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-info">
+              <div class="fi-title">申请金额：¥1,500.00</div>
+              <div class="fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
+              <div style="margin-top:3px;"><span class="tag t-green">已到账</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">2026-03-15</div></div>
+          </div>
+          <div class="flow-item" style="align-items:flex-start;">
+            <div class="fi-icon ic-orange">⏳</div>
+            <div class="fi-info">
+              <div class="fi-title">申请金额：¥1,500.00</div>
+              <div class="fi-desc">灵工平台 · 运营审核中</div>
+              <div style="margin-top:3px;"><span class="tag t-orange">审核中</span></div>
+            </div>
+            <div class="fi-right"><div class="fi-time">今天 10:21</div></div>
+          </div>
+          <div class="steps" style="margin-top:12px;">
+            <div class="step"><div class="step-dot sd-done">✓</div><div class="step-label">灵工注册</div></div>
+            <div class="step-line sl-done"></div>
+            <div class="step"><div class="step-dot sd-now">2</div><div class="step-label">申请提现</div></div>
+            <div class="step-line sl-wait"></div>
+            <div class="step"><div class="step-dot sd-wait">3</div><div class="step-label">运营审核</div></div>
+            <div class="step-line sl-wait"></div>
+            <div class="step"><div class="step-dot sd-wait">4</div><div class="step-label">打款到账</div></div>
+          </div>
+        </div>
+
+        <!-- ▸ Tab: 订单 -->
+        <div class="tab-panel" id="agent-tab-orders" style="display:none;padding:12px;">
+          <div class="card">
+            <div class="card-t">本月延保订单汇总</div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv green">165</div><div class="sl">本月订单数</div></div>
+              <div class="stat-box"><div class="sv blue">¥986.70</div><div class="sl">本月分润合计</div></div>
+              <div class="stat-box"><div class="sv orange">2</div><div class="sl">退款订单</div></div>
+            </div>
+          </div>
+          <div class="sec-t">延保订单列表</div>
+          <!-- 订单项 -->
+          <div class="flow-item" onclick="alert('订单详情\nSN: XW2024****8832\n延保版本：标准版 ¥29.9\n激活时间：2026-04-10 14:32\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info">
+              <div class="fi-title">SN: XW2024****8832</div>
+              <div class="fi-desc">标准版 ¥29.9 · 2026-04-10 14:32</div>
+            </div>
+            <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div style="font-size:10px;"><span class="tag t-green" style="font-size:9px;">正常</span></div></div>
+          </div>
+          <div class="flow-item" onclick="alert('订单详情\nSN: XW2024****7741\n延保版本：高级版 ¥59.9\n激活时间：2026-04-10 11:05\n分润金额：¥11.98\n状态：正常')" style="cursor:pointer;">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info">
+              <div class="fi-title">SN: XW2024****7741</div>
+              <div class="fi-desc">高级版 ¥59.9 · 2026-04-10 11:05</div>
+            </div>
+            <div class="fi-right"><div class="fi-amt green">+¥11.98</div><div style="font-size:10px;"><span class="tag t-green" style="font-size:9px;">正常</span></div></div>
+          </div>
+          <div class="flow-item" onclick="alert('订单详情\nSN: XW2024****6001\n延保版本：标准版 ¥29.9\n激活时间：2026-04-08 15:00\n退款时间：2026-04-09\n补偿金额：¥23.92\n状态：已退款')" style="cursor:pointer;">
+            <div class="fi-icon ic-orange">↩</div>
+            <div class="fi-info">
+              <div class="fi-title">SN: XW2024****6001</div>
+              <div class="fi-desc">标准版 ¥29.9 · 退款补偿¥23.92</div>
+            </div>
+            <div class="fi-right"><div class="fi-amt" style="color:#fa8c16;">退款</div><div style="font-size:10px;"><span class="tag t-orange" style="font-size:9px;">已退款</span></div></div>
+          </div>
+          <div class="flow-item" onclick="alert('订单详情\nSN: XW2024****6620\n延保版本：基础版 ¥19.9\n激活时间：2026-04-09 08:48\n分润金额：¥3.98\n状态：正常')" style="cursor:pointer;">
+            <div class="fi-icon ic-blue">💎</div>
+            <div class="fi-info">
+              <div class="fi-title">SN: XW2024****6620</div>
+              <div class="fi-desc">基础版 ¥19.9 · 2026-04-09 08:48</div>
+            </div>
+            <div class="fi-right"><div class="fi-amt green">+¥3.98</div><div style="font-size:10px;"><span class="tag t-green" style="font-size:9px;">正常</span></div></div>
+          </div>
+          <div style="text-align:center;color:#bbb;font-size:12px;padding:6px 0;">共 165 笔订单 · 上拉加载更多</div>
+        </div>
+
+        <!-- ▸ Tab: 我的 -->
+        <div class="tab-panel" id="agent-tab-profile" style="display:none;padding:16px;">
+          <div style="text-align:center;padding:20px 0 16px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#1677ff,#4096ff);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;">🏪</div>
+            <div style="font-size:17px;font-weight:800;margin-bottom:4px;">黄石新捷顺名车</div>
+            <div><span class="tag t-blue">一级代理</span></div>
+          </div>
+          <div class="card">
+            <div class="info-row"><span class="lbl">登录手机号</span><span style="font-weight:600;font-family:monospace;">135****8888</span></div>
+            <div class="info-row"><span class="lbl">代理渠道</span><span>黄石新捷顺名车</span></div>
+            <div class="info-row"><span class="lbl">负责销售</span><span>张明</span></div>
+            <div class="info-row"><span class="lbl">分润比例</span><span class="blue" style="font-weight:700;">20%</span></div>
+            <div class="info-row"><span class="lbl">账号状态</span><span class="tag t-green">正常</span></div>
+            <div class="info-row" style="border:none;"><span class="lbl">系统版本</span><span style="color:#bbb;">V1.3</span></div>
+          </div>
+          <button class="btn" style="background:#fff1f0;color:#cf1322;border:1.5px solid #ffa39e;margin-top:16px;font-size:14px;" onclick="doLogout()">退出登录</button>
+        </div>
+
+      </div>
+      <div class="phone-footer" style="padding:6px 0 12px;">
+        <div class="tab-btn on" onclick="switchTab('agent','home',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>首页</div>
+        <div class="tab-btn" onclick="switchTab('agent','stock',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.53 15.62 1 13.5 1c-1.23 0-2.34.58-3.13 1.47L10 3.88l-.37-.41C8.84 2.58 7.73 2 6.5 2 4.38 2 2 3.53 2 6c0 .48.11.92.18 1.36H0v2h24V8h-4V6zm-7.5-3c1.12 0 2.5.72 2.5 1.64.0.48-.17.92-.5 1.36H9.5C9.17 5.56 9 5.12 9 4.64 9 3.72 10.38 3 11.5 3zM4 10v10h16V10H4z"/></svg>库存</div>
+        <div class="tab-btn" onclick="switchTab('agent','account',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>账户</div>
+        <div class="tab-btn" onclick="switchTab('agent','orders',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>订单</div>
+        <div class="tab-btn" onclick="switchTab('agent','profile',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>135****8888</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="panel-card">
+      <h3>一级代理 · 权限说明</h3>
+      <div class="hl-blue">
+        <div style="font-size:13px;color:#0958d9;font-weight:700;margin-bottom:6px;">✅ 代理可查看/操作的内容</div>
+        <div style="font-size:12px;color:#444;line-height:2;">
+          · 本渠道库存（进货总量 / 已激活 / 未激活 / 激活率）<br>
+          · 本渠道分润账户余额及历史流水<br>
+          · 本渠道延保订单明细（SN / 金额 / 分润金额）<br>
+          · <strong>申请提现</strong>（灵工平台，1-3工作日）<br>
+          · 查看提现历史记录
+        </div>
+      </div>
+      <div class="hl-red">
+        <div style="font-size:13px;color:#cf1322;font-weight:700;margin-bottom:6px;">🚫 代理无权访问</div>
+        <div style="font-size:12px;color:#888;line-height:2;">
+          · 其他代理渠道的任何数据<br>
+          · 全渠道汇总数据<br>
+          · 修改分润比例（后台运营权限）<br>
+          · SN 号段绑定操作（后台运营权限）
+        </div>
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>提现流程说明</h3>
+      <div class="steps">
+        <div class="step"><div class="step-dot sd-done">✓</div><div class="step-label">灵工注册</div></div>
+        <div class="step-line sl-done"></div>
+        <div class="step"><div class="step-dot sd-now">2</div><div class="step-label">申请提现</div></div>
+        <div class="step-line sl-wait"></div>
+        <div class="step"><div class="step-dot sd-wait">3</div><div class="step-label">运营审核</div></div>
+        <div class="step-line sl-wait"></div>
+        <div class="step"><div class="step-dot sd-wait">4</div><div class="step-label">打款到账</div></div>
+      </div>
+      <div style="font-size:12px;color:#888;line-height:1.8;margin-top:8px;">
+        · 首次提现需完成灵工平台实名（身份证+银行卡+人脸，一次性）<br>
+        · 提交申请后 <strong>1-3 个工作日</strong>人工审核<br>
+        · 审核通过后灵工平台自动打款至绑定银行卡<br>
+        · 主管与销售<strong>无此流程</strong>
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>分润计算规则</h3>
+      <table class="admin-tbl">
+        <tr><th>延保产品</th><th>售价</th><th>分润比例</th><th>分润金额</th></tr>
+        <tr><td>基础版</td><td>¥19.9</td><td>20%</td><td><strong class="green">¥3.98</strong></td></tr>
+        <tr><td>标准版</td><td>¥29.9</td><td>20%</td><td><strong class="green">¥5.98</strong></td></tr>
+        <tr><td>高级版</td><td>¥59.9</td><td>20%</td><td><strong class="green">¥11.98</strong></td></tr>
+      </table>
+      <div style="font-size:11px;color:#888;margin-top:8px;">* 分润比例由后台运营配置，不同代理可不同，上限 80%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 5：后台管理端
+══════════════════════════════ -->
+<div class="page" id="page-admin">
+  <div style="width:100%;max-width:1100px;">
+
+    <div class="panel-card">
+      <h3>平台整体数据看板（后台运营）</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">23</div><div class="sl">代理渠道数</div></div>
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">18,432</div><div class="sl">SN绑定总量</div></div>
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv green">12,108</div><div class="sl">已激活</div></div>
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv" style="color:#722ed1;">¥58,320</div><div class="sl">待结算分润</div></div>
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv orange">5</div><div class="sl">待审核提现</div></div>
+        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">8</div><div class="sl">销售人员数</div></div>
+      </div>
+    </div>
+
+    <!-- 销售-代理归属配置（新增） -->
+    <div class="panel-card">
+      <h3>销售-代理归属关系配置（V1.1 新增）</h3>
+      <div class="hl-orange" style="font-size:12px;margin-bottom:14px;">
+        ⚠️ 此配置决定销售账号可查看哪些代理的数据，变更后<strong>立即生效</strong>。一个代理只能归属一个销售。
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <select style="flex:1;min-width:140px;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"><option>全部销售</option><option>张明</option><option>李华</option></select>
+        <button class="btn btn-primary btn-sm" style="padding:8px 16px;">+ 新增归属配置</button>
+      </div>
+      <table class="admin-tbl">
+        <tr><th>销售人员</th><th>负责代理渠道</th><th>代理数量</th><th>合计库存</th><th>合计未激活</th><th>合计分润余额</th><th>操作</th></tr>
+        <tr>
+          <td><strong>张明</strong></td>
+          <td>黄石新捷顺名车、石新元汽配</td>
+          <td>2</td><td>2,500</td>
+          <td><span class="orange">778</span></td>
+          <td><span style="color:#722ed1;font-weight:700;">¥4,926</span></td>
+          <td><button class="btn btn-ghost btn-sm">编辑归属</button></td>
+        </tr>
+        <tr>
+          <td><strong>李华</strong></td>
+          <td>飞鱼科技渠道</td>
+          <td>1</td><td>1,000</td>
+          <td><span class="orange">690</span></td>
+          <td><span style="color:#722ed1;font-weight:700;">¥920</span></td>
+          <td><button class="btn btn-ghost btn-sm">编辑归属</button></td>
+        </tr>
+        <tr>
+          <td><strong>（无归属）</strong></td>
+          <td style="color:#ff4d4f;">新进渠道A、新进渠道B</td>
+          <td>2</td><td>800</td>
+          <td><span class="orange">800</span></td>
+          <td>—</td>
+          <td><button class="btn btn-primary btn-sm">分配销售</button></td>
+        </tr>
+      </table>
+      <div style="font-size:11.5px;color:#888;margin-top:10px;">无归属销售的代理，仅主管可在小程序内查看其数据；代理自身访问不受影响</div>
+    </div>
+
+    <!-- SN 号段管理 -->
+    <div class="panel-card">
+      <h3>SN 号段绑定管理</h3>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <input placeholder="搜索 SN / 代理名称" style="flex:1;min-width:160px;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+        <select style="padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"><option>全部代理</option><option>黄石新捷顺名车</option></select>
+        <button class="btn btn-primary btn-sm" style="padding:8px 16px;">+ 新增绑定</button>
+      </div>
+      <table class="admin-tbl">
+        <tr><th>SN 号段</th><th>数量</th><th>代理渠道</th><th>归属销售</th><th>录入时间</th><th>已激活</th><th>未激活</th><th>状态</th><th>操作</th></tr>
+        <tr>
+          <td><code>XW2024****0001~1000</code></td><td>1,000</td>
+          <td>黄石新捷顺名车</td><td>张明</td><td>2024-10-08</td>
+          <td class="green">832</td><td class="orange">168</td>
+          <td><span class="tag t-green">正常</span></td>
+          <td><button class="btn btn-ghost btn-sm">详情</button></td>
+        </tr>
+        <tr>
+          <td><code>XW2024****5001~6000</code></td><td>1,000</td>
+          <td>飞鱼科技渠道</td><td>李华</td><td>2024-12-01</td>
+          <td class="green">310</td><td class="orange">690</td>
+          <td><span class="tag t-green">正常</span></td>
+          <td><button class="btn btn-ghost btn-sm">详情</button></td>
+        </tr>
+        <tr>
+          <td><code>XW2025****9001~9500</code></td><td>500</td>
+          <td><span class="red">未绑定</span></td><td>—</td><td>2025-01-10</td>
+          <td>—</td><td>—</td>
+          <td><span class="tag t-red">待绑定</span></td>
+          <td><button class="btn btn-primary btn-sm">绑定</button></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 分润比例配置 -->
+    <div class="panel-card">
+      <h3>代理分润比例配置</h3>
+      <div class="hl-orange" style="font-size:12px;margin-bottom:12px;">⚠️ 系统上限 80%，变更记录自动留存日志</div>
+      <table class="admin-tbl">
+        <tr><th>代理渠道</th><th>归属销售</th><th>当前比例</th><th>19.9元分润</th><th>29.9元分润</th><th>59.9元分润</th><th>最近修改</th><th>操作</th></tr>
+        <tr><td><strong>黄石新捷顺名车</strong></td><td>张明</td><td class="blue"><strong>20%</strong></td><td>¥3.98</td><td>¥5.98</td><td>¥11.98</td><td style="color:#888;font-size:12px;">2024-10-01</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
+        <tr><td><strong>飞鱼科技渠道</strong></td><td>李华</td><td class="blue"><strong>15%</strong></td><td>¥2.99</td><td>¥4.49</td><td>¥8.99</td><td style="color:#888;font-size:12px;">2024-11-20</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
+        <tr><td><strong>新进渠道（试用）</strong></td><td>—</td><td style="color:#888;"><strong>10%</strong></td><td>¥1.99</td><td>¥2.99</td><td>¥5.99</td><td style="color:#888;font-size:12px;">2025-01-05</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
+      </table>
+    </div>
+
+    <!-- 提现审核 -->
+    <div class="panel-card">
+      <h3>提现审核队列（仅一级代理可发起申请）</h3>
+      <table class="admin-tbl">
+        <tr><th>申请时间</th><th>代理渠道</th><th>归属销售</th><th>提现金额</th><th>灵工账户</th><th>状态</th><th>操作</th></tr>
+        <tr>
+          <td>2026-04-14 10:22</td><td>黄石新捷顺名车</td><td>张明</td>
+          <td><strong class="blue">¥1,500.00</strong></td><td style="font-size:12px;">138****9920</td>
+          <td><span class="tag t-orange">待审核</span></td>
+          <td><button class="btn btn-primary btn-sm" style="margin-right:4px;">通过</button><button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;">拒绝</button></td>
+        </tr>
+        <tr>
+          <td>2026-04-13 15:38</td><td>飞鱼科技渠道</td><td>李华</td>
+          <td><strong class="blue">¥800.00</strong></td><td style="font-size:12px;">135****7710</td>
+          <td><span class="tag t-orange">待审核</span></td>
+          <td><button class="btn btn-primary btn-sm" style="margin-right:4px;">通过</button><button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;">拒绝</button></td>
+        </tr>
+        <tr>
+          <td>2026-04-12 09:15</td><td>黄石新捷顺名车</td><td>张明</td>
+          <td><strong class="green">¥2,000.00</strong></td><td style="font-size:12px;">138****9920</td>
+          <td><span class="tag t-green">已打款</span></td>
+          <td><button class="btn btn-ghost btn-sm">查看凭证</button></td>
+        </tr>
+      </table>
+      <div style="font-size:12px;color:#888;margin-top:10px;">提现审核 1-3 工作日完成 → 通过后灵工平台自动打款</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 6：权限对比
+══════════════════════════════ -->
+<div class="page" id="page-perm">
+  <div style="width:100%;max-width:900px;">
+    <div class="panel-card">
+      <h3>三角色权限全量对比（V1.1）</h3>
+      <table class="perm-tbl">
+        <tr>
+          <th style="width:35%;">功能 / 数据范围</th>
+          <th>🏢 主管</th>
+          <th>👔 销售</th>
+          <th>🏪 一级代理</th>
+        </tr>
+        <tr class="perm-group"><td colspan="4">📦 库存 / 进销存</td></tr>
+        <tr><td>查看库存总览</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>进货数量</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>已激活数量</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>未激活数量</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>下钻代理详情</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="pn">— 无需</td></tr>
+        <tr><td>SN号段绑定/解绑</td><td class="pn">✗（后台运营）</td><td class="pn">✗</td><td class="pn">✗</td></tr>
+
+        <tr class="perm-group"><td colspan="4">💰 分润数据</td></tr>
+        <tr><td>分润账户余额</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>分润流水明细</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>延保订单明细</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>配置分润比例</td><td class="pn">✗（后台运营）</td><td class="pn">✗</td><td class="pn">✗</td></tr>
+
+        <tr class="perm-group"><td colspan="4">💳 提现</td></tr>
+        <tr><td>申请提现</td><td class="pn">✗ 无权限</td><td class="pn">✗ 无权限</td><td class="py">✅ 仅代理</td></tr>
+        <tr><td>查看提现记录</td><td class="py">✅ 所有代理</td><td class="pp">△ 负责代理</td><td class="py">✅ 本渠道</td></tr>
+        <tr><td>审核提现申请</td><td class="pn">✗（后台运营）</td><td class="pn">✗</td><td class="pn">✗</td></tr>
+
+        <tr class="perm-group"><td colspan="4">👥 人员管理</td></tr>
+        <tr><td>查看所有代理列表</td><td class="py">✅</td><td class="pn">✗</td><td class="pn">✗</td></tr>
+        <tr><td>查看负责代理列表</td><td class="py">✅（全量）</td><td class="py">✅（负责的）</td><td class="pn">✗</td></tr>
+        <tr><td>配置销售-代理归属</td><td class="pn">✗（后台运营）</td><td class="pn">✗</td><td class="pn">✗</td></tr>
+      </table>
+      <div style="margin-top:12px;display:flex;gap:16px;font-size:12px;color:#888;flex-wrap:wrap;">
+        <span><span class="py">✅</span> 完全权限</span>
+        <span><span class="pp">△</span> 仅限负责范围</span>
+        <span><span class="pn">✗</span> 无权限</span>
+        <span style="color:#bbb;">括号内说明权限归属</span>
+      </div>
+    </div>
+    <div class="panel-card">
+      <h3>数据范围边界规则</h3>
+      <table class="admin-tbl">
+        <tr><th>场景</th><th>主管</th><th>销售</th><th>代理</th></tr>
+        <tr><td>代理A与代理B同属一个销售</td><td class="green">均可见</td><td class="green">均可见</td><td style="color:#d9d9d9;">不可见</td></tr>
+        <tr><td>代理A归销售X，代理B归销售Y</td><td class="green">均可见</td><td style="color:#fa8c16;">仅各自负责的</td><td style="color:#d9d9d9;">不可见</td></tr>
+        <tr><td>代理未分配给任何销售</td><td class="green">可见</td><td style="color:#d9d9d9;">不可见</td><td class="green">自己可见</td></tr>
+        <tr><td>销售越权访问非负责代理</td><td>—</td><td class="red">返回「无权限」</td><td>—</td></tr>
+        <tr><td>归属关系变更后</td><td>—</td><td class="green">立即生效</td><td class="green">不受影响</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 7：业务时序图
+══════════════════════════════ -->
+<div class="page" id="page-flow">
+  <div class="flow-section">
+    <div class="panel-card">
+      <h3>核心链路时序图（V1.1 · 6条链路）</h3>
+      <div class="flow-tabs">
+        <button class="flow-tab on"  onclick="sf(this,'f1')">A.1 登录与视图路由</button>
+        <button class="flow-tab" onclick="sf(this,'f2')">A.2 主管/销售下钻详情</button>
+        <button class="flow-tab" onclick="sf(this,'f3')">A.3 延保分润入账</button>
+        <button class="flow-tab" onclick="sf(this,'f4')">A.4 代理提现</button>
+        <button class="flow-tab" onclick="sf(this,'f5')">A.5 销售-代理归属配置</button>
+        <button class="flow-tab" onclick="sf(this,'f6')">A.6 退款管控</button>
+      </div>
+
+      <div id="f1" class="mermaid-wrap">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor 用户
+    participant MP as 代理端小程序
+    participant Auth as 认证服务
+    participant Perm as 权限引擎
+    participant DS as 数据服务
+
+    用户->>MP: 登录（手机号+验证码）
+    MP->>Auth: 验证身份
+    Auth-->>MP: 返回账号信息（含角色类型）
+    MP->>Perm: 查询角色权限与数据范围
+
+    alt 角色=主管
+        Perm-->>MP: 数据范围=全部代理渠道
+        MP->>DS: 拉取所有代理汇总数据
+        DS-->>MP: 全量代理列表+库存+进销存+分润
+        MP-->>用户: 展示主管视图·全代理总览
+    else 角色=主管下的销售
+        Perm-->>MP: 数据范围=负责代理渠道ID列表
+        MP->>DS: 拉取负责代理汇总数据
+        DS-->>MP: 负责代理列表+库存+进销存+分润
+        MP-->>用户: 展示销售视图·负责代理总览
+    else 角色=一级代理
+        Perm-->>MP: 数据范围=本渠道
+        MP->>DS: 拉取本渠道数据
+        DS-->>MP: 本渠道库存+分润账户+延保订单
+        MP-->>用户: 展示代理视图·分润账户首页
+    end
+</div>
+      </div>
+
+      <div id="f2" class="mermaid-wrap" style="display:none">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor 内部用户 as 内部用户（主管或销售）
+    participant MP as 代理端小程序
+    participant Perm as 权限引擎
+    participant DS as 数据服务
+
+    内部用户->>MP: 点击代理列表中某代理行
+    MP->>Perm: 校验是否有权限查看该代理
+    alt 有权限（主管 or 该销售负责的代理）
+        Perm-->>MP: 校验通过
+        MP->>DS: 查询该代理详情（库存/进销存/分润/延保订单）
+        DS-->>MP: 返回完整详情数据
+        MP-->>内部用户: 展示代理详情页（只读）
+        Note over 内部用户,MP: 详情页无提现入口，仅数据查看
+    else 无权限（销售访问非负责代理）
+        Perm-->>MP: 校验失败
+        MP-->>内部用户: 提示「您无权查看该代理数据」
+    end
+</div>
+      </div>
+
+      <div id="f3" class="mermaid-wrap" style="display:none">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor 车主
+    participant App as 小万APP
+    participant WS as 延保服务
+    participant CE as 分润引擎
+    participant SN as SN归属库
+    participant ACC as 代理账户服务
+    actor 代理 as 一级代理
+
+    车主->>App: 选择延保产品并支付
+    App->>WS: 创建延保订单（含SN）
+    WS-->>App: 订单支付成功
+    WS->>CE: 触发分润计算（订单ID/SN/金额）
+    CE->>SN: 查询SN归属代理渠道
+    alt SN已绑定代理
+        SN-->>CE: 返回代理渠道ID+分润比例
+        CE->>CE: 分润金额=延保金额×比例（上限80%）
+        CE->>ACC: 写入分润流水，更新余额
+        ACC-->>CE: 入账成功
+        ACC-)代理: 推送「新分润入账」通知
+        Note over 代理: 主管/销售刷新后亦可查看此分润
+    else SN未绑定
+        SN-->>CE: 无归属记录
+        CE->>CE: 记录异常日志，不产生分润
+    end
+</div>
+      </div>
+
+      <div id="f4" class="mermaid-wrap" style="display:none">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor 代理 as 一级代理
+    participant MP as 代理端小程序
+    participant Perm as 权限引擎
+    participant ACC as 账户服务
+    participant OPS as 后台审核
+    participant LG as 灵工平台
+    actor Card as 代理银行卡
+
+    代理->>MP: 点击「提现」
+    MP->>Perm: 校验角色是否允许提现
+    Note over Perm: 主管/销售无提现权限直接拒绝
+
+    alt 角色=一级代理（允许）
+        Perm-->>MP: 校验通过
+        alt 首次提现
+            MP->>LG: 跳转灵工平台注册
+            LG-->>MP: 一次性实名审核通过
+        end
+        代理->>MP: 输入提现金额并确认
+        MP->>ACC: 校验余额充足
+        alt 余额充足
+            ACC->>ACC: 冻结金额，生成申请单
+            ACC->>OPS: 推送待审核通知
+            OPS->>OPS: 人工审核1-3工作日
+            alt 审核通过
+                OPS->>LG: 发起打款
+                LG->>Card: 实际打款
+                LG-->>ACC: 打款成功回调
+                ACC-)代理: 推送「提现成功」通知
+            else 审核拒绝
+                ACC->>ACC: 解冻余额
+                ACC-)代理: 推送「提现被驳回」+原因
+            end
+        else 余额不足
+            ACC-->>MP: 余额不足提示
+        end
+    else 角色为主管或销售
+        Perm-->>MP: 无提现权限
+        MP-->>代理: 提示「当前账号无提现权限」
+    end
+</div>
+      </div>
+
+      <div id="f5" class="mermaid-wrap" style="display:none">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor OPS as 后台运营
+    participant Admin as 后台管理系统
+    participant Perm as 权限引擎
+    actor Sales as 销售人员
+    participant MP as 代理端小程序
+
+    OPS->>Admin: 进入「销售管理」→配置归属代理
+    Admin->>Admin: 展示销售列表+代理渠道列表
+    OPS->>Admin: 为销售A绑定「代理甲、代理乙」
+    Admin->>Perm: 写入销售A数据范围（代理ID列表）
+    Perm-->>Admin: 配置成功，立即生效
+    Admin-->>OPS: 保存成功
+
+    Note over Sales,MP: 归属变更后立即生效
+
+    Sales->>MP: 刷新代理列表
+    MP->>Perm: 重新查询数据范围
+    Perm-->>MP: 返回最新负责代理列表
+    MP-->>Sales: 展示更新后的代理列表
+
+    Note over OPS: 归属变更不迁移历史数据
+</div>
+      </div>
+
+      <div id="f6" class="mermaid-wrap" style="display:none">
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor 车主
+    participant App as 小万APP/小程序
+    actor 客服 as 客服人员
+    participant CS as 客服后台系统
+    participant OM as 订单标记服务
+    participant RS as 退款服务
+    participant ACC as 代理账户服务
+    actor 代理 as 一级代理
+
+    车主->>App: 发起退款请求
+    App-->>车主: 展示「延保退款请联系客服」引导
+    Note over App: 所有退款无自助入口，统一引导至客服
+
+    车主->>客服: 联系客服申请退款
+    客服->>CS: 后台查询订单详情
+    CS->>OM: 查询订单渠道类型及分润信息
+    OM-->>CS: 返回渠道类型+分润金额
+
+    alt 代理渠道订单
+        CS-->>客服: 展示代理面板（代理名称/延保¥29.9/分润¥5.98）
+        客服->>代理: 通知代理向车主退全额¥29.9
+        代理->>车主: 线下退全款¥29.9
+        车主->>客服: 提供退款凭证截图
+        客服->>CS: 上传凭证，确认执行退款
+        CS->>RS: 执行补偿划账（¥29.9-¥5.98=¥23.92）
+        RS->>ACC: 划入代理账户¥23.92（流水类型：退款补偿）
+        ACC-->>RS: 划账成功
+        RS-->>客服: 操作完成
+        Note over ACC,代理: 代理平台余额不变（原分润¥5.98保留）
+        Note over 车主,代理: 资金平衡：退¥29.9-补偿¥23.92-保留分润¥5.98=¥0
+    else 非代理渠道订单
+        CS-->>客服: 展示标准退款面板
+        客服->>RS: 后台操作全额退款
+        RS->>车主: 原路退款¥29.9
+        RS-->>客服: 退款完成
+    end
+</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div style="text-align:center;color:#bbb;font-size:12px;padding:16px 0;">
+  代理渠道延保分润系统 · 产品原型 V1.3 · 三角色权限体系 · 底部Tab全交互 · 退款统一客服收口 · 基于 2026-04-14 会议纪要
+</div>
+
+<script>
+mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { fontSize: '12px', fontFamily: 'PingFang SC, sans-serif' } });
+
+let _role = 'mgr';
+
+function go(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+  const b = document.getElementById('badge');
+  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1];
+}
+
+function selRole(el, role) {
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel'); _role = role;
+}
+
+function doLogin() {
+  const map = { mgr:'mgr', sales:'sales', agent:'agent' };
+  document.querySelectorAll('.nav-tab')[{ mgr:1, sales:2, agent:3 }[_role]].click();
+}
+
+function doLogout() {
+  if (!confirm('确认退出登录？')) return;
+  // 重置所有角色的 tab 到首页
+  ['mgr','sales','agent'].forEach(function(role) {
+    var firstPanel = document.getElementById(role + '-tab-home');
+    if (firstPanel) {
+      document.querySelectorAll('[id^="' + role + '-tab-"]').forEach(function(el) { el.style.display = 'none'; });
+      firstPanel.style.display = 'block';
+    }
+    var footer = document.querySelector('#page-' + role + ' .phone-footer');
+    if (footer) {
+      footer.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('on'); });
+      var first = footer.querySelector('.tab-btn');
+      if (first) first.classList.add('on');
+    }
+  });
+  // 跳转回登录页
+  document.querySelectorAll('.nav-tab')[0].click();
+}
+
+function switchTab(role, tab, btn) {
+  // 隐藏该角色所有 tab-panel
+  var prefix = role + '-tab-';
+  document.querySelectorAll('[id^="' + prefix + '"]').forEach(function(el) {
+    el.style.display = 'none';
+  });
+  // 显示目标 panel
+  var panel = document.getElementById(prefix + tab);
+  if (panel) panel.style.display = 'block';
+  // 更新底部 tab 高亮
+  if (btn) {
+    var footer = btn.closest('.phone-footer');
+    if (footer) footer.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('on'); });
+    btn.classList.add('on');
+  }
+}
+
+function sf(btn, id) {
+  document.querySelectorAll('.flow-tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.mermaid-wrap').forEach(el => el.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+  mermaid.run({ nodes: document.getElementById(id).querySelectorAll('.mermaid') });
+}
+</script>
+</body>
+</html>
