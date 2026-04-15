@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>修改渠道弹窗原型 V2.0</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #e8eaf0;
+  min-height: 100vh;
+  padding: 24px 20px 40px;
+}
+
+/* ── 顶部标题 ── */
+.page-title {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.page-title h1 { font-size: 17px; color: #1a1a1a; font-weight: 700; }
+.page-title p { font-size: 12px; color: #999; margin-top: 3px; }
+
+/* ── 变更摘要条 ── */
+.change-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.change-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+.chip-del { border-left: 3px solid #ff4d4f; }
+.chip-del .label { color: #ff4d4f; font-weight: 700; font-size: 11px; }
+.chip-mod { border-left: 3px solid #fa8c16; }
+.chip-mod .label { color: #fa8c16; font-weight: 700; font-size: 11px; }
+.chip-add { border-left: 3px solid #52c41a; }
+.chip-add .label { color: #52c41a; font-weight: 700; font-size: 11px; }
+.chip-text { color: #555; }
+
+/* ── 居中弹窗容器 ── */
+.modal-outer {
+  max-width: 580px;
+  margin: 0 auto;
+  background: rgba(0,0,0,.25);
+  border-radius: 12px;
+  padding: 30px;
+}
+
+/* ── 弹窗主体 ── */
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  overflow: hidden;
+}
+
+/* ── 标题栏 ── */
+.modal-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: linear-gradient(90deg, #1677ff 0%, #4096ff 100%);
+  color: #fff;
+}
+.modal-hd .ttl { font-size: 14px; font-weight: 600; }
+.close-btn {
+  width: 22px; height: 22px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 14px; opacity: .75;
+  border: none; background: transparent; color: #fff;
+  transition: opacity .15s, background .15s;
+}
+.close-btn:hover { opacity: 1; background: rgba(255,255,255,.2); }
+
+/* ── 表单区 ── */
+.modal-bd {
+  padding: 16px 20px 8px;
+}
+
+/* ── 表单行 ── */
+.frow {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 13px;
+  font-size: 13px;
+}
+.flabel {
+  flex: 0 0 88px;
+  color: #333;
+  padding-top: 7px;
+  text-align: right;
+  padding-right: 10px;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.flabel .req { color: #ff4d4f; margin-right: 2px; }
+.fctrl { flex: 1; min-width: 0; }
+
+/* ── 输入控件 ── */
+.fctrl input,
+.fctrl select,
+.fctrl textarea {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  background: #fff;
+  font-family: inherit;
+}
+.fctrl input:focus, .fctrl select:focus, .fctrl textarea:focus {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(22,119,255,.1);
+}
+.fctrl textarea { resize: vertical; min-height: 54px; }
+.fctrl select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+/* ── 套餐行 ── */
+.pkg-inline {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.pkg-inline select { flex: 0 0 110px; }
+.pkg-inline .sep { font-size: 12px; color: #999; flex-shrink: 0; }
+.pkg-inline .add-btn {
+  width: 28px; height: 30px;
+  border: 1px solid #d9d9d9; border-radius: 5px;
+  background: #fafafa; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #888; flex-shrink: 0;
+  transition: all .15s;
+}
+.pkg-inline .add-btn:hover { border-color: #1677ff; color: #1677ff; background: #f0f5ff; }
+
+.hint { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+/* ── 分割线 ── */
+.divider {
+  border: none;
+  border-top: 1px dashed #eaeaea;
+  margin: 8px 0 12px;
+}
+
+/* ── 模块标题 ── */
+.sec-hd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1677ff;
+  background: #f0f5ff;
+  border-left: 3px solid #1677ff;
+  padding: 5px 10px 5px 8px;
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 10px;
+}
+.sec-hd .opt-tag { font-size: 11px; font-weight: 400; color: #aaa; }
+.sec-hd .new-tag {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700;
+  background: #f6ffed; color: #389e0d;
+  border: 1px solid #b7eb8f;
+  border-radius: 3px; padding: 1px 5px;
+}
+
+/* ── 模块字段 3列 ── */
+.sec-body {
+  padding: 0 0 0 0;
+  margin-bottom: 4px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.fi label {
+  display: block;
+  font-size: 11.5px;
+  color: #777;
+  margin-bottom: 3px;
+}
+
+/* ── 改版标签 ── */
+.mod-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  border-radius: 3px; padding: 1px 5px;
+  background: #fff7e6; color: #d46b08;
+  border: 1px solid #ffd591;
+  vertical-align: middle; margin-left: 4px;
+}
+
+/* ── 底部按钮 ── */
+.modal-ft {
+  padding: 10px 20px 14px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+.btn-ok {
+  padding: 7px 30px;
+  background: #1677ff; color: #fff;
+  border: none; border-radius: 5px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+}
+.btn-ok:hover { background: #4096ff; }
+.btn-cancel {
+  padding: 7px 22px;
+  background: #fff; color: #555;
+  border: 1px solid #d9d9d9; border-radius: 5px;
+  font-size: 13px; cursor: pointer; transition: all .15s;
+}
+.btn-cancel:hover { border-color: #1677ff; color: #1677ff; }
+</style>
+</head>
+<body>
+
+<!-- 页面标题 -->
+<div class="page-title">
+  <h1>修改渠道 · 弹窗改版原型 V2.0</h1>
+  <p>渠道管理系统 · 2026-04-10 需求改版</p>
+</div>
+
+<!-- 变更摘要 -->
+<div class="change-bar">
+  <div class="change-chip chip-mod">
+    <span class="label">改</span>
+    <span class="chip-text">适配套餐 → 非必填</span>
+  </div>
+  <div class="change-chip chip-del">
+    <span class="label">删</span>
+    <span class="chip-text">负责人姓名 已移除</span>
+  </div>
+  <div class="change-chip chip-del">
+    <span class="label">删</span>
+    <span class="chip-text">分润比例（原有）已移除</span>
+  </div>
+  <div class="change-chip chip-del">
+    <span class="label">删</span>
+    <span class="chip-text">联系方式（原有）已移除</span>
+  </div>
+  <div class="change-chip chip-add">
+    <span class="label">增</span>
+    <span class="chip-text">模块①智能服务分润（非必填）</span>
+  </div>
+  <div class="change-chip chip-add">
+    <span class="label">增</span>
+    <span class="chip-text">模块②延保服务分润（非必填）</span>
+  </div>
+  <div class="change-chip chip-add">
+    <span class="label">增</span>
+    <span class="chip-text">模块③销售人员（非必填）</span>
+  </div>
+</div>
+
+<!-- 弹窗预览 -->
+<div class="modal-outer">
+  <div class="modal">
+
+    <!-- 标题栏 -->
+    <div class="modal-hd">
+      <span class="ttl">修改渠道</span>
+      <button class="close-btn" onclick="alert('关闭')">✕</button>
+    </div>
+
+    <!-- 表单 -->
+    <div class="modal-bd">
+
+      <!-- 渠道名称（必填） -->
+      <div class="frow">
+        <div class="flabel"><span class="req">*</span>渠道名称</div>
+        <div class="fctrl">
+          <input type="text" value="非胡陈创" />
+        </div>
+      </div>
+
+      <!-- 渠道类型（必填） -->
+      <div class="frow">
+        <div class="flabel"><span class="req">*</span>渠道类型</div>
+        <div class="fctrl">
+          <select>
+            <option>准前装</option>
+            <option>前装</option>
+            <option>后装</option>
+            <option>直销</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 适配套餐（非必填，改版） -->
+      <div class="frow">
+        <div class="flabel">
+          适配套餐
+        </div>
+        <div class="fctrl">
+          <div class="pkg-inline">
+            <select>
+              <option>ONE-10</option>
+              <option>ONE-20</option>
+              <option>ONE-50</option>
+            </select>
+            <select style="flex:1;">
+              <option>直播间时间60分钟</option>
+              <option selected>直播间时间120分钟</option>
+              <option>直播间时间180分钟</option>
+              <option>直播间时间240分钟</option>
+            </select>
+            <div class="add-btn" title="添加套餐">＋</div>
+          </div>
+          <div class="hint">非必填，可不选套餐</div>
+        </div>
+      </div>
+
+      <!-- 货车产品套餐 -->
+      <div class="frow">
+        <div class="flabel">货车产品套餐</div>
+        <div class="fctrl">
+          <select>
+            <option value="">请选择货车产品套餐</option>
+            <option>货运标准版</option>
+            <option>货运增强版</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ── 分割 ── -->
+      <hr class="divider" />
+
+      <!-- 模块① 智能服务分润 -->
+      <div class="sec-hd">
+          模块①&nbsp;智能服务分润
+          <span class="opt-tag">（非必填）</span>
+      </div>
+      <div class="sec-body">
+        <div class="grid3">
+          <div class="fi">
+            <label>代理商姓名</label>
+            <input type="text" placeholder="请输入姓名" />
+          </div>
+          <div class="fi">
+            <label>分润比例（%）</label>
+            <input type="number" placeholder="0 ~ 80" min="0" max="80" />
+          </div>
+          <div class="fi">
+            <label>手机号</label>
+            <input type="text" placeholder="请输入手机号" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 分割 ── -->
+      <hr class="divider" />
+
+      <!-- 模块② 延保服务分润 -->
+      <div class="sec-hd">
+          模块②&nbsp;延保服务分润
+          <span class="opt-tag">（非必填）</span>
+      </div>
+      <div class="sec-body">
+        <div class="grid3">
+          <div class="fi">
+            <label>代理商姓名</label>
+            <input type="text" placeholder="请输入姓名" />
+          </div>
+          <div class="fi">
+            <label>分润比例（%）</label>
+            <input type="number" placeholder="0 ~ 80" min="0" max="80" />
+          </div>
+          <div class="fi">
+            <label>手机号</label>
+            <input type="text" placeholder="请输入手机号" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 分割 ── -->
+      <hr class="divider" />
+
+      <!-- 模块③ 销售人员 -->
+      <div class="sec-hd">
+          模块③&nbsp;销售人员
+          <span class="opt-tag">（非必填）</span>
+      </div>
+      <div class="sec-body">
+        <div class="grid2">
+          <div class="fi">
+            <label>销售姓名</label>
+            <input type="text" placeholder="请输入姓名" />
+          </div>
+          <div class="fi">
+            <label>手机号</label>
+            <input type="text" placeholder="请输入手机号" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 分割 ── -->
+      <hr class="divider" />
+
+      <!-- 模块④ 负责人 -->
+      <div class="sec-hd">
+          模块④&nbsp;负责人
+          <span class="opt-tag">（非必填）</span>
+      </div>
+      <div class="sec-body">
+        <div class="grid2">
+          <div class="fi">
+            <label>负责人姓名</label>
+            <input type="text" placeholder="请输入姓名" />
+          </div>
+          <div class="fi">
+            <label>手机号</label>
+            <input type="text" placeholder="请输入手机号" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 分割 ── -->
+      <hr class="divider" />
+
+      <!-- 备注 -->
+      <div class="frow">
+        <div class="flabel" style="padding-top:8px;">备注</div>
+        <div class="fctrl">
+          <textarea placeholder="请填写备注信息（选填）"></textarea>
+        </div>
+      </div>
+
+    </div><!-- /modal-bd -->
+
+    <!-- 底部按钮 -->
+    <div class="modal-ft">
+      <button class="btn-ok" onclick="alert('✅ 保存成功！')">确 认</button>
+      <button class="btn-cancel" onclick="alert('已取消')">取 消</button>
+    </div>
+
+  </div><!-- /modal -->
+</div>
+
+<div style="text-align:center;font-size:11px;color:#bbb;margin-top:16px;">
+  渠道管理系统 · 修改渠道弹窗 V2.0 · 2026-04-10
+</div>
+
+</body>
+</html>
