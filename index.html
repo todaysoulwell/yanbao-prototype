@@ -480,26 +480,56 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <!-- 累计分润 -->
           <div class="card" style="border:1.5px solid #efdbff;">
             <div class="card-t" style="color:#722ed1;">📊 累计分润总览</div>
+            <!-- 三项汇总 -->
             <div class="stat-row" style="margin-bottom:12px;">
-              <div class="stat-box"><div class="sv" style="color:#722ed1;font-size:20px;">¥312,840</div><div class="sl">全渠道累计分润</div></div>
-              <div class="stat-box"><div class="sv blue">18,432</div><div class="sl">累计激活订单</div></div>
+              <div class="stat-box"><div class="sv" style="color:#722ed1;font-size:17px;">¥312,840</div><div class="sl">累计分润总额</div></div>
+              <div class="stat-box"><div class="sv blue" style="font-size:17px;">18,432</div><div class="sl">累计订单</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:17px;">¥48,200</div><div class="sl">累计提现</div></div>
             </div>
-            <div class="sec-t" style="margin-bottom:6px;">各代理渠道累计分润</div>
-            <div style="background:#f9f0ff;border-radius:8px;overflow:hidden;">
-              <div style="display:flex;align-items:center;padding:9px 12px;border-bottom:1px solid #efdbff;gap:8px;">
+            <!-- 各渠道列表表头 -->
+            <div style="display:flex;align-items:center;padding:6px 10px;background:#f9f0ff;border-radius:6px 6px 0 0;font-size:11px;color:#888;font-weight:600;">
+              <div style="flex:1;">渠道名称</div>
+              <div style="width:52px;text-align:right;">订单数</div>
+              <div style="width:72px;text-align:right;">分润金额</div>
+              <div style="width:72px;text-align:right;">已提现</div>
+            </div>
+            <div style="border:1px solid #efdbff;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;" id="mgr-channel-list">
+              <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
                 <div style="flex:1;font-size:12.5px;font-weight:700;">黄石新捷顺名车</div>
-                <div style="font-size:12px;color:#888;">1,312笔</div>
-                <div style="font-size:13px;color:#722ed1;font-weight:700;">¥156,420</div>
+                <div style="width:52px;text-align:right;font-size:12px;color:#555;">1,312笔</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥156,420</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥22,000</div>
               </div>
-              <div style="display:flex;align-items:center;padding:9px 12px;border-bottom:1px solid #efdbff;gap:8px;">
+              <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
                 <div style="flex:1;font-size:12.5px;font-weight:700;">飞鱼科技渠道</div>
-                <div style="font-size:12px;color:#888;">310笔</div>
-                <div style="font-size:13px;color:#722ed1;font-weight:700;">¥55,890</div>
+                <div style="width:52px;text-align:right;font-size:12px;color:#555;">310笔</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥55,890</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥8,500</div>
               </div>
-              <div style="display:flex;align-items:center;padding:9px 12px;gap:8px;">
+              <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
                 <div style="flex:1;font-size:12.5px;font-weight:700;">石新元汽配</div>
-                <div style="font-size:12px;color:#888;">410笔</div>
-                <div style="font-size:13px;color:#722ed1;font-weight:700;">¥100,530</div>
+                <div style="width:52px;text-align:right;font-size:12px;color:#555;">410笔</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥100,530</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥14,200</div>
+              </div>
+              <!-- 折叠内容（默认隐藏） -->
+              <div id="mgr-channel-more" style="display:none;">
+                <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
+                  <div style="flex:1;font-size:12.5px;font-weight:700;">新进渠道A</div>
+                  <div style="width:52px;text-align:right;font-size:12px;color:#555;">88笔</div>
+                  <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥10,560</div>
+                  <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥0</div>
+                </div>
+                <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
+                  <div style="flex:1;font-size:12.5px;font-weight:700;">新进渠道B</div>
+                  <div style="width:52px;text-align:right;font-size:12px;color:#555;">22笔</div>
+                  <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥3,440</div>
+                  <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥0</div>
+                </div>
+              </div>
+              <!-- 展开/收起按钮 -->
+              <div onclick="toggleMore('mgr-channel-more','mgr-channel-toggle')" style="padding:8px;text-align:center;cursor:pointer;background:#f9f0ff;">
+                <span id="mgr-channel-toggle" style="font-size:11.5px;color:#722ed1;font-weight:600;">展开更多 5 个渠道 ▾</span>
               </div>
             </div>
             <div style="font-size:10px;color:#bbb;margin-top:8px;text-align:right;">数据截至今日 · 含历史所有批次</div>
@@ -786,21 +816,31 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <!-- 累计分润 -->
           <div class="card" style="border:1.5px solid #efdbff;">
             <div class="card-t" style="color:#722ed1;">📊 累计分润总览</div>
+            <!-- 三项汇总 -->
             <div class="stat-row" style="margin-bottom:12px;">
-              <div class="stat-box"><div class="sv" style="color:#722ed1;font-size:20px;">¥256,950</div><div class="sl">我负责渠道累计分润</div></div>
-              <div class="stat-box"><div class="sv blue">1,722</div><div class="sl">累计激活订单</div></div>
+              <div class="stat-box"><div class="sv" style="color:#722ed1;font-size:17px;">¥256,950</div><div class="sl">累计分润总额</div></div>
+              <div class="stat-box"><div class="sv blue" style="font-size:17px;">1,722</div><div class="sl">累计订单</div></div>
+              <div class="stat-box"><div class="sv green" style="font-size:17px;">¥36,200</div><div class="sl">累计提现</div></div>
             </div>
-            <div class="sec-t" style="margin-bottom:6px;">各代理渠道累计分润</div>
-            <div style="background:#f9f0ff;border-radius:8px;overflow:hidden;">
-              <div style="display:flex;align-items:center;padding:9px 12px;border-bottom:1px solid #efdbff;gap:8px;">
+            <!-- 各渠道列表表头 -->
+            <div style="display:flex;align-items:center;padding:6px 10px;background:#f9f0ff;border-radius:6px 6px 0 0;font-size:11px;color:#888;font-weight:600;">
+              <div style="flex:1;">渠道名称</div>
+              <div style="width:52px;text-align:right;">订单数</div>
+              <div style="width:72px;text-align:right;">分润金额</div>
+              <div style="width:72px;text-align:right;">已提现</div>
+            </div>
+            <div style="border:1px solid #efdbff;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;">
+              <div style="display:flex;align-items:center;padding:9px 10px;border-bottom:1px solid #f9f0ff;gap:4px;">
                 <div style="flex:1;font-size:12.5px;font-weight:700;">黄石新捷顺名车</div>
-                <div style="font-size:12px;color:#888;">1,312笔</div>
-                <div style="font-size:13px;color:#722ed1;font-weight:700;">¥156,420</div>
+                <div style="width:52px;text-align:right;font-size:12px;color:#555;">1,312笔</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥156,420</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥22,000</div>
               </div>
-              <div style="display:flex;align-items:center;padding:9px 12px;gap:8px;">
+              <div style="display:flex;align-items:center;padding:9px 10px;gap:4px;">
                 <div style="flex:1;font-size:12.5px;font-weight:700;">石新元汽配</div>
-                <div style="font-size:12px;color:#888;">410笔</div>
-                <div style="font-size:13px;color:#722ed1;font-weight:700;">¥100,530</div>
+                <div style="width:52px;text-align:right;font-size:12px;color:#555;">410笔</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#722ed1;font-weight:700;">¥100,530</div>
+                <div style="width:72px;text-align:right;font-size:12.5px;color:#52c41a;font-weight:600;">¥14,200</div>
               </div>
             </div>
             <div style="font-size:10px;color:#bbb;margin-top:8px;text-align:right;">数据截至今日 · 含历史所有批次</div>
@@ -2043,6 +2083,15 @@ function doLogout() {
   });
   // 跳转回登录页
   document.querySelectorAll('.nav-tab')[0].click();
+}
+
+function toggleMore(moreId, toggleId) {
+  var more = document.getElementById(moreId);
+  var btn = document.getElementById(toggleId);
+  if (!more || !btn) return;
+  var expanded = more.style.display !== 'none';
+  more.style.display = expanded ? 'none' : 'block';
+  btn.textContent = expanded ? '展开更多 5 个渠道 ▾' : '收起 ▴';
 }
 
 function openChannelDialog(mode, name) {
