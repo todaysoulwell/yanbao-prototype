@@ -1436,9 +1436,15 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;">适配套餐</div>
         <div style="flex:1;">
           <div style="display:flex;gap:6px;align-items:center;">
-            <select style="flex:0 0 100px;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;"><option>ONE-10</option><option>ONE-20</option><option>ONE-50</option></select>
+            <select style="flex:0 0 120px;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+              <option value="">请选择设备类型</option>
+              <option>W1</option><option>W1-Z</option><option>ONE-11</option><option>ONE-10</option>
+              <option>ONE-10-SE</option><option>ONE-10-TSE</option><option>ONE-10-ULTRA</option>
+            </select>
             <select style="flex:1;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
-              <option>直播间时间60分钟</option><option selected>直播间时间120分钟</option><option>直播间时间180分钟</option>
+              <option value="">请选择套餐</option>
+              <option>直播时间720分钟</option><option>直播时间120分钟</option>
+              <option>3个月300分钟</option><option>3个月无限</option>
             </select>
             <button style="width:28px;height:30px;border:1px solid #d9d9d9;border-radius:5px;background:#fafafa;cursor:pointer;font-size:16px;color:#888;">＋</button>
           </div>
@@ -1449,7 +1455,9 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;">货车产品套餐</div>
         <div style="flex:1;">
           <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
-            <option value="">请选择货车产品套餐</option><option>货运标准版</option><option>货运增强版</option>
+            <option value="">请选择货车产品套餐</option>
+            <option>1934517434533629954-速通免押日结</option>
+            <option>1934517434533629954-速通免押日结(电商版)</option>
           </select>
         </div>
       </div>
@@ -1478,15 +1486,27 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
       </div>
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
-      <!-- 模块③ 销售人员 -->
-      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块③ 销售人员 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <!-- 模块③ 货车分润 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块③ 货车分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div>
+          <label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">分润比例（%）</label>
+          <input type="number" placeholder="0 ~ 80" min="0" max="80" oninput="checkRatio(this,'err-ratio-truck')" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <div id="err-ratio-truck" style="display:none;font-size:11px;color:#ff4d4f;margin-top:3px;">⚠️ 分润比例不可超过 80%</div>
+        </div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <!-- 模块④ 销售人员 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 销售人员 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">销售姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
       </div>
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
-      <!-- 模块④ 负责人 -->
-      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 负责人 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <!-- 模块⑤ 负责人 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块⑤ 负责人 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">负责人姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
