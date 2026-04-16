@@ -214,7 +214,6 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <button class="nav-tab" onclick="go('mgr')">主管视图</button>
     <button class="nav-tab" onclick="go('sales')">销售视图</button>
     <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
-    <button class="nav-tab" onclick="go('admin')">后台管理端</button>
     <button class="nav-tab" onclick="go('channel-admin')">渠道管理</button>
     <button class="nav-tab" onclick="go('withdraw-admin')">提现审核</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
@@ -1248,124 +1247,6 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 </div>
 
-<!-- ══════════════════════════════
-     页面 5：后台管理端
-══════════════════════════════ -->
-<div class="page" id="page-admin">
-  <div style="width:100%;max-width:1100px;">
-
-    <div class="panel-card">
-      <h3>平台整体数据看板（后台运营）</h3>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">23</div><div class="sl">代理渠道数</div></div>
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">18,432</div><div class="sl">SN绑定总量</div></div>
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv green">12,108</div><div class="sl">已激活</div></div>
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv" style="color:#722ed1;">¥58,320</div><div class="sl">待结算分润</div></div>
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv orange">5</div><div class="sl">待审核提现</div></div>
-        <div class="stat-box" style="flex:1;min-width:100px;"><div class="sv blue">8</div><div class="sl">销售人员数</div></div>
-      </div>
-    </div>
-
-    <!-- 销售-代理归属配置（新增） -->
-    <div class="panel-card">
-      <h3>销售-代理归属关系配置（V1.1 新增）</h3>
-      <div class="hl-orange" style="font-size:12px;margin-bottom:14px;">
-        ⚠️ 此配置决定销售账号可查看哪些代理的数据，变更后<strong>立即生效</strong>。一个代理只能归属一个销售。
-      </div>
-      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-        <select style="flex:1;min-width:140px;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"><option>全部销售</option><option>张明</option><option>李华</option></select>
-        <button class="btn btn-primary btn-sm" style="padding:8px 16px;">+ 新增归属配置</button>
-      </div>
-      <table class="admin-tbl">
-        <tr><th>销售人员</th><th>负责代理渠道</th><th>代理数量</th><th>合计库存</th><th>合计未激活</th><th>合计分润余额</th><th>操作</th></tr>
-        <tr>
-          <td><strong>张明</strong></td>
-          <td>黄石新捷顺名车、石新元汽配</td>
-          <td>2</td><td>2,500</td>
-          <td><span class="orange">778</span></td>
-          <td><span style="color:#722ed1;font-weight:700;">¥4,926</span></td>
-          <td><button class="btn btn-ghost btn-sm">编辑归属</button></td>
-        </tr>
-        <tr>
-          <td><strong>李华</strong></td>
-          <td>飞鱼科技渠道</td>
-          <td>1</td><td>1,000</td>
-          <td><span class="orange">690</span></td>
-          <td><span style="color:#722ed1;font-weight:700;">¥920</span></td>
-          <td><button class="btn btn-ghost btn-sm">编辑归属</button></td>
-        </tr>
-        <tr>
-          <td><strong>（无归属）</strong></td>
-          <td style="color:#ff4d4f;">新进渠道A、新进渠道B</td>
-          <td>2</td><td>800</td>
-          <td><span class="orange">800</span></td>
-          <td>—</td>
-          <td><button class="btn btn-primary btn-sm">分配销售</button></td>
-        </tr>
-      </table>
-      <div style="font-size:11.5px;color:#888;margin-top:10px;">无归属销售的代理，仅主管可在小程序内查看其数据；代理自身访问不受影响</div>
-    </div>
-
-    <!-- SN 号段管理 -->
-    <div class="panel-card">
-      <h3>SN 号段绑定管理</h3>
-      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
-        <input placeholder="搜索 SN / 代理名称" style="flex:1;min-width:160px;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
-        <select style="padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"><option>全部代理</option><option>黄石新捷顺名车</option></select>
-        <button class="btn btn-primary btn-sm" style="padding:8px 16px;">+ 新增绑定</button>
-      </div>
-      <table class="admin-tbl">
-        <tr><th>SN 号段</th><th>数量</th><th>代理渠道</th><th>归属销售</th><th>录入时间</th><th>已激活</th><th>未激活</th><th>状态</th><th>操作</th></tr>
-        <tr>
-          <td><code>XW2024****0001~1000</code></td><td>1,000</td>
-          <td>黄石新捷顺名车</td><td>张明</td><td>2024-10-08</td>
-          <td class="green">832</td><td class="orange">168</td>
-          <td><span class="tag t-green">正常</span></td>
-          <td><button class="btn btn-ghost btn-sm">详情</button></td>
-        </tr>
-        <tr>
-          <td><code>XW2024****5001~6000</code></td><td>1,000</td>
-          <td>飞鱼科技渠道</td><td>李华</td><td>2024-12-01</td>
-          <td class="green">310</td><td class="orange">690</td>
-          <td><span class="tag t-green">正常</span></td>
-          <td><button class="btn btn-ghost btn-sm">详情</button></td>
-        </tr>
-        <tr>
-          <td><code>XW2025****9001~9500</code></td><td>500</td>
-          <td><span class="red">未绑定</span></td><td>—</td><td>2025-01-10</td>
-          <td>—</td><td>—</td>
-          <td><span class="tag t-red">待绑定</span></td>
-          <td><button class="btn btn-primary btn-sm">绑定</button></td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- 分润比例配置 -->
-    <div class="panel-card">
-      <h3>代理分润比例配置</h3>
-      <div class="hl-orange" style="font-size:12px;margin-bottom:12px;">⚠️ 系统上限 80%，变更记录自动留存日志</div>
-      <table class="admin-tbl">
-        <tr><th>代理渠道</th><th>归属销售</th><th>当前比例</th><th>19.9元分润</th><th>29.9元分润</th><th>59.9元分润</th><th>最近修改</th><th>操作</th></tr>
-        <tr><td><strong>黄石新捷顺名车</strong></td><td>张明</td><td class="blue"><strong>20%</strong></td><td>¥3.98</td><td>¥5.98</td><td>¥11.98</td><td style="color:#888;font-size:12px;">2024-10-01</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
-        <tr><td><strong>飞鱼科技渠道</strong></td><td>李华</td><td class="blue"><strong>15%</strong></td><td>¥2.99</td><td>¥4.49</td><td>¥8.99</td><td style="color:#888;font-size:12px;">2024-11-20</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
-        <tr><td><strong>新进渠道（试用）</strong></td><td>—</td><td style="color:#888;"><strong>10%</strong></td><td>¥1.99</td><td>¥2.99</td><td>¥5.99</td><td style="color:#888;font-size:12px;">2025-01-05</td><td><button class="btn btn-ghost btn-sm">修改</button></td></tr>
-      </table>
-    </div>
-
-    <!-- 提现审核入口 -->
-    <div class="panel-card" style="border:1.5px solid #bae0ff;cursor:pointer;" onclick="document.querySelectorAll('.nav-tab')[4].click()">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <h3 style="margin-bottom:6px;">💳 提现审核</h3>
-          <div style="font-size:13px;color:#555;">当前 <strong class="orange">5 笔</strong>待审核申请，合计 <strong style="color:#1677ff;">¥7,800.00</strong></div>
-          <div style="font-size:12px;color:#888;margin-top:4px;">提现审核已独立为专属页面，支持筛选、批量审核与打款记录查询</div>
-        </div>
-        <div style="font-size:24px;color:#1677ff;flex-shrink:0;margin-left:16px;">›</div>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <!-- ══════════════════════════════
      页面：渠道管理
@@ -2130,7 +2011,7 @@ function go(name) {
   document.getElementById('page-' + name).classList.add('active');
   event.target.classList.add('active');
   const b = document.getElementById('badge');
-  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
   b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1];
 }
 
