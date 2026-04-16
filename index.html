@@ -215,6 +215,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <button class="nav-tab" onclick="go('sales')">销售视图</button>
     <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
     <button class="nav-tab" onclick="go('admin')">后台管理端</button>
+    <button class="nav-tab" onclick="go('withdraw-admin')">提现审核</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
     <button class="nav-tab" onclick="go('flow')">业务时序图</button>
   </div>
@@ -1350,31 +1351,188 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       </table>
     </div>
 
-    <!-- 提现审核 -->
+    <!-- 提现审核入口 -->
+    <div class="panel-card" style="border:1.5px solid #bae0ff;cursor:pointer;" onclick="document.querySelectorAll('.nav-tab')[4].click()">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h3 style="margin-bottom:6px;">💳 提现审核</h3>
+          <div style="font-size:13px;color:#555;">当前 <strong class="orange">5 笔</strong>待审核申请，合计 <strong style="color:#1677ff;">¥7,800.00</strong></div>
+          <div style="font-size:12px;color:#888;margin-top:4px;">提现审核已独立为专属页面，支持筛选、批量审核与打款记录查询</div>
+        </div>
+        <div style="font-size:24px;color:#1677ff;flex-shrink:0;margin-left:16px;">›</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面 6：提现审核
+══════════════════════════════ -->
+<div class="page" id="page-withdraw-admin">
+  <div style="width:100%;max-width:1100px;">
+
+    <!-- 顶部汇总 -->
     <div class="panel-card">
-      <h3>提现审核队列（仅一级代理可发起申请）</h3>
+      <h3>提现审核工作台</h3>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:0;">
+        <div class="stat-box" style="flex:1;min-width:100px;background:#fff7e6;border:1px solid #ffd591;">
+          <div class="sv orange">5</div><div class="sl">待审核</div>
+        </div>
+        <div class="stat-box" style="flex:1;min-width:100px;background:#f6ffed;border:1px solid #b7eb8f;">
+          <div class="sv green">18</div><div class="sl">本月已通过</div>
+        </div>
+        <div class="stat-box" style="flex:1;min-width:100px;">
+          <div class="sv blue">¥5,746</div><div class="sl">本月已打款</div>
+        </div>
+        <div class="stat-box" style="flex:1;min-width:100px;">
+          <div class="sv" style="color:#722ed1;">¥85,320</div><div class="sl">累计已打款</div>
+        </div>
+        <div class="stat-box" style="flex:1;min-width:100px;background:#fff1f0;border:1px solid #ffa39e;">
+          <div class="sv red">1</div><div class="sl">本月已拒绝</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="panel-card" style="padding:14px 20px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <select style="padding:7px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;">
+          <option>全部状态</option>
+          <option selected>待审核</option>
+          <option>已通过</option>
+          <option>已拒绝</option>
+        </select>
+        <select style="padding:7px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;">
+          <option>全部代理</option>
+          <option>黄石新捷顺名车</option>
+          <option>飞鱼科技渠道</option>
+          <option>石新元汽配</option>
+        </select>
+        <select style="padding:7px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;">
+          <option>全部销售</option>
+          <option>张明</option>
+          <option>李华</option>
+        </select>
+        <input placeholder="搜索代理名称 / 灵工账户" style="flex:1;min-width:180px;padding:7px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+        <button class="btn btn-primary btn-sm" style="padding:8px 20px;">查询</button>
+      </div>
+    </div>
+
+    <!-- 待审核队列 -->
+    <div class="panel-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <h3 style="margin-bottom:0;">待审核申请 <span class="tag t-orange" style="font-size:12px;margin-left:6px;">5 笔</span></h3>
+        <button class="btn btn-primary btn-sm" style="padding:7px 16px;" onclick="alert('批量通过已选中的申请')">批量通过</button>
+      </div>
       <table class="admin-tbl">
-        <tr><th>申请时间</th><th>代理渠道</th><th>归属销售</th><th>提现金额</th><th>灵工账户</th><th>状态</th><th>操作</th></tr>
         <tr>
-          <td>2026-04-14 10:22</td><td>黄石新捷顺名车</td><td>张明</td>
-          <td><strong class="blue">¥1,500.00</strong></td><td style="font-size:12px;">138****9920</td>
-          <td><span class="tag t-orange">待审核</span></td>
-          <td><button class="btn btn-primary btn-sm" style="margin-right:4px;">通过</button><button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;">拒绝</button></td>
+          <th><input type="checkbox" onclick="this.closest('table').querySelectorAll('tbody input[type=checkbox]').forEach(c=>c.checked=this.checked)"/></th>
+          <th>申请时间</th><th>代理渠道</th><th>归属销售</th>
+          <th>申请金额</th><th>可提现余额</th><th>灵工账户</th>
+          <th>首次实名</th><th>操作</th>
+        </tr>
+        <tbody>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td style="white-space:nowrap;">2026-04-14 10:22</td>
+          <td><strong>黄石新捷顺名车</strong></td><td>张明</td>
+          <td><strong class="blue">¥1,500.00</strong></td>
+          <td style="color:#722ed1;">¥3,286.50</td>
+          <td style="font-family:monospace;font-size:12px;">138****9920</td>
+          <td><span class="tag t-green">已认证</span></td>
+          <td>
+            <button class="btn btn-primary btn-sm" style="margin-right:4px;" onclick="approveWithdraw(this,'黄石新捷顺名车','¥1,500.00')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="rejectWithdraw(this)">拒绝</button>
+          </td>
         </tr>
         <tr>
-          <td>2026-04-13 15:38</td><td>飞鱼科技渠道</td><td>李华</td>
-          <td><strong class="blue">¥800.00</strong></td><td style="font-size:12px;">135****7710</td>
-          <td><span class="tag t-orange">待审核</span></td>
-          <td><button class="btn btn-primary btn-sm" style="margin-right:4px;">通过</button><button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;">拒绝</button></td>
+          <td><input type="checkbox"/></td>
+          <td style="white-space:nowrap;">2026-04-13 16:05</td>
+          <td><strong>石新元汽配</strong></td><td>张明</td>
+          <td><strong class="blue">¥800.00</strong></td>
+          <td style="color:#722ed1;">¥1,640.00</td>
+          <td style="font-family:monospace;font-size:12px;">156****3301</td>
+          <td><span class="tag t-green">已认证</span></td>
+          <td>
+            <button class="btn btn-primary btn-sm" style="margin-right:4px;" onclick="approveWithdraw(this,'石新元汽配','¥800.00')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="rejectWithdraw(this)">拒绝</button>
+          </td>
         </tr>
         <tr>
-          <td>2026-04-12 09:15</td><td>黄石新捷顺名车</td><td>张明</td>
-          <td><strong class="green">¥2,000.00</strong></td><td style="font-size:12px;">138****9920</td>
+          <td><input type="checkbox"/></td>
+          <td style="white-space:nowrap;">2026-04-13 15:38</td>
+          <td><strong>飞鱼科技渠道</strong></td><td>李华</td>
+          <td><strong class="blue">¥500.00</strong></td>
+          <td style="color:#722ed1;">¥920.00</td>
+          <td style="font-family:monospace;font-size:12px;">135****7710</td>
+          <td><span class="tag t-orange">未认证</span></td>
+          <td>
+            <button class="btn btn-sm" style="background:#f5f5f5;color:#bbb;margin-right:4px;cursor:not-allowed;" disabled title="需先完成灵工实名">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="rejectWithdraw(this)">拒绝</button>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td style="white-space:nowrap;">2026-04-12 14:20</td>
+          <td><strong>黄石新捷顺名车</strong></td><td>张明</td>
+          <td><strong class="blue">¥2,000.00</strong></td>
+          <td style="color:#722ed1;">¥3,286.50</td>
+          <td style="font-family:monospace;font-size:12px;">138****9920</td>
+          <td><span class="tag t-green">已认证</span></td>
+          <td>
+            <button class="btn btn-primary btn-sm" style="margin-right:4px;" onclick="approveWithdraw(this,'黄石新捷顺名车','¥2,000.00')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="rejectWithdraw(this)">拒绝</button>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"/></td>
+          <td style="white-space:nowrap;">2026-04-11 09:55</td>
+          <td><strong>石新元汽配</strong></td><td>张明</td>
+          <td><strong class="blue">¥300.00</strong></td>
+          <td style="color:#722ed1;">¥1,640.00</td>
+          <td style="font-family:monospace;font-size:12px;">156****3301</td>
+          <td><span class="tag t-green">已认证</span></td>
+          <td>
+            <button class="btn btn-primary btn-sm" style="margin-right:4px;" onclick="approveWithdraw(this,'石新元汽配','¥300.00')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="rejectWithdraw(this)">拒绝</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div style="font-size:12px;color:#888;margin-top:10px;">⚠️ 灵工平台未实名的代理无法打款，需引导代理先完成实名认证</div>
+    </div>
+
+    <!-- 历史记录 -->
+    <div class="panel-card">
+      <h3>历史打款记录</h3>
+      <table class="admin-tbl">
+        <tr><th>申请时间</th><th>审核时间</th><th>代理渠道</th><th>归属销售</th><th>金额</th><th>灵工账户</th><th>状态</th><th>操作</th></tr>
+        <tr>
+          <td>2026-04-12 09:15</td><td>2026-04-12 14:30</td>
+          <td>黄石新捷顺名车</td><td>张明</td>
+          <td><strong class="green">¥2,000.00</strong></td>
+          <td style="font-family:monospace;font-size:12px;">138****9920</td>
           <td><span class="tag t-green">已打款</span></td>
-          <td><button class="btn btn-ghost btn-sm">查看凭证</button></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="alert('打款凭证：灵工流水号 LG20260412-0823\n到账时间：2026-04-12 16:45\n银行卡尾号：9920')">查看凭证</button></td>
+        </tr>
+        <tr>
+          <td>2026-04-10 11:20</td><td>2026-04-10 16:08</td>
+          <td>飞鱼科技渠道</td><td>李华</td>
+          <td><strong class="green">¥500.00</strong></td>
+          <td style="font-family:monospace;font-size:12px;">135****7710</td>
+          <td><span class="tag t-green">已打款</span></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="alert('打款凭证：灵工流水号 LG20260410-0614\n到账时间：2026-04-10 18:22\n银行卡尾号：7710')">查看凭证</button></td>
+        </tr>
+        <tr>
+          <td>2026-04-09 14:33</td><td>2026-04-09 17:00</td>
+          <td>黄石新捷顺名车</td><td>张明</td>
+          <td class="red">¥3,000.00</td>
+          <td style="font-family:monospace;font-size:12px;">138****9920</td>
+          <td><span class="tag t-red">已拒绝</span></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="alert('拒绝原因：提现金额超过当期可提现余额，请重新申请')">查看原因</button></td>
         </tr>
       </table>
-      <div style="font-size:12px;color:#888;margin-top:10px;">提现审核 1-3 工作日完成 → 通过后灵工平台自动打款</div>
     </div>
 
   </div>
@@ -1707,7 +1865,7 @@ function go(name) {
   document.getElementById('page-' + name).classList.add('active');
   event.target.classList.add('active');
   const b = document.getElementById('badge');
-  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
   b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1];
 }
 
@@ -1739,6 +1897,23 @@ function doLogout() {
   });
   // 跳转回登录页
   document.querySelectorAll('.nav-tab')[0].click();
+}
+
+function approveWithdraw(btn, name, amount) {
+  if (!confirm('确认通过「' + name + '」提现申请 ' + amount + '？\n通过后灵工平台将自动打款。')) return;
+  var row = btn.closest('tr');
+  row.cells[7].innerHTML = '<span class="tag t-green">已打款</span>';
+  row.cells[8].innerHTML = '<button class="btn btn-ghost btn-sm" onclick="alert(\'打款凭证：灵工平台处理中\')">查看凭证</button>';
+  row.style.opacity = '0.6';
+}
+
+function rejectWithdraw(btn) {
+  var reason = prompt('请输入拒绝原因：', '提现金额超过当期可提现余额');
+  if (reason === null) return;
+  var row = btn.closest('tr');
+  row.cells[7].innerHTML = '<span class="tag t-red">已拒绝</span>';
+  row.cells[8].innerHTML = '<button class="btn btn-ghost btn-sm" onclick="alert(\'拒绝原因：' + reason + '\')">查看原因</button>';
+  row.style.opacity = '0.6';
 }
 
 function switchTab(role, tab, btn) {
