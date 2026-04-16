@@ -36,10 +36,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 .main { margin-top: 52px; padding: 20px; display: flex; justify-content: center; }
 .page { display: none; width: 100%; max-width: 1160px; }
 .page.active { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
-/* 后台页（单列）专用：覆盖 flex，改为 block 并居中 */
+/* 后台页（单列）专用：限定宽度 + 自动左右边距居中 */
 #page-channel-admin.active,
 #page-withdraw-admin.active,
-#page-perm.active { display: block; max-width: 1280px; }
+#page-perm.active { display: block; width: 960px; max-width: calc(100vw - 80px); margin: 0 auto; }
 
 /* ── 手机外壳 ── */
 .phone-wrap { flex: 0 0 375px; }
