@@ -1470,8 +1470,47 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
      页面：渠道管理
 ══════════════════════════════ -->
 <div class="page" id="page-channel-admin">
-  <div style="width:100%;max-width:1400px;display:flex;gap:20px;align-items:flex-start;">
-  <div style="flex:1;min-width:0;max-width:1100px;">
+  <div style="width:100%;max-width:1200px;">
+
+    <!-- 需求说明 -->
+    <details style="margin-bottom:14px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:3px solid #1677ff;">
+      <summary style="padding:12px 16px;font-size:13px;font-weight:700;color:#1677ff;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">📋 渠道管理 · 产品需求 <span style="font-size:11px;font-weight:400;color:#bbb;">（点击展开）</span></summary>
+      <div style="padding:0 16px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">筛选区</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            支持：渠道名称（模糊）、录入时间区间、渠道类型、APPID（精确）、录入人、联系方式<br>
+            多条件同时筛选取<strong>交集</strong><br>
+            <span style="color:#e67e00;">⚠ 时间区间开始>结束：提示错误，不可查询</span><br>
+            <span style="color:#e67e00;">⚠ 无结果：显示「暂无匹配数据」</span><br>
+            重置：清空所有条件，恢复全量列表
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">表格列表</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            渠道编码系统自动生成，唯一，不可手动填写<br>
+            <strong>二维码：</strong>弹出渠道专属二维码，支持下载<br>
+            <strong>修改：</strong>打开编辑弹窗<br>
+            <strong>冻结：</strong>冻结后代理无法登录，按钮变「解冻」<br>
+            <span style="color:#e67e00;">⚠ APPID重复：保存时提示「APPID已存在」</span><br>
+            <span style="color:#e67e00;">⚠ 冻结渠道二维码：弹窗顶部红色提示</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">新增/修改弹窗</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            <strong>必填：</strong>渠道名称（≤50字）、渠道类型<br>
+            <strong>选填：</strong>适配套餐、货车套餐、各分润模块、销售、负责人、备注<br>
+            <span style="color:#e67e00;">⚠ 必填项为空：提交时阻断并提示</span><br>
+            <span style="color:#e67e00;">⚠ 分润比例>80：实时红色提示，提交阻断</span><br>
+            <span style="color:#e67e00;">⚠ 比例变更：历史流水不变，新流水按新比例</span><br>
+            <span style="color:#e67e00;">⚠ 关闭弹窗：有未保存内容时二次确认</span><br>
+            <span style="color:#e67e00;">⚠ 保存失败：弹窗不关闭，提示重试</span>
+          </div>
+        </div>
+      </div>
+    </details>
 
     <!-- 面包屑 -->
     <div style="font-size:12px;color:#888;margin-bottom:14px;">首页 &gt; 后台管理 &gt; <span style="color:#1677ff;">渠道管理</span></div>
@@ -1759,61 +1798,52 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 </div>
 
-  </div><!-- /inner flex left -->
-  <!-- 渠道管理 需求面板 -->
-  <div style="flex:0 0 300px;">
-    <div class="req-card">
-      <h4>📋 渠道管理 · 产品需求</h4>
-      <details class="req-tab" open>
-        <summary>筛选区</summary>
-        <div class="req-body">
-          支持：渠道名称（模糊）、录入时间区间、渠道类型（线下/线上/准前装/前装）、APPID（精确）、录入人（模糊）、联系方式（模糊）<br>
-          多条件同时筛选取<strong>交集</strong>。
-          <div class="req-rule"><span class="rk">时间区间</span><span class="rv">开始>结束时提示错误，不可查询</span></div>
-          <div class="req-rule"><span class="rk">无结果</span><span class="rv">显示「暂无匹配数据」</span></div>
-          <div class="req-rule"><span class="rk">重置</span><span class="rv">清空所有条件，恢复全量列表</span></div>
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>表格列表</summary>
-        <div class="req-body">
-          自动生成渠道编码（唯一，不可手动填写）<br>
-          <table class="req-tbl">
-            <tr><th>操作</th><th>说明</th></tr>
-            <tr><td>二维码</td><td>展示渠道专属二维码，支持下载</td></tr>
-            <tr><td>修改</td><td>打开编辑弹窗</td></tr>
-            <tr><td>冻结</td><td>冻结后代理无法登录；变为「解冻」按钮</td></tr>
-          </table>
-          <div class="req-rule"><span class="rk">APPID重复</span><span class="rv">保存时提示「APPID已存在」</span></div>
-          <div class="req-rule"><span class="rk">冻结渠道二维码</span><span class="rv">弹窗顶部显示「该渠道已冻结」红色提示</span></div>
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>新增/修改弹窗</summary>
-        <div class="req-body">
-          <strong>必填：</strong>渠道名称（≤50字）、渠道类型<br>
-          <strong>选填：</strong>适配套餐、货车产品套餐、各分润模块（智能/延保/货车）、销售人员、负责人、备注
-          <table class="req-tbl" style="margin-top:4px;">
-            <tr><th>边界场景</th><th>处理规则</th></tr>
-            <tr><td>必填项为空</td><td>提交时阻断并提示</td></tr>
-            <tr><td>分润比例>80</td><td>实时红色提示，提交时阻断</td></tr>
-            <tr><td>比例变更</td><td>历史流水按原比例，变更后新流水按新比例</td></tr>
-            <tr><td>关闭弹窗</td><td>有未保存内容时二次确认</td></tr>
-            <tr><td>保存失败</td><td>弹窗不关闭，提示「保存失败，请重试」</td></tr>
-          </table>
-        </div>
-      </details>
-    </div>
   </div>
-  </div><!-- /outer flex -->
-</div><!-- /page-channel-admin -->
+</div>
 
 <!-- ══════════════════════════════
      页面 6：提现审核
 ══════════════════════════════ -->
 <div class="page" id="page-withdraw-admin">
-  <div style="width:100%;max-width:1400px;display:flex;gap:20px;align-items:flex-start;">
-  <div style="flex:1;min-width:0;max-width:1100px;">
+  <div style="width:100%;max-width:1100px;">
+
+    <!-- 需求说明 -->
+    <details style="margin-bottom:14px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:3px solid #1677ff;">
+      <summary style="padding:12px 16px;font-size:13px;font-weight:700;color:#1677ff;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">📋 提现审核 · 产品需求 <span style="font-size:11px;font-weight:400;color:#bbb;">（点击展开）</span></summary>
+      <div style="padding:0 16px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">待审核队列</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            字段：多选框、申请时间、代理渠道、归属销售、申请金额、可提现余额、灵工账户、实名状态、操作<br>
+            <span style="color:#e67e00;">⚠ 未完成灵工实名：「通过」置灰，hover提示</span><br>
+            <span style="color:#e67e00;">⚠ 申请金额>余额：标红，不允许通过</span><br>
+            <span style="color:#e67e00;">⚠ 批量通过含未实名：过滤后执行，给出结果提示</span><br>
+            <span style="color:#e67e00;">⚠ 两人同时审核：后操作者提示「已被处理」</span><br>
+            <span style="color:#e67e00;">⚠ 重复点击通过：接口幂等，只创建一笔</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">拒绝 & 打款失败</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            拒绝时必须填写原因，否则不可提交<br>
+            拒绝后金额自动退回代理可提现余额<br>
+            代理端状态变「已拒绝」，可查看原因<br>
+            <span style="color:#e67e00;">⚠ 灵工打款失败：状态变「打款失败」，需人工重触发</span><br>
+            审核时代理余额变动：以申请时锁定金额为准
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">历史记录</div>
+          <div style="font-size:11.5px;color:#555;line-height:1.9;">
+            字段：申请时间、审核时间、代理渠道、归属销售、金额、灵工账户、状态、操作<br>
+            操作：查看凭证（已打款）/ 查看原因（已拒绝）<br>
+            分页展示，每页20条<br>
+            支持按时间/金额排序<br>
+            <span style="color:#e67e00;">⚠ 凭证数据缺失：提示联系灵工平台</span>
+          </div>
+        </div>
+      </div>
+    </details>
 
     <!-- 顶部汇总 -->
     <div class="panel-card">
@@ -1978,57 +2008,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       </table>
     </div>
 
-  </div><!-- /inner flex left -->
-  <!-- 提现审核 需求面板 -->
-  <div style="flex:0 0 300px;">
-    <div class="req-card">
-      <h4>📋 提现审核 · 产品需求</h4>
-      <details class="req-tab" open>
-        <summary>汇总数据</summary>
-        <div class="req-body">
-          待审核总笔数、本月已通过笔数、本月已打款总金额（实时数据）
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>待审核队列</summary>
-        <div class="req-body">
-          表格字段：多选框、申请时间、代理渠道、归属销售、申请金额、可提现余额、灵工账户、首次实名状态、操作
-          <table class="req-tbl" style="margin-top:4px;">
-            <tr><th>边界场景</th><th>处理规则</th></tr>
-            <tr><td>未完成灵工实名</td><td>「通过」置灰，hover提示「需先完成实名」</td></tr>
-            <tr><td>申请金额>余额</td><td>标红异常标记，不允许通过</td></tr>
-            <tr><td>批量通过含未实名</td><td>过滤未实名，仅对已实名执行，给出结果提示</td></tr>
-            <tr><td>审核时余额变动</td><td>以申请时锁定金额为准</td></tr>
-            <tr><td>两人同时审核同一笔</td><td>后操作者提示「已被[姓名]处理」</td></tr>
-            <tr><td>重复点击通过</td><td>接口幂等，只创建一笔打款记录</td></tr>
-          </table>
-          <div class="req-warn">拒绝时必须填写拒绝原因，否则不可提交</div>
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>拒绝后处理</summary>
-        <div class="req-body">
-          <div class="req-rule"><span class="rk">金额退回</span><span class="rv">自动退回代理可提现余额</span></div>
-          <div class="req-rule"><span class="rk">状态变更</span><span class="rv">变为「已拒绝」，代理端可查看原因</span></div>
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>打款失败后</summary>
-        <div class="req-body">
-          <div class="req-rule"><span class="rk">灵工打款失败</span><span class="rv">状态变为「打款失败」，需人工重新触发[待确认]</span></div>
-          <div class="req-rule"><span class="rk">凭证缺失</span><span class="rv">提示「凭证暂未同步，请联系灵工平台」</span></div>
-        </div>
-      </details>
-      <details class="req-tab">
-        <summary>历史记录</summary>
-        <div class="req-body">
-          字段：申请时间、审核时间、代理渠道、归属销售、金额、灵工账户、状态、操作（查看凭证/查看原因）<br>
-          分页展示，每页20条，支持按时间/金额排序
-        </div>
-      </details>
-    </div>
   </div>
-  </div><!-- /outer flex -->
 </div>
 
 <!-- ══════════════════════════════
