@@ -215,6 +215,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <button class="nav-tab" onclick="go('sales')">销售视图</button>
     <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
     <button class="nav-tab" onclick="go('admin')">后台管理端</button>
+    <button class="nav-tab" onclick="go('channel-admin')">渠道管理</button>
     <button class="nav-tab" onclick="go('withdraw-admin')">提现审核</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
     <button class="nav-tab" onclick="go('flow')">业务时序图</button>
@@ -1367,6 +1368,270 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 </div>
 
 <!-- ══════════════════════════════
+     页面：渠道管理
+══════════════════════════════ -->
+<div class="page" id="page-channel-admin">
+  <div style="width:100%;max-width:1200px;">
+
+    <!-- 面包屑 -->
+    <div style="font-size:12px;color:#888;margin-bottom:14px;">首页 &gt; 后台管理 &gt; <span style="color:#1677ff;">渠道管理</span></div>
+
+    <!-- 筛选栏 -->
+    <div class="panel-card" style="padding:16px 20px 12px;">
+      <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">渠道名称</span>
+          <input placeholder="请输入渠道名称" style="width:150px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">录入时间</span>
+          <input type="date" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <span style="color:#bbb;">至</span>
+          <input type="date" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">渠道类型</span>
+          <select style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+            <option value="">请选择渠道类型</option>
+            <option>线下</option><option>线上</option><option>准前装</option><option>前装</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">APPID</span>
+          <input placeholder="请输入" style="width:120px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">录入人</span>
+          <input placeholder="请输入" style="width:100px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;">
+          <span style="color:#555;white-space:nowrap;">联系方式</span>
+          <input placeholder="请输入电话号码" style="width:140px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="openChannelDialog('add')" style="padding:6px 16px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;">+ 新增</button>
+        <button style="padding:6px 16px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;cursor:pointer;">查询</button>
+        <button style="padding:6px 16px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;cursor:pointer;">重置</button>
+      </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="panel-card" style="overflow-x:auto;">
+      <table class="admin-tbl" style="min-width:1100px;">
+        <tr>
+          <th>渠道编码</th><th>录入时间</th><th>渠道名称</th><th>APPID</th>
+          <th>渠道类型</th><th>负责人名称</th><th>负责人联系方式</th>
+          <th>分润比例</th><th>备注</th><th>更新时间</th>
+          <th>创建人</th><th>更新人</th><th style="min-width:130px;">操作</th>
+        </tr>
+        <tr>
+          <td>38</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>李嘉馨</strong></td><td style="font-family:monospace;font-size:12px;">LJY1038</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:19</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('LJY1038')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','李嘉馨')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>39</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>铭松泰亚电子<br><span style="font-size:11px;color:#888;">(天津有限公司)</span></strong></td>
+          <td style="font-family:monospace;font-size:12px;">JSTKDZ1039</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:21</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('JSTKDZ1039')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','铭松泰亚电子')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>40</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>普颐风行旅居</strong></td><td style="font-family:monospace;font-size:12px;">KMFXSJ1040</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:06:55</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('KMFXSJ1040')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','普颐风行旅居')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>41</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>广东好司机</strong></td><td style="font-family:monospace;font-size:12px;">haosiji0509</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:23</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('haosiji0509')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','广东好司机')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>42</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>刘大师</strong></td><td style="font-family:monospace;font-size:12px;">LDS1041</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:24</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('LDS1041')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','刘大师')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>43</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>梗月丹</strong></td><td style="font-family:monospace;font-size:12px;">HDD1042</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:27</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('HDD1042')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','梗月丹')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>44</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>中信银行</strong></td><td style="font-family:monospace;font-size:12px;">ZXYX1043</td>
+          <td><span class="tag t-blue">线上</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>20%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:01</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('ZXYX1043')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','中信银行')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>45</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>张光品</strong></td><td style="font-family:monospace;font-size:12px;">ZGP1044</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:10</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('ZGP1044')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','张光品')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>47</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>韩梦</strong></td><td style="font-family:monospace;font-size:12px;">HS1046</td>
+          <td><span class="tag t-gray">线下</span></td><td>比利</td><td style="font-family:monospace;font-size:12px;">13611028532</td>
+          <td>0%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2026-01-22 12:09:33</td>
+          <td>赵骅臻</td><td>刘洪煌</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('HS1046')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','韩梦')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+        <tr>
+          <td>48</td><td style="white-space:nowrap;font-size:12px;">2024-06-24 21:23:18</td>
+          <td><strong>光大银行行景景<br><span style="font-size:11px;color:#888;">通颐联送</span></strong></td>
+          <td style="font-family:monospace;font-size:12px;">LGZ1047</td>
+          <td><span class="tag t-blue">线上</span></td><td>王浩</td><td style="font-family:monospace;font-size:12px;">17200375749</td>
+          <td>15%</td><td style="color:#bbb;">无</td><td style="white-space:nowrap;font-size:12px;">2025-08-18 14:06:52</td>
+          <td>赵骅臻</td><td>王浩</td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showQrCode('LGZ1047')">二维码</button> <button class="btn btn-ghost btn-sm" onclick="openChannelDialog('edit','光大银行行景景通颐联送')">修改</button> <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="toggleFreeze(this)">冻结</button></td>
+        </tr>
+      </table>
+      <!-- 分页 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:13px;color:#555;">
+        <span>共 <strong>287</strong> 条记录</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button style="padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:12px;">&lt;</button>
+          <button style="padding:4px 10px;border:1px solid #1677ff;border-radius:4px;background:#1677ff;color:#fff;font-size:12px;">4</button>
+          <button style="padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:12px;">5</button>
+          <button style="padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:12px;">6</button>
+          <button style="padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:12px;">&gt;</button>
+          <span style="color:#888;margin-left:8px;">前往</span>
+          <input style="width:44px;padding:4px 6px;border:1px solid #d9d9d9;border-radius:4px;font-size:12px;text-align:center;outline:none;" value="4"/>
+          <span style="color:#888;">页</span>
+        </div>
+        <span style="color:#888;">每页 10 条</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ 渠道管理 · 修改/新增弹窗 ══ -->
+<div id="channel-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.3);width:560px;max-width:96vw;max-height:90vh;overflow-y:auto;">
+    <!-- 标题栏 -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:linear-gradient(90deg,#1677ff,#4096ff);border-radius:8px 8px 0 0;">
+      <span id="channel-modal-title" style="font-size:14px;font-weight:600;color:#fff;">修改渠道</span>
+      <button onclick="closeChannelDialog()" style="width:22px;height:22px;background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;border-radius:50;opacity:.8;">✕</button>
+    </div>
+    <!-- 表单 -->
+    <div style="padding:16px 20px 8px;">
+      <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
+        <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;"><span style="color:#ff4d4f;">*</span>渠道名称</div>
+        <div style="flex:1;"><input id="cm-name" type="text" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
+        <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;"><span style="color:#ff4d4f;">*</span>渠道类型</div>
+        <div style="flex:1;">
+          <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+            <option>线下</option><option>线上</option><option>准前装</option><option>前装</option><option>后装</option><option>直销</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
+        <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;">适配套餐</div>
+        <div style="flex:1;">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <select style="flex:0 0 100px;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;"><option>ONE-10</option><option>ONE-20</option><option>ONE-50</option></select>
+            <select style="flex:1;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+              <option>直播间时间60分钟</option><option selected>直播间时间120分钟</option><option>直播间时间180分钟</option>
+            </select>
+            <button style="width:28px;height:30px;border:1px solid #d9d9d9;border-radius:5px;background:#fafafa;cursor:pointer;font-size:16px;color:#888;">＋</button>
+          </div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">非必填，可不选套餐</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
+        <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;">货车产品套餐</div>
+        <div style="flex:1;">
+          <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+            <option value="">请选择货车产品套餐</option><option>货运标准版</option><option>货运增强版</option>
+          </select>
+        </div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <!-- 模块① 智能服务分润 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块① 智能服务分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">分润比例（%）</label><input type="number" placeholder="0 ~ 80" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <!-- 模块② 延保服务分润 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块② 延保服务分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商姓名</label><input id="cm-agent-name" type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">分润比例（%）</label><input type="number" placeholder="0 ~ 80" min="0" max="80" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <!-- 模块③ 销售人员 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块③ 销售人员 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">销售姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <!-- 模块④ 负责人 -->
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 负责人 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">负责人姓名</label><input type="text" placeholder="请输入姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">手机号</label><input type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+      </div>
+      <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
+      <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
+        <div style="flex:0 0 96px;color:#333;padding-top:8px;text-align:right;padding-right:10px;">备注</div>
+        <div style="flex:1;"><textarea placeholder="请填写备注信息（选填）" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;resize:vertical;min-height:54px;font-family:inherit;"></textarea></div>
+      </div>
+    </div>
+    <!-- 底部按钮 -->
+    <div style="padding:10px 20px 16px;display:flex;justify-content:center;gap:10px;border-top:1px solid #f0f0f0;">
+      <button onclick="saveChannelDialog()" style="padding:7px 30px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;">确 认</button>
+      <button onclick="closeChannelDialog()" style="padding:7px 22px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;cursor:pointer;">取 消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 二维码弹窗 -->
+<div id="qr-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:10px;padding:28px 32px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.25);min-width:240px;">
+    <div style="font-size:14px;font-weight:700;margin-bottom:16px;">渠道二维码</div>
+    <div id="qr-appid" style="font-size:12px;color:#888;margin-bottom:12px;font-family:monospace;"></div>
+    <!-- 模拟二维码 -->
+    <div style="width:140px;height:140px;margin:0 auto 14px;background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 0 0/12px 12px;border:3px solid #000;border-radius:4px;position:relative;">
+      <div style="position:absolute;inset:4px;background:white;border-radius:2px;display:flex;align-items:center;justify-content:center;">
+        <div style="width:30px;height:30px;background:linear-gradient(135deg,#1677ff,#4096ff);border-radius:4px;"></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#888;margin-bottom:16px;">扫描二维码进入渠道小程序</div>
+    <button onclick="document.getElementById('qr-modal-mask').style.display='none'" style="padding:7px 28px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;cursor:pointer;">关 闭</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
      页面 6：提现审核
 ══════════════════════════════ -->
 <div class="page" id="page-withdraw-admin">
@@ -1865,7 +2130,7 @@ function go(name) {
   document.getElementById('page-' + name).classList.add('active');
   event.target.classList.add('active');
   const b = document.getElementById('badge');
-  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], admin:['⚙️ 后台运营','badge-mgr'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
   b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1];
 }
 
@@ -1898,6 +2163,42 @@ function doLogout() {
   // 跳转回登录页
   document.querySelectorAll('.nav-tab')[0].click();
 }
+
+function openChannelDialog(mode, name) {
+  var mask = document.getElementById('channel-modal-mask');
+  mask.style.display = 'flex';
+  document.getElementById('channel-modal-title').textContent = mode === 'add' ? '新增渠道' : '修改渠道';
+  document.getElementById('cm-name').value = mode === 'edit' ? (name || '') : '';
+  document.getElementById('cm-agent-name').value = '';
+}
+function closeChannelDialog() {
+  document.getElementById('channel-modal-mask').style.display = 'none';
+}
+function saveChannelDialog() {
+  var name = document.getElementById('cm-name').value.trim();
+  if (!name) { alert('请填写渠道名称'); return; }
+  closeChannelDialog();
+  alert('✅ 保存成功！渠道「' + name + '」已更新');
+}
+function showQrCode(appid) {
+  document.getElementById('qr-appid').textContent = 'APPID：' + appid;
+  document.getElementById('qr-modal-mask').style.display = 'flex';
+}
+function toggleFreeze(btn) {
+  var frozen = btn.textContent === '解冻';
+  btn.textContent = frozen ? '冻结' : '解冻';
+  btn.style.background = frozen ? '#fff1f0' : '#f0f5ff';
+  btn.style.color = frozen ? '#ff4d4f' : '#1677ff';
+  var row = btn.closest('tr');
+  row.style.opacity = frozen ? '1' : '0.5';
+}
+// 点击遮罩关闭弹窗
+document.addEventListener('click', function(e) {
+  var mask = document.getElementById('channel-modal-mask');
+  if (e.target === mask) closeChannelDialog();
+  var qrmask = document.getElementById('qr-modal-mask');
+  if (e.target === qrmask) qrmask.style.display = 'none';
+});
 
 function approveWithdraw(btn, name, amount) {
   if (!confirm('确认通过「' + name + '」提现申请 ' + amount + '？\n通过后灵工平台将自动打款。')) return;
