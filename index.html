@@ -133,6 +133,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 .perm-warn { background: #fff7e6; border: 1px solid #ffd591; border-radius: 8px; padding: 10px 12px; font-size: 11.5px; color: #873800; margin-bottom: 10px; }
 .perm-block { background: #f5f5f5; border-radius: 10px; padding: 24px; text-align: center; margin-top: 10px; }
 
+/* ── 需求卡片 ── */
+.req-card { background:#fff; border-radius:10px; padding:14px 16px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,.06); border-left:3px solid #1677ff; }
+.req-card h4 { font-size:13px; font-weight:700; color:#1677ff; margin-bottom:8px; }
+details.req-tab { margin-bottom:6px; }
+details.req-tab summary { font-size:12.5px; font-weight:700; color:#333; cursor:pointer; padding:5px 0; border-bottom:1px solid #f0f0f0; list-style:none; display:flex; align-items:center; gap:5px; }
+details.req-tab summary::before { content:'▶'; font-size:9px; color:#1677ff; transition:transform .2s; }
+details.req-tab[open] summary::before { transform:rotate(90deg); }
+details.req-tab .req-body { padding:8px 0 4px; font-size:12px; color:#444; line-height:1.85; }
+.req-rule { display:flex; gap:6px; margin-bottom:4px; font-size:12px; }
+.req-rule .rk { flex-shrink:0; background:#f0f5ff; color:#1677ff; border-radius:3px; padding:1px 5px; font-size:11px; font-weight:700; white-space:nowrap; }
+.req-rule .rv { color:#555; }
+.req-warn { background:#fff7e6; border:1px solid #ffd591; border-radius:5px; padding:5px 8px; font-size:11.5px; color:#873800; margin:4px 0; }
+.req-err { background:#fff1f0; border:1px solid #ffa39e; border-radius:5px; padding:5px 8px; font-size:11.5px; color:#a8071a; margin:4px 0; }
+.req-ok { background:#f6ffed; border:1px solid #b7eb8f; border-radius:5px; padding:5px 8px; font-size:11.5px; color:#237804; margin:4px 0; }
+.req-tbl { width:100%; border-collapse:collapse; font-size:11.5px; margin:6px 0; }
+.req-tbl th { background:#f0f5ff; color:#1677ff; font-weight:700; padding:4px 6px; border:1px solid #e6f0ff; }
+.req-tbl td { padding:4px 6px; border:1px solid #f0f0f0; color:#444; vertical-align:top; }
+.req-tbl tr:nth-child(even) td { background:#fafafa; }
+
 /* ── 分割线/节标题 ── */
 .sec-t { font-size: 11.5px; color: #888; font-weight: 600; margin-bottom: 8px; }
 .divider { height: 1px; background: #f0f0f0; margin: 10px 0; }
@@ -287,6 +306,40 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 
   <div class="side-panel">
+    <div class="req-card">
+      <h4>📋 登录页 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>功能说明</summary>
+        <div class="req-body">
+          手机号 + 短信验证码登录，<strong>不需要用户选择角色</strong>。<br>
+          登录成功后系统根据后台配置的角色自动路由跳转。
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>字段规则</summary>
+        <div class="req-body">
+          <table class="req-tbl">
+            <tr><th>字段</th><th>规则</th></tr>
+            <tr><td>手机号</td><td>11位数字，非数字字符禁止输入</td></tr>
+            <tr><td>获取验证码</td><td>60s倒计时，期间不可重复点击</td></tr>
+            <tr><td>验证码</td><td>6位数字，有效期5分钟</td></tr>
+            <tr><td>登录按钮</td><td>手机号+验证码均非空时可点击</td></tr>
+          </table>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>⚠️ 边界条件</summary>
+        <div class="req-body">
+          <div class="req-rule"><span class="rk">手机号未注册</span><span class="rv">提示「该手机号未开通权限」，不发送验证码</span></div>
+          <div class="req-rule"><span class="rk">验证码错误</span><span class="rv">提示错误，最多重试3次；超3次锁定10分钟</span></div>
+          <div class="req-rule"><span class="rk">验证码超时</span><span class="rv">提示「已过期，请重新获取」</span></div>
+          <div class="req-rule"><span class="rk">重复提交</span><span class="rv">登录按钮点击后立即loading，防重复提单</span></div>
+          <div class="req-rule"><span class="rk">网络异常</span><span class="rv">提示「网络连接失败，请重试」</span></div>
+          <div class="req-rule"><span class="rk">Token过期</span><span class="rv">下次打开自动跳登录页，不保留登录态</span></div>
+          <div class="req-rule"><span class="rk">多设备登录</span><span class="rv">以最新设备为准，旧设备Token失效 [待确认]</span></div>
+        </div>
+      </details>
+    </div>
     <div class="panel-card">
       <h3>三角色层级架构（V1.1）</h3>
       <div class="tree">
@@ -640,6 +693,64 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 
   <div class="side-panel">
+    <div class="req-card">
+      <h4>📋 主管视图 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>总览 Tab — 汇总卡片</summary>
+        <div class="req-body">
+          展示全渠道累计数据（非仅本月）：代理总数、进货总量、已激活、未激活、总分润、延保订单、待审核提现。<br>
+          <table class="req-tbl" style="margin-top:6px;">
+            <tr><th>字段</th><th>说明</th></tr>
+            <tr><td>代理总数</td><td>当前激活中的代理渠道数</td></tr>
+            <tr><td>进货总量</td><td>所有代理历史进货SN累计</td></tr>
+            <tr><td>总分润</td><td>所有代理历史累计分润金额</td></tr>
+            <tr><td>待审核提现</td><td>当前待处理提现申请笔数</td></tr>
+          </table>
+          <div class="req-rule" style="margin-top:6px;"><span class="rk">排序</span><span class="rv">代理列表支持按激活率/分润金额升降序</span></div>
+          <div class="req-rule"><span class="rk">点击行</span><span class="rv">进入代理详情（进销存+分润+订单全量，只读）</span></div>
+          <div class="req-rule"><span class="rk">分页</span><span class="rv">列表上拉加载，每次20条</span></div>
+          <div class="req-err">边界：无代理时显示空状态；某代理无负责销售显示「—」；数据下拉刷新</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>库存 Tab</summary>
+        <div class="req-body">
+          全渠道库存汇总（进货总量/已激活/未激活）+ 各代理库存明细卡片。<br>
+          每张卡片：渠道名、激活率、负责销售、最近进货日期、进货量、已激活、未激活、SN号段。
+          <div class="req-rule"><span class="rk">SN缺失</span><span class="rv">显示「—」不影响其他字段</span></div>
+          <div class="req-rule"><span class="rk">多批次</span><span class="rv">合并展示总量，详情可查各批次</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>分润 Tab</summary>
+        <div class="req-body">
+          <strong>本月汇总：</strong>本月分润总额、计费订单数、已提现<br>
+          <strong>累计总览：</strong>累计分润总额、累计订单、累计提现；各渠道明细（渠道名/订单数/分润金额/已提现），超3条折叠，「展开更多」<br>
+          <strong>最新流水：</strong>展示近20条，正常分润绿色，退款补偿橙色<br>
+          <div class="req-rule" style="margin-top:4px;"><span class="rk">退款补偿</span><span class="rv">以正数入账（不扣减代理余额），标注「退款补偿」</span></div>
+          <div class="req-rule"><span class="rk">比例变更</span><span class="rv">历史流水保留原比例，不追溯修改</span></div>
+          <div class="req-err">边界：当月无数据显示0；分润为0的渠道仍展示</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>提现记录 Tab</summary>
+        <div class="req-body">
+          汇总（待审核/本月已通过/本月已打款）+ 列表（代理名/申请金额/平台/状态/时间）<br>
+          状态：待审核🟠 / 已打款🟢 / 已拒绝🔴<br>
+          <div class="req-warn">主管仅可查看，无审核操作。审核入口在后台「提现审核」页</div>
+          <div class="req-rule"><span class="rk">空数据</span><span class="rv">显示「暂无提现记录」空状态</span></div>
+          <div class="req-rule"><span class="rk">多笔待审核</span><span class="rv">按申请时间倒序全部展示</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>我的 Tab</summary>
+        <div class="req-body">
+          展示：头像、姓名、角色标签、登录手机号、角色权限、账号状态、系统版本<br>
+          退出登录：二次确认弹窗 → 清除登录态 → 回登录页，所有Tab重置为默认
+          <div class="req-rule"><span class="rk">账号被封</span><span class="rv">下次打开时提示「账号已禁用」</span></div>
+        </div>
+      </details>
+    </div>
     <div class="panel-card">
       <h3>主管视图 · 权限说明</h3>
       <div class="hl-blue">
@@ -917,6 +1028,46 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 
   <div class="side-panel">
+    <div class="req-card">
+      <h4>📋 销售视图 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>总览 Tab — 汇总卡片</summary>
+        <div class="req-body">
+          与主管视图字段保持一致（代理总数/进货总量/已激活/未激活/总分润/延保订单/待审核提现），<strong>数据范围仅限该销售负责的代理</strong>。
+          <div class="req-rule"><span class="rk">归属变更</span><span class="rv">后台修改后立即生效：新代理出现，移出代理消失</span></div>
+          <div class="req-rule"><span class="rk">越权访问</span><span class="rv">接口返回403，前端提示「无权限访问」（不仅前端隐藏）</span></div>
+          <div class="req-err">边界：无负责代理时显示空状态；未分配给任何销售的代理不展示</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>库存 Tab</summary>
+        <div class="req-body">
+          仅展示负责代理的库存，字段与主管库存Tab一致。
+          <div class="req-warn">接口层鉴权，非仅前端隐藏。越权请求返回403。</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>分润 Tab</summary>
+        <div class="req-body">
+          与主管分润Tab结构一致，数据范围限负责代理。<br>
+          累计总览中仅展示该销售负责的渠道列表。
+          <div class="req-rule"><span class="rk">退款补偿</span><span class="rv">同主管：以正数入账，标注「退款补偿」</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>提现记录 Tab</summary>
+        <div class="req-body">
+          仅展示负责代理的提现申请记录，只读，无审核操作。
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>我的 Tab</summary>
+        <div class="req-body">
+          展示：姓名、角色标签（主管下的销售）、登录手机号、负责代理数、账号状态、系统版本<br>
+          退出登录逻辑同主管。
+        </div>
+      </details>
+    </div>
     <div class="panel-card">
       <h3>销售视图 · 权限说明</h3>
       <div class="hl-orange">
@@ -1195,6 +1346,72 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 
   <div class="side-panel">
+    <div class="req-card">
+      <h4>📋 一级代理视图 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>Header — 账户余额栏</summary>
+        <div class="req-body">
+          展示：渠道名称、分润账户余额（实时）、本月新增分润、累计提现金额
+          <div class="req-rule"><span class="rk">余额为0</span><span class="rv">显示¥0.00，提现按钮置灰</span></div>
+          <div class="req-rule"><span class="rk">余额异常</span><span class="rv">负数不应出现，出现需后台告警</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>首页 Tab</summary>
+        <div class="req-body">
+          快捷入口（提现/库存/订单）+ 库存快览 + 退款提示 + 最近4条分润流水
+          <div class="req-rule"><span class="rk">退款补偿条目</span><span class="rv">橙色+号，标签「退款补偿」，分润余额不扣减</span></div>
+          <div class="req-rule"><span class="rk">SN脱敏</span><span class="rv">前4后4，中间替换为****</span></div>
+          <div class="req-rule"><span class="rk">无流水</span><span class="rv">显示「暂无分润记录」空状态</span></div>
+          <div class="req-warn">退款提示固定文案：「如需退款，请联系客服处理，不支持自助退款」</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>库存 Tab</summary>
+        <div class="req-body">
+          库存汇总（进货总量/已激活/未激活/激活率/SN号段）+ 进货批次列表<br>
+          每批次：批次号、进货日期、进货量、已激活、未激活、激活率、SN号段、分润比例
+          <div class="req-rule"><span class="rk">无进货记录</span><span class="rv">显示「暂无进货记录，请联系负责销售」</span></div>
+          <div class="req-rule"><span class="rk">SN号段重叠</span><span class="rv">后台录入时校验唯一性，不允许重叠</span></div>
+          <div class="req-rule"><span class="rk">激活率>100%</span><span class="rv">数据异常，前端标记，后台告警</span></div>
+          <div class="req-ok">新增进货提示：显示负责销售姓名，引导代理联系销售</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>账户 Tab（提现）</summary>
+        <div class="req-body">
+          可提现余额 + 提现表单 + 提现历史 + 步骤指引（灵工注册→申请→审核→到账）
+          <table class="req-tbl" style="margin-top:4px;">
+            <tr><th>边界场景</th><th>处理规则</th></tr>
+            <tr><td>金额为0或负数</td><td>提交按钮置灰</td></tr>
+            <tr><td>金额>可提现余额</td><td>提示「不能超过可提现余额」</td></tr>
+            <tr><td>首次未实名灵工</td><td>跳转灵工实名，完成后返回</td></tr>
+            <tr><td>重复提交</td><td>按钮loading防重，接口幂等</td></tr>
+            <tr><td>网络异常</td><td>提示「提交失败，请重试」</td></tr>
+            <tr><td>被拒绝后</td><td>金额退回余额，可查看拒绝原因</td></tr>
+            <tr><td>已有待审核申请</td><td>提示用户有待审核申请，仍可再次提交[待确认]</td></tr>
+          </table>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>订单 Tab</summary>
+        <div class="req-body">
+          本月汇总（订单数/分润合计/退款订单数）+ 延保订单列表<br>
+          每条：SN号（脱敏）、延保版本及金额、激活时间、分润金额、状态（正常🟢/已退款🟠）<br>
+          点击行：弹出订单详情
+          <div class="req-rule"><span class="rk">同一SN重复激活</span><span class="rv">后台拦截，列表不出现重复SN</span></div>
+          <div class="req-rule"><span class="rk">订单量>1000</span><span class="rv">分页，每页50条，下拉加载</span></div>
+          <div class="req-rule"><span class="rk">退款是否计入订单数</span><span class="rv">计入总数并单独标注退款数[待确认]</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>我的 Tab</summary>
+        <div class="req-body">
+          展示：渠道名称、角色标签、登录手机号、代理渠道、负责销售、分润比例、账号状态、系统版本<br>
+          退出登录逻辑同主管。
+        </div>
+      </details>
+    </div>
     <div class="panel-card">
       <h3>一级代理 · 权限说明</h3>
       <div class="hl-blue">
@@ -1253,7 +1470,8 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
      页面：渠道管理
 ══════════════════════════════ -->
 <div class="page" id="page-channel-admin">
-  <div style="width:100%;max-width:1200px;">
+  <div style="width:100%;max-width:1400px;display:flex;gap:20px;align-items:flex-start;">
+  <div style="flex:1;min-width:0;max-width:1100px;">
 
     <!-- 面包屑 -->
     <div style="font-size:12px;color:#888;margin-bottom:14px;">首页 &gt; 后台管理 &gt; <span style="color:#1677ff;">渠道管理</span></div>
@@ -1541,11 +1759,60 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 </div>
 
+  </div><!-- /inner flex left -->
+  <!-- 渠道管理 需求面板 -->
+  <div style="flex:0 0 300px;">
+    <div class="req-card">
+      <h4>📋 渠道管理 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>筛选区</summary>
+        <div class="req-body">
+          支持：渠道名称（模糊）、录入时间区间、渠道类型（线下/线上/准前装/前装）、APPID（精确）、录入人（模糊）、联系方式（模糊）<br>
+          多条件同时筛选取<strong>交集</strong>。
+          <div class="req-rule"><span class="rk">时间区间</span><span class="rv">开始>结束时提示错误，不可查询</span></div>
+          <div class="req-rule"><span class="rk">无结果</span><span class="rv">显示「暂无匹配数据」</span></div>
+          <div class="req-rule"><span class="rk">重置</span><span class="rv">清空所有条件，恢复全量列表</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>表格列表</summary>
+        <div class="req-body">
+          自动生成渠道编码（唯一，不可手动填写）<br>
+          <table class="req-tbl">
+            <tr><th>操作</th><th>说明</th></tr>
+            <tr><td>二维码</td><td>展示渠道专属二维码，支持下载</td></tr>
+            <tr><td>修改</td><td>打开编辑弹窗</td></tr>
+            <tr><td>冻结</td><td>冻结后代理无法登录；变为「解冻」按钮</td></tr>
+          </table>
+          <div class="req-rule"><span class="rk">APPID重复</span><span class="rv">保存时提示「APPID已存在」</span></div>
+          <div class="req-rule"><span class="rk">冻结渠道二维码</span><span class="rv">弹窗顶部显示「该渠道已冻结」红色提示</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>新增/修改弹窗</summary>
+        <div class="req-body">
+          <strong>必填：</strong>渠道名称（≤50字）、渠道类型<br>
+          <strong>选填：</strong>适配套餐、货车产品套餐、各分润模块（智能/延保/货车）、销售人员、负责人、备注
+          <table class="req-tbl" style="margin-top:4px;">
+            <tr><th>边界场景</th><th>处理规则</th></tr>
+            <tr><td>必填项为空</td><td>提交时阻断并提示</td></tr>
+            <tr><td>分润比例>80</td><td>实时红色提示，提交时阻断</td></tr>
+            <tr><td>比例变更</td><td>历史流水按原比例，变更后新流水按新比例</td></tr>
+            <tr><td>关闭弹窗</td><td>有未保存内容时二次确认</td></tr>
+            <tr><td>保存失败</td><td>弹窗不关闭，提示「保存失败，请重试」</td></tr>
+          </table>
+        </div>
+      </details>
+    </div>
+  </div>
+  </div><!-- /outer flex -->
+
 <!-- ══════════════════════════════
      页面 6：提现审核
 ══════════════════════════════ -->
 <div class="page" id="page-withdraw-admin">
-  <div style="width:100%;max-width:1100px;">
+  <div style="width:100%;max-width:1400px;display:flex;gap:20px;align-items:flex-start;">
+  <div style="flex:1;min-width:0;max-width:1100px;">
 
     <!-- 顶部汇总 -->
     <div class="panel-card">
@@ -1710,7 +1977,57 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       </table>
     </div>
 
+  </div><!-- /inner flex left -->
+  <!-- 提现审核 需求面板 -->
+  <div style="flex:0 0 300px;">
+    <div class="req-card">
+      <h4>📋 提现审核 · 产品需求</h4>
+      <details class="req-tab" open>
+        <summary>汇总数据</summary>
+        <div class="req-body">
+          待审核总笔数、本月已通过笔数、本月已打款总金额（实时数据）
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>待审核队列</summary>
+        <div class="req-body">
+          表格字段：多选框、申请时间、代理渠道、归属销售、申请金额、可提现余额、灵工账户、首次实名状态、操作
+          <table class="req-tbl" style="margin-top:4px;">
+            <tr><th>边界场景</th><th>处理规则</th></tr>
+            <tr><td>未完成灵工实名</td><td>「通过」置灰，hover提示「需先完成实名」</td></tr>
+            <tr><td>申请金额>余额</td><td>标红异常标记，不允许通过</td></tr>
+            <tr><td>批量通过含未实名</td><td>过滤未实名，仅对已实名执行，给出结果提示</td></tr>
+            <tr><td>审核时余额变动</td><td>以申请时锁定金额为准</td></tr>
+            <tr><td>两人同时审核同一笔</td><td>后操作者提示「已被[姓名]处理」</td></tr>
+            <tr><td>重复点击通过</td><td>接口幂等，只创建一笔打款记录</td></tr>
+          </table>
+          <div class="req-warn">拒绝时必须填写拒绝原因，否则不可提交</div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>拒绝后处理</summary>
+        <div class="req-body">
+          <div class="req-rule"><span class="rk">金额退回</span><span class="rv">自动退回代理可提现余额</span></div>
+          <div class="req-rule"><span class="rk">状态变更</span><span class="rv">变为「已拒绝」，代理端可查看原因</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>打款失败后</summary>
+        <div class="req-body">
+          <div class="req-rule"><span class="rk">灵工打款失败</span><span class="rv">状态变为「打款失败」，需人工重新触发[待确认]</span></div>
+          <div class="req-rule"><span class="rk">凭证缺失</span><span class="rv">提示「凭证暂未同步，请联系灵工平台」</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
+        <summary>历史记录</summary>
+        <div class="req-body">
+          字段：申请时间、审核时间、代理渠道、归属销售、金额、灵工账户、状态、操作（查看凭证/查看原因）<br>
+          分页展示，每页20条，支持按时间/金额排序
+        </div>
+      </details>
+    </div>
   </div>
+  </div><!-- /outer flex -->
 </div>
 
 <!-- ══════════════════════════════
