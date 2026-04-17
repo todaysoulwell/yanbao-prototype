@@ -1509,7 +1509,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <strong>代理商：</strong>姓名、电话（选填）；电话下提示「涉及分润须谨慎，审核通过后才可使用」<br>
             <strong>智能/延保分润：</strong>仅比例（%），≤80，实时校验<br>
             <strong>货车分润：</strong>三项金额（元）每项≤500；可全空；若填任一项则三项必填；非法或超上限阻断提交<br>
-            <strong>审核分流：</strong>代理商电话相对打开弹窗时为<strong>新增或已变更</strong>，且填写了任一分润比例或货车金额 → 提交后进入<strong>渠道信息审核</strong>队列（弹窗可跳转审核页），非直接生效；<strong>提现手机号</strong>等敏感变更亦在本页审核<br>
+            <strong>审核分流：</strong>满足任一条即提交审核：<strong>代理商电话新增/变更</strong>，或<strong>填写了任一分润比例/货车金额</strong> → 弹出提示（手机号与提现登录关系），展示<strong>审核状态：待审核</strong>与申请单号；审核通过前不可用该手机号登录/提现<br>
             <strong>销售：</strong>姓名下拉，手机号根据所选人员自动带出（只读）<br>
             <strong>主管：</strong>可添加多行，姓名下拉+电话自动带出<br>
             <strong>选填：</strong>适配套餐、货车套餐、各分润模块、主管、备注<br>
@@ -1846,11 +1846,21 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 </div>
 
-<!-- 渠道变更审核流程（代理商电话新增/变更 + 已填分润时弹出） -->
+<!-- 渠道变更审核流程：手机号新增/变更 或 填写分润数据 时弹出 -->
 <div id="channel-audit-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;" onclick="if(event.target===this)closeChannelAuditModal();">
-  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:460px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
-    <div id="channel-audit-modal-title" style="font-size:15px;font-weight:700;color:#1677ff;margin-bottom:12px;">已进入审核流程</div>
-    <div id="channel-audit-modal-desc" style="font-size:13px;color:#555;line-height:1.75;"></div>
+  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:480px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
+    <div id="channel-audit-modal-title" style="font-size:15px;font-weight:700;color:#1677ff;margin-bottom:12px;">提交成功 · 待审核</div>
+    <div id="channel-audit-modal-desc" style="font-size:13px;color:#333;line-height:1.75;"></div>
+    <div style="margin-top:14px;padding:12px 14px;background:#f7f8fa;border-radius:8px;border:1px solid #e8e8e8;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:12px;color:#666;font-weight:600;">审核状态</span>
+        <span id="channel-audit-status-badge" class="tag t-orange" style="font-size:12px;padding:3px 10px;">待审核</span>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#888;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <span>申请单号：<span id="channel-audit-order-no" style="font-family:monospace;color:#555;">—</span></span>
+        <span id="channel-audit-channel-label" style="color:#bbb;"></span>
+      </div>
+    </div>
     <div style="display:flex;gap:10px;margin-top:18px;">
       <button type="button" onclick="closeChannelAuditModal()" style="flex:1;padding:9px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;cursor:pointer;">我知道了</button>
       <button type="button" onclick="goChannelAuditFromModal()" style="flex:1;padding:9px;background:#1677ff;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;">前往渠道信息审核</button>
@@ -2080,8 +2090,8 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <summary style="padding:12px 16px;font-size:13px;font-weight:700;color:#1677ff;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">📋 渠道信息审核 · 产品需求 <span style="font-size:11px;font-weight:400;color:#bbb;">（点击展开）</span></summary>
       <div style="padding:0 16px 14px;font-size:11.5px;color:#555;line-height:1.9;">
         <div style="font-weight:700;color:#333;margin-bottom:6px;">触发来源</div>
-        <div>① 渠道管理中：<strong>代理商电话新增或变更</strong>，且同单填写了<strong>智能/延保分润比例</strong>或<strong>货车分润金额</strong> → 生成审核单，配置待审核通过后生效。<br>
-        ② <strong>提现手机号</strong>、收款账户等敏感信息的新增/变更（可与①合并为同一审核单，由申请类型区分）。</div>
+        <div>① 渠道管理中满足<strong>任一</strong>：代理商电话<strong>新增/变更</strong>，或填写了<strong>智能/延保分润比例</strong>/<strong>货车分润金额</strong> → 弹出「提现与登录」提示，生成审核单（状态<strong>待审核</strong>），配置审核通过后生效。<br>
+        ② <strong>提现手机号</strong>等与代理商电话一致的敏感字段，变更后同样需审核通过方可用于登录/提现验证。</div>
         <div style="font-weight:700;color:#333;margin:10px 0 6px;">主流程</div>
         <div style="padding:10px 12px;background:#f6f9ff;border-radius:8px;border:1px solid #e6f0ff;font-family:monospace;font-size:12px;line-height:1.85;">
           提交申请 → 待审核队列 → 运营审核（通过/驳回）→ 通过则同步渠道主数据 &amp; 通知申请人；驳回则保留旧值并说明原因
@@ -2656,13 +2666,43 @@ function openChannelAuditFlow(channelName) {
   var m = document.getElementById('channel-audit-modal-mask');
   var desc = document.getElementById('channel-audit-modal-desc');
   var title = document.getElementById('channel-audit-modal-title');
+  var orderEl = document.getElementById('channel-audit-order-no');
+  var chLabel = document.getElementById('channel-audit-channel-label');
+  var badge = document.getElementById('channel-audit-status-badge');
   if (!m || !desc) {
-    alert('已提交审核：渠道「' + channelName + '」因代理商电话新增/变更且已填写分润信息，需审核通过后生效。');
+    alert('当前手机号涉及到提现，需审核完成后，才可通过此手机号登录。渠道「' + channelName + '」已提交审核。');
     return;
   }
-  if (title) title.textContent = '已进入审核流程';
-  desc.innerHTML = '渠道「<strong>' + (channelName || '') + '</strong>」的<strong>代理商电话</strong>为新增或已变更，且当前填写了<strong>分润比例</strong>或<strong>货车分润金额</strong>，将<strong>不直接生效</strong>，而是生成一条<strong>渠道信息审核</strong>单（含提现手机号等敏感字段变更场景亦走本流程），由运营在「渠道信息审核」中处理，<strong>审核通过后</strong>方可用于分润与提现。';
+  if (title) title.textContent = '提交成功 · 待审核';
+  desc.innerHTML =
+    '<p style="margin:0 0 10px;font-size:14px;font-weight:600;color:#1a1a1a;">当前手机号涉及到提现，需审核完成后，才可通过此手机号登录。</p>' +
+    '<p style="margin:0;font-size:12px;color:#666;line-height:1.7;">渠道「<strong>' + (channelName || '—') + '</strong>」的配置已提交。审核通过前，<strong>请勿使用该手机号作为登录/提现验证</strong>；分润相关配置亦待审核通过后生效。</p>';
+  if (orderEl) {
+    var d = new Date();
+    var y = d.getFullYear();
+    var mo = String(d.getMonth() + 1).padStart(2, '0');
+    var da = String(d.getDate()).padStart(2, '0');
+    orderEl.textContent = 'CH-AUD-' + y + mo + da + String(Math.floor(100 + Math.random() * 900));
+  }
+  if (chLabel) chLabel.textContent = '渠道：' + (channelName || '—');
+  if (badge) {
+    badge.textContent = '待审核';
+    badge.className = 'tag t-orange';
+    badge.style.fontSize = '12px';
+    badge.style.padding = '3px 10px';
+  }
   m.style.display = 'flex';
+}
+
+/** 是否需要走审核：代理商电话新增/变更，或填写了任一分润比例/货车金额 */
+function shouldSubmitChannelAudit() {
+  var apEl = document.getElementById('cm-agent-phone');
+  var curPhone = apEl ? (apEl.value || '').trim() : '';
+  var snap = window.__channelAgentPhoneSnapshot !== undefined && window.__channelAgentPhoneSnapshot !== null
+    ? String(window.__channelAgentPhoneSnapshot).trim() : '';
+  var phoneChanged = curPhone !== snap;
+  var profit = typeof hasChannelProfitFilled === 'function' && hasChannelProfitFilled();
+  return phoneChanged || profit;
 }
 
 function closeChannelAuditModal() {
@@ -2791,12 +2831,7 @@ function saveChannelDialog() {
     alert('货车分润金额每项不得超过 500 元');
     return;
   }
-  var apEl = document.getElementById('cm-agent-phone');
-  var curPhone = apEl ? (apEl.value || '').trim() : '';
-  var snap = window.__channelAgentPhoneSnapshot !== undefined && window.__channelAgentPhoneSnapshot !== null
-    ? String(window.__channelAgentPhoneSnapshot).trim() : '';
-  var phoneChanged = curPhone !== snap;
-  if (phoneChanged && typeof hasChannelProfitFilled === 'function' && hasChannelProfitFilled()) {
+  if (typeof shouldSubmitChannelAudit === 'function' && shouldSubmitChannelAudit()) {
     closeChannelDialog();
     openChannelAuditFlow(name);
     return;
