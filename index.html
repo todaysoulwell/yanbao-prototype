@@ -39,6 +39,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 /* 后台页（单列）专用：限定宽度 + 自动左右边距居中 */
 #page-channel-admin.active,
 #page-withdraw-admin.active,
+#page-channel-audit.active,
 #page-perm.active { display: block; width: 960px; max-width: calc(100vw - 80px); margin: 0 auto; }
 
 /* ── 手机外壳 ── */
@@ -238,6 +239,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <button class="nav-tab" onclick="go('sales')">销售视图</button>
     <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
     <button class="nav-tab" onclick="go('channel-admin')">渠道管理</button>
+    <button class="nav-tab" onclick="go('channel-audit')">渠道信息审核</button>
     <button class="nav-tab" onclick="go('withdraw-admin')">提现审核</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
     <button class="nav-tab" onclick="go('flow')">业务时序图</button>
@@ -1504,9 +1506,10 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;border-bottom:1px solid #f0f0f0;padding-bottom:4px;">新增/修改弹窗</div>
           <div style="font-size:11.5px;color:#555;line-height:1.9;">
             <strong>必填：</strong>渠道名称（≤50字）、渠道类型、销售人员（下拉选人）<br>
-            <strong>代理商：</strong>姓名、电话（选填，与下方分润配置配合）<br>
+            <strong>代理商：</strong>姓名、电话（选填）；电话下提示「涉及分润须谨慎，审核通过后才可使用」<br>
             <strong>智能/延保分润：</strong>仅比例（%），≤80，实时校验<br>
-            <strong>货车分润：</strong>轻卡/重卡/牵引车三项为金额（元）；可全空；若填任一项则三项必填<br>
+            <strong>货车分润：</strong>三项金额（元）每项≤500；可全空；若填任一项则三项必填；非法或超上限阻断提交<br>
+            <strong>审核分流：</strong>代理商电话相对打开弹窗时为<strong>新增或已变更</strong>，且填写了任一分润比例或货车金额 → 提交后进入<strong>渠道信息审核</strong>队列（弹窗可跳转审核页），非直接生效；<strong>提现手机号</strong>等敏感变更亦在本页审核<br>
             <strong>销售：</strong>姓名下拉，手机号根据所选人员自动带出（只读）<br>
             <strong>主管：</strong>可添加多行，姓名下拉+电话自动带出<br>
             <strong>选填：</strong>适配套餐、货车套餐、各分润模块、主管、备注<br>
@@ -1729,9 +1732,13 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
       <!-- 代理商信息 -->
       <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">代理商信息</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;align-items:start;">
         <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商姓名</label><input id="cm-agent-name" type="text" placeholder="请输入代理商姓名" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
-        <div><label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商电话</label><input id="cm-agent-phone" type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/></div>
+        <div>
+          <label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">代理商电话</label>
+          <input id="cm-agent-phone" type="text" placeholder="请输入手机号" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <div style="font-size:11px;color:#e67e00;line-height:1.45;margin-top:4px;">如涉及分润，请谨慎填写，审核通过后才可使用</div>
+        </div>
       </div>
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
       <!-- 模块① 智能服务分润比例 -->
@@ -1752,22 +1759,23 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
       <!-- 模块③ 货车分润（金额） -->
       <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:6px;">模块③ 货车分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（选填，若填写须三项齐全）</span></div>
-      <div style="font-size:11px;color:#888;margin-bottom:8px;line-height:1.5;">轻卡/重卡/牵引车为分润金额（元）；可全部留空；若填写任一项，则三项均需填写。</div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;line-height:1.5;">轻卡/重卡/牵引车为分润金额（元），<strong>单项不超过 500</strong>；可全部留空；若填写任一项，则三项均需填写。</div>
       <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:6px;">
         <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
           <span style="font-size:12px;color:#555;">轻卡普通货车</span>
-          <input id="cm-truck-light" type="text" inputmode="decimal" placeholder="分润金额（元）" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <input id="cm-truck-light" type="text" inputmode="decimal" placeholder="金额（元），≤500" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
         </div>
         <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
           <span style="font-size:12px;color:#555;">重卡普通货车</span>
-          <input id="cm-truck-heavy" type="text" inputmode="decimal" placeholder="分润金额（元）" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <input id="cm-truck-heavy" type="text" inputmode="decimal" placeholder="金额（元），≤500" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
         </div>
         <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
           <span style="font-size:12px;color:#555;">牵引车</span>
-          <input id="cm-truck-tractor" type="text" inputmode="decimal" placeholder="分润金额（元）" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <input id="cm-truck-tractor" type="text" inputmode="decimal" placeholder="金额（元），≤500" oninput="checkTruckAmounts()" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
         </div>
       </div>
-      <div id="err-truck-partial" style="display:none;font-size:11px;color:#ff4d4f;margin-bottom:10px;">⚠️ 货车分润已部分填写，请补全轻卡、重卡、牵引车三项金额</div>
+      <div id="err-truck-partial" style="display:none;font-size:11px;color:#ff4d4f;margin-bottom:4px;">⚠️ 货车分润已部分填写，请补全轻卡、重卡、牵引车三项金额</div>
+      <div id="err-truck-max" style="display:none;font-size:11px;color:#ff4d4f;margin-bottom:10px;">⚠️ 货车分润金额每项不得超过 500 元</div>
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
       <!-- 模块④ 销售人员 -->
       <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 销售人员 <span style="font-size:11px;font-weight:400;color:#e67e00;">（必填）</span></div>
@@ -1835,6 +1843,18 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     </div>
     <div style="font-size:11px;color:#888;margin-bottom:16px;">扫描二维码进入渠道小程序</div>
     <button onclick="document.getElementById('qr-modal-mask').style.display='none'" style="padding:7px 28px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;cursor:pointer;">关 闭</button>
+  </div>
+</div>
+
+<!-- 渠道变更审核流程（代理商电话新增/变更 + 已填分润时弹出） -->
+<div id="channel-audit-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;" onclick="if(event.target===this)closeChannelAuditModal();">
+  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:460px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
+    <div id="channel-audit-modal-title" style="font-size:15px;font-weight:700;color:#1677ff;margin-bottom:12px;">已进入审核流程</div>
+    <div id="channel-audit-modal-desc" style="font-size:13px;color:#555;line-height:1.75;"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button type="button" onclick="closeChannelAuditModal()" style="flex:1;padding:9px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;cursor:pointer;">我知道了</button>
+      <button type="button" onclick="goChannelAuditFromModal()" style="flex:1;padding:9px;background:#1677ff;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;">前往渠道信息审核</button>
+    </div>
   </div>
 </div>
 
@@ -2048,6 +2068,127 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       </table>
     </div>
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     页面：渠道信息审核（代理商电话 / 提现手机号等）
+══════════════════════════════ -->
+<div class="page" id="page-channel-audit">
+  <div style="width:100%;">
+    <details style="margin-bottom:14px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:3px solid #1677ff;">
+      <summary style="padding:12px 16px;font-size:13px;font-weight:700;color:#1677ff;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">📋 渠道信息审核 · 产品需求 <span style="font-size:11px;font-weight:400;color:#bbb;">（点击展开）</span></summary>
+      <div style="padding:0 16px 14px;font-size:11.5px;color:#555;line-height:1.9;">
+        <div style="font-weight:700;color:#333;margin-bottom:6px;">触发来源</div>
+        <div>① 渠道管理中：<strong>代理商电话新增或变更</strong>，且同单填写了<strong>智能/延保分润比例</strong>或<strong>货车分润金额</strong> → 生成审核单，配置待审核通过后生效。<br>
+        ② <strong>提现手机号</strong>、收款账户等敏感信息的新增/变更（可与①合并为同一审核单，由申请类型区分）。</div>
+        <div style="font-weight:700;color:#333;margin:10px 0 6px;">主流程</div>
+        <div style="padding:10px 12px;background:#f6f9ff;border-radius:8px;border:1px solid #e6f0ff;font-family:monospace;font-size:12px;line-height:1.85;">
+          提交申请 → 待审核队列 → 运营审核（通过/驳回）→ 通过则同步渠道主数据 &amp; 通知申请人；驳回则保留旧值并说明原因
+        </div>
+        <div style="font-weight:700;color:#333;margin:10px 0 6px;">边界</div>
+        <div>
+          <span style="color:#e67e00;">⚠ 审核通过前：新电话不可用于分润结算与提现验证</span><br>
+          <span style="color:#e67e00;">⚠ 同一渠道多条待审：按时间排队或合并策略由产品定</span><br>
+          <span style="color:#e67e00;">⚠ 驳回后允许重新提交</span>
+        </div>
+      </div>
+    </details>
+
+    <div style="font-size:12px;color:#888;margin-bottom:14px;">首页 &gt; 后台管理 &gt; <span style="color:#1677ff;">渠道信息审核</span></div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+      <div class="panel-card" style="margin:0;padding:14px 16px;text-align:center;">
+        <div style="font-size:22px;font-weight:800;color:#fa8c16;">5</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">待审核</div>
+      </div>
+      <div class="panel-card" style="margin:0;padding:14px 16px;text-align:center;">
+        <div style="font-size:22px;font-weight:800;color:#52c41a;">12</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">今日已通过</div>
+      </div>
+      <div class="panel-card" style="margin:0;padding:14px 16px;text-align:center;">
+        <div style="font-size:22px;font-weight:800;color:#ff4d4f;">2</div>
+        <div style="font-size:12px;color:#888;margin-top:4px;">今日已驳回</div>
+      </div>
+    </div>
+
+    <div class="panel-card" style="padding:14px 16px 12px;margin-bottom:14px;">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;">
+        <span style="color:#666;">状态</span>
+        <select style="padding:5px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:12px;"><option>待审核</option><option>已通过</option><option>已驳回</option><option>全部</option></select>
+        <span style="color:#666;">申请类型</span>
+        <select style="padding:5px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:12px;"><option>全部</option><option>代理商电话+分润</option><option>提现手机号变更</option><option>合并变更</option></select>
+        <input type="text" placeholder="渠道名称 / 申请单号" style="flex:1;min-width:160px;padding:5px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:12px;"/>
+        <button class="btn btn-sm" style="background:#1677ff;color:#fff;">查询</button>
+      </div>
+    </div>
+
+    <div class="panel-card" style="padding:0;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:13px;font-weight:700;">待审核申请</div>
+      <table class="admin-tbl">
+        <tr>
+          <th>申请单号</th>
+          <th>渠道名称</th>
+          <th>申请类型</th>
+          <th>变更摘要</th>
+          <th>分润信息快照</th>
+          <th>提交时间</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:11px;">CH-AUD-20260416001</td>
+          <td><strong>李嘉豪</strong></td>
+          <td><span class="tag t-orange">代理商电话+分润</span></td>
+          <td style="font-size:11px;max-width:200px;">电话：空 → 138****8000</td>
+          <td style="font-size:11px;">智能15% / 延保20% / 货车¥100×3</td>
+          <td style="white-space:nowrap;font-size:11px;">2026-04-16 10:22</td>
+          <td><span class="tag t-orange">待审核</span></td>
+          <td>
+            <button class="btn btn-ghost btn-sm" onclick="alert('详情：展示完整表单快照、操作日志')">详情</button>
+            <button class="btn btn-sm" style="background:#52c41a;color:#fff;" onclick="if(confirm('确认通过？通过后渠道配置生效。'))alert('已通过（演示）')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="var r=prompt('驳回原因');if(r)alert('已驳回：'+r)">驳回</button>
+          </td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;font-size:11px;">CH-AUD-20260416002</td>
+          <td><strong>黄石新捷顺名车</strong></td>
+          <td><span class="tag t-blue">提现手机号变更</span></td>
+          <td style="font-size:11px;max-width:200px;">提现手机：139****1111 → 139****9920</td>
+          <td style="font-size:11px;color:#bbb;">—</td>
+          <td style="white-space:nowrap;font-size:11px;">2026-04-16 09:05</td>
+          <td><span class="tag t-orange">待审核</span></td>
+          <td>
+            <button class="btn btn-ghost btn-sm" onclick="alert('详情')">详情</button>
+            <button class="btn btn-sm" style="background:#52c41a;color:#fff;" onclick="if(confirm('确认通过？'))alert('已通过（演示）')">通过</button>
+            <button class="btn btn-sm" style="background:#fff1f0;color:#ff4d4f;" onclick="var r=prompt('驳回原因');if(r)alert('已驳回')">驳回</button>
+          </td>
+        </tr>
+        <tr style="opacity:.75;">
+          <td style="font-family:monospace;font-size:11px;">CH-AUD-20260415088</td>
+          <td>铭松泰亚电子</td>
+          <td><span class="tag t-orange">代理商电话+分润</span></td>
+          <td style="font-size:11px;">电话变更 + 比例调整</td>
+          <td style="font-size:11px;">智能10%</td>
+          <td style="white-space:nowrap;font-size:11px;">2026-04-15 16:40</td>
+          <td><span class="tag t-green">已通过</span></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="alert('仅查看')">查看</button></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="panel-card" style="margin-top:14px;">
+      <h3 style="margin-bottom:10px;">流程示意（与提现审核并列的后台能力）</h3>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:#555;">
+        <div style="flex:1;min-width:100px;text-align:center;padding:10px;background:#f0f5ff;border-radius:8px;">渠道保存<br><small style="color:#888;">命中规则</small></div>
+        <span style="color:#1677ff;">→</span>
+        <div style="flex:1;min-width:100px;text-align:center;padding:10px;background:#fff7e6;border-radius:8px;">生成审核单<br><small style="color:#888;">待审核</small></div>
+        <span style="color:#1677ff;">→</span>
+        <div style="flex:1;min-width:100px;text-align:center;padding:10px;background:#f6ffed;border-radius:8px;">运营处理<br><small style="color:#888;">通过/驳回</small></div>
+        <span style="color:#1677ff;">→</span>
+        <div style="flex:1;min-width:100px;text-align:center;padding:10px;background:#fafafa;border-radius:8px;">主数据生效<br><small style="color:#888;">通知</small></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2381,11 +2522,21 @@ function demoLogin(role) {
 function go(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  event.target.classList.add('active');
+  var pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(function(t) {
+    var oc = t.getAttribute('onclick') || '';
+    if (oc.indexOf("go('" + name + "')") >= 0 || oc.indexOf('go("' + name + '")') >= 0) t.classList.add('active');
+  });
   const b = document.getElementById('badge');
-  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
-  b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1];
+  const m = { login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'channel-audit':['📋 渠道信息审核','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  if (m[name]) { b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1]; }
+}
+
+/** 从审核提示弹窗跳转至「渠道信息审核」页 */
+function goChannelAuditFromModal() {
+  closeChannelAuditModal();
+  go('channel-audit');
 }
 
 function selRole(el, role) {
@@ -2445,7 +2596,7 @@ function syncMgrPhone(sel) {
   if (phone) phone.value = sel.value || '';
 }
 
-/** 货车分润：全空或三项全填；否则提示 */
+/** 货车分润：全空或三项全填；单项金额 ≤500 */
 function checkTruckAmounts() {
   var a = document.getElementById('cm-truck-light');
   var b = document.getElementById('cm-truck-heavy');
@@ -2456,12 +2607,67 @@ function checkTruckAmounts() {
   var vc = (c.value || '').trim();
   var filled = (va ? 1 : 0) + (vb ? 1 : 0) + (vc ? 1 : 0);
   var err = document.getElementById('err-truck-partial');
-  var bad = filled > 0 && filled < 3;
-  if (err) err.style.display = bad ? 'block' : 'none';
-  [a, b, c].forEach(function(el) {
-    var t = (el.value || '').trim();
-    el.style.borderColor = bad && !t ? '#ff4d4f' : '#d9d9d9';
+  var errMax = document.getElementById('err-truck-max');
+  var badPartial = filled > 0 && filled < 3;
+  if (err) err.style.display = badPartial ? 'block' : 'none';
+
+  function parseAmt(s) {
+    if (!s) return null;
+    var n = parseFloat(String(s).replace(/,/g, '').trim());
+    return isNaN(n) ? NaN : n;
+  }
+  var badMax = false;
+  [va, vb, vc].forEach(function(v) {
+    if (!v) return;
+    var n = parseAmt(v);
+    if (isNaN(n) || n < 0 || n > 500) badMax = true;
   });
+  if (errMax) errMax.style.display = badMax ? 'block' : 'none';
+
+  var arr = [a, b, c];
+  var vals = [va, vb, vc];
+  arr.forEach(function(el, i) {
+    var t = vals[i];
+    var n = t ? parseAmt(t) : null;
+    var numBad = t && (isNaN(n) || n < 0 || n > 500);
+    if (badPartial && !t) {
+      el.style.borderColor = '#ff4d4f';
+    } else if (numBad) {
+      el.style.borderColor = '#ff4d4f';
+    } else {
+      el.style.borderColor = '#d9d9d9';
+    }
+  });
+}
+
+/** 是否填写了任意分润比例或货车金额（用于审核分流） */
+function hasChannelProfitFilled() {
+  var ai = (document.getElementById('cm-ratio-ai') && document.getElementById('cm-ratio-ai').value || '').trim();
+  var yb = (document.getElementById('cm-ratio-yb') && document.getElementById('cm-ratio-yb').value || '').trim();
+  var tl = (document.getElementById('cm-truck-light') && document.getElementById('cm-truck-light').value || '').trim();
+  var th = (document.getElementById('cm-truck-heavy') && document.getElementById('cm-truck-heavy').value || '').trim();
+  var tt = (document.getElementById('cm-truck-tractor') && document.getElementById('cm-truck-tractor').value || '').trim();
+  if (ai !== '' || yb !== '') return true;
+  if (tl || th || tt) return true;
+  return false;
+}
+
+function openChannelAuditFlow(channelName) {
+  var m = document.getElementById('channel-audit-modal-mask');
+  var desc = document.getElementById('channel-audit-modal-desc');
+  var title = document.getElementById('channel-audit-modal-title');
+  if (!m || !desc) {
+    alert('已提交审核：渠道「' + channelName + '」因代理商电话新增/变更且已填写分润信息，需审核通过后生效。');
+    return;
+  }
+  if (title) title.textContent = '已进入审核流程';
+  desc.innerHTML = '渠道「<strong>' + (channelName || '') + '</strong>」的<strong>代理商电话</strong>为新增或已变更，且当前填写了<strong>分润比例</strong>或<strong>货车分润金额</strong>，将<strong>不直接生效</strong>，而是生成一条<strong>渠道信息审核</strong>单（含提现手机号等敏感字段变更场景亦走本流程），由运营在「渠道信息审核」中处理，<strong>审核通过后</strong>方可用于分润与提现。';
+  m.style.display = 'flex';
+}
+
+function closeChannelAuditModal() {
+  var m = document.getElementById('channel-audit-modal-mask');
+  if (m) m.style.display = 'none';
 }
 
 function updateMgrRemoveButtons() {
@@ -2523,7 +2729,6 @@ function openChannelDialog(mode, name) {
   document.getElementById('cm-name').value = mode === 'edit' ? (name || '') : '';
   document.getElementById('cm-agent-name').value = '';
   var ap = document.getElementById('cm-agent-phone');
-  if (ap) ap.value = '';
   var rai = document.getElementById('cm-ratio-ai');
   var ryb = document.getElementById('cm-ratio-yb');
   if (rai) { rai.value = ''; rai.style.borderColor = '#d9d9d9'; }
@@ -2538,6 +2743,16 @@ function openChannelDialog(mode, name) {
   });
   var et = document.getElementById('err-truck-partial');
   if (et) et.style.display = 'none';
+  var etm = document.getElementById('err-truck-max');
+  if (etm) etm.style.display = 'none';
+  if (ap) {
+    if (mode === 'edit') {
+      ap.value = '13800138000';
+    } else {
+      ap.value = '';
+    }
+  }
+  window.__channelAgentPhoneSnapshot = ap ? (ap.value || '').trim() : '';
   var ss = document.getElementById('cm-sales-select');
   var sp = document.getElementById('cm-sales-phone');
   if (ss) ss.value = '';
@@ -2569,6 +2784,21 @@ function saveChannelDialog() {
   var errTr = document.getElementById('err-truck-partial');
   if (errTr && errTr.style.display === 'block') {
     alert('货车分润为选填；若填写任一项，请补全轻卡、重卡、牵引车三项金额');
+    return;
+  }
+  var errTm = document.getElementById('err-truck-max');
+  if (errTm && errTm.style.display === 'block') {
+    alert('货车分润金额每项不得超过 500 元');
+    return;
+  }
+  var apEl = document.getElementById('cm-agent-phone');
+  var curPhone = apEl ? (apEl.value || '').trim() : '';
+  var snap = window.__channelAgentPhoneSnapshot !== undefined && window.__channelAgentPhoneSnapshot !== null
+    ? String(window.__channelAgentPhoneSnapshot).trim() : '';
+  var phoneChanged = curPhone !== snap;
+  if (phoneChanged && typeof hasChannelProfitFilled === 'function' && hasChannelProfitFilled()) {
+    closeChannelDialog();
+    openChannelAuditFlow(name);
     return;
   }
   closeChannelDialog();
