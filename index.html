@@ -70,6 +70,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 .tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font-size: 10px; color: #888; transition: color .15s; }
 .tab-btn.on { color: #1677ff; }
 .tab-btn svg { width: 22px; height: 22px; }
+/* 一级代理 6 Tab 底部略缩字 */
+#page-agent .phone-footer .tab-btn { font-size: 9px; gap: 2px; }
+#page-agent .phone-footer .tab-btn svg { width: 20px; height: 20px; }
 
 /* ── 卡片 ── */
 .card { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
@@ -1137,6 +1140,13 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="stat-box" style="cursor:pointer;" onclick="switchTab('agent','orders',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(4)'))">
               <div style="font-size:20px;">📋</div><div class="sl" style="font-size:12px;">订单</div>
             </div>
+            <div class="stat-box" style="cursor:pointer;" onclick="switchTab('agent','stores',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(5)'))">
+              <div style="font-size:20px;">🏪</div><div class="sl" style="font-size:12px;">门店</div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer;" onclick="switchTab('agent','stores',document.querySelector('#page-agent .phone-footer .tab-btn:nth-child(5)'))">
+            <span style="font-size:13px;font-weight:600;">门店分润 · 按月份查看</span>
+            <span style="font-size:12px;color:#1677ff;">进入 ›</span>
           </div>
           <div class="card">
             <div class="card-t">本渠道库存</div>
@@ -1321,6 +1331,36 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <div style="text-align:center;color:#bbb;font-size:12px;padding:6px 0;">共 165 笔订单 · 上拉加载更多</div>
         </div>
 
+        <!-- ▸ Tab: 门店分润（按月份 + 各门店累计/当月） -->
+        <div class="tab-panel" id="agent-tab-stores" style="display:none;padding:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span class="sec-t" style="margin:0;">门店分润</span>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:#888;">统计月份</span>
+              <select id="agent-store-month" onchange="updateAgentStoreMonth()" style="padding:6px 10px;border-radius:8px;border:1px solid #e8e8e8;font-size:12px;max-width:140px;background:#fff;">
+                <option value="2026-04">2026年4月</option>
+                <option value="2026-03">2026年3月</option>
+                <option value="2026-02">2026年2月</option>
+                <option value="2026-01">2026年1月</option>
+                <option value="2025-12">2025年12月</option>
+                <option value="2025-11">2025年11月</option>
+              </select>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-t">全渠道汇总 <span style="color:#1677ff;font-weight:700;" id="agent-store-month-label">2026年4月</span></div>
+            <div class="stat-row" style="margin-bottom:0;">
+              <div class="stat-box"><div class="sv blue" id="agent-store-sum-total">¥42,080.50</div><div class="sl">各门店累计分润合计</div></div>
+              <div class="stat-box"><div class="sv green" id="agent-store-sum-month">¥1,240.00</div><div class="sl">当月分润合计</div></div>
+              <div class="stat-box"><div class="sv orange" id="agent-store-sum-orders">165</div><div class="sl">当月订单数</div></div>
+            </div>
+            <div style="font-size:10px;color:#bbb;margin-top:8px;line-height:1.5;">* 累计分润为截至今日各门店历史分润之和（演示）；当月数据随上方月份切换。</div>
+          </div>
+          <div class="sec-t">各门店明细</div>
+          <div id="agent-store-list-wrap"></div>
+          <div style="text-align:center;color:#bbb;font-size:11px;padding:8px 0 4px;">切换月份可查看历史各月分润与订单数</div>
+        </div>
+
         <!-- ▸ Tab: 我的 -->
         <div class="tab-panel" id="agent-tab-profile" style="display:none;padding:16px;">
           <div style="text-align:center;padding:20px 0 16px;">
@@ -1340,12 +1380,13 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         </div>
 
       </div>
-      <div class="phone-footer" style="padding:6px 0 12px;">
+      <div class="phone-footer" id="agent-phone-footer" style="padding:6px 0 12px;">
         <div class="tab-btn on" onclick="switchTab('agent','home',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>首页</div>
         <div class="tab-btn" onclick="switchTab('agent','stock',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.53 15.62 1 13.5 1c-1.23 0-2.34.58-3.13 1.47L10 3.88l-.37-.41C8.84 2.58 7.73 2 6.5 2 4.38 2 2 3.53 2 6c0 .48.11.92.18 1.36H0v2h24V8h-4V6zm-7.5-3c1.12 0 2.5.72 2.5 1.64.0.48-.17.92-.5 1.36H9.5C9.17 5.56 9 5.12 9 4.64 9 3.72 10.38 3 11.5 3zM4 10v10h16V10H4z"/></svg>库存</div>
         <div class="tab-btn" onclick="switchTab('agent','account',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>账户</div>
         <div class="tab-btn" onclick="switchTab('agent','orders',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>订单</div>
-        <div class="tab-btn" onclick="switchTab('agent','profile',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>135****8888</div>
+        <div class="tab-btn" onclick="switchTab('agent','stores',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v4H6V4h12zM6 20v-8h12v8H6zm6-7h-2v2h2v-2z"/></svg>门店</div>
+        <div class="tab-btn" onclick="switchTab('agent','profile',this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>我的</div>
       </div>
     </div>
   </div>
@@ -1399,6 +1440,16 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         </div>
       </details>
       <details class="req-tab">
+        <summary>门店 Tab（分润按门店）</summary>
+        <div class="req-body">
+          <strong>月份筛选：</strong>下拉选择统计月份，切换后刷新「全渠道汇总」与「各门店明细」。<br>
+          <strong>全渠道汇总：</strong>各门店累计分润合计、<strong>当月</strong>分润合计、<strong>当月</strong>订单数（均对应当前所选月）。<br>
+          <strong>各门店明细：</strong>每门店展示<strong>累计分润（总分润）</strong>、<strong>当月分润</strong>、<strong>当月订单数</strong>。<br>
+          <div class="req-rule"><span class="rk">无门店</span><span class="rv">仅单店时列表一行；无二级门店则隐藏本 Tab 或空状态 [待确认]</span></div>
+          <div class="req-rule"><span class="rk">跨月对比</span><span class="rv">仅支持逐月查看，不做同比曲线（可后续迭代）</span></div>
+        </div>
+      </details>
+      <details class="req-tab">
         <summary>订单 Tab</summary>
         <div class="req-body">
           本月汇总（订单数/分润合计/退款订单数）+ 延保订单列表<br>
@@ -1425,6 +1476,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           · 本渠道库存（进货总量 / 已激活 / 未激活 / 激活率）<br>
           · 本渠道分润账户余额及历史流水<br>
           · 本渠道延保订单明细（SN / 金额 / 分润金额）<br>
+          · <strong>各门店分润</strong>：按月份查看各门店累计分润、当月分润与当月订单数<br>
           · <strong>申请提现</strong>（灵工平台，1-3工作日）<br>
           · 查看提现历史记录
         </div>
@@ -2876,6 +2928,73 @@ function rejectWithdraw(btn) {
   row.style.opacity = '0.6';
 }
 
+/** 一级代理 · 门店分润演示数据（按月份） */
+var agentStoreMonthData = {
+  '2026-04': { label: '2026年4月', totalCumulative: 42080.50, monthProfit: 1240.00, monthOrders: 165, stores: [
+    { name: '黄石旗舰店', total: 18520.00, month: 520.50, orders: 68 },
+    { name: '大冶城区店', total: 14200.00, month: 410.20, orders: 52 },
+    { name: '阳新服务店', total: 9360.50, month: 309.30, orders: 45 }
+  ]},
+  '2026-03': { label: '2026年3月', totalCumulative: 40840.50, monthProfit: 1180.00, monthOrders: 158, stores: [
+    { name: '黄石旗舰店', total: 18000.00, month: 480.00, orders: 65 },
+    { name: '大冶城区店', total: 13800.00, month: 390.00, orders: 50 },
+    { name: '阳新服务店', total: 9040.50, month: 310.00, orders: 43 }
+  ]},
+  '2026-02': { label: '2026年2月', totalCumulative: 39660.50, monthProfit: 1095.50, monthOrders: 151, stores: [
+    { name: '黄石旗舰店', total: 17520.00, month: 445.00, orders: 62 },
+    { name: '大冶城区店', total: 13400.00, month: 360.50, orders: 48 },
+    { name: '阳新服务店', total: 8740.50, month: 290.00, orders: 41 }
+  ]},
+  '2026-01': { label: '2026年1月', totalCumulative: 38565.00, monthProfit: 1020.00, monthOrders: 142, stores: [
+    { name: '黄石旗舰店', total: 17075.00, month: 420.00, orders: 58 },
+    { name: '大冶城区店', total: 13040.00, month: 340.00, orders: 45 },
+    { name: '阳新服务店', total: 8450.00, month: 260.00, orders: 39 }
+  ]},
+  '2025-12': { label: '2025年12月', totalCumulative: 37545.00, monthProfit: 980.00, monthOrders: 138, stores: [
+    { name: '黄石旗舰店', total: 16655.00, month: 400.00, orders: 56 },
+    { name: '大冶城区店', total: 12700.00, month: 325.00, orders: 44 },
+    { name: '阳新服务店', total: 8190.00, month: 255.00, orders: 38 }
+  ]},
+  '2025-11': { label: '2025年11月', totalCumulative: 36565.00, monthProfit: 910.00, monthOrders: 128, stores: [
+    { name: '黄石旗舰店', total: 16255.00, month: 380.00, orders: 52 },
+    { name: '大冶城区店', total: 12375.00, month: 310.00, orders: 42 },
+    { name: '阳新服务店', total: 7935.00, month: 220.00, orders: 34 }
+  ]}
+};
+
+function fmtMoney(n) {
+  var x = Number(n);
+  if (isNaN(x)) return '—';
+  return '¥' + x.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function updateAgentStoreMonth() {
+  var sel = document.getElementById('agent-store-month');
+  var key = sel ? sel.value : '2026-04';
+  var d = agentStoreMonthData[key];
+  if (!d) return;
+  var elLabel = document.getElementById('agent-store-month-label');
+  var elSumT = document.getElementById('agent-store-sum-total');
+  var elSumM = document.getElementById('agent-store-sum-month');
+  var elOrd = document.getElementById('agent-store-sum-orders');
+  var wrap = document.getElementById('agent-store-list-wrap');
+  if (elLabel) elLabel.textContent = d.label;
+  if (elSumT) elSumT.textContent = fmtMoney(d.totalCumulative);
+  if (elSumM) elSumM.textContent = fmtMoney(d.monthProfit);
+  if (elOrd) elOrd.textContent = String(d.monthOrders);
+  if (!wrap) return;
+  wrap.innerHTML = d.stores.map(function(s) {
+    return '<div class="card" style="margin-bottom:8px;padding:12px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+      '<span style="font-size:13px;font-weight:700;">' + s.name + '</span><span class="tag t-blue">门店</span></div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center;">' +
+      '<div><div style="font-size:10px;color:#888;">累计分润</div><div class="sv blue" style="font-size:14px;font-weight:800;">' + fmtMoney(s.total) + '</div></div>' +
+      '<div><div style="font-size:10px;color:#888;">当月分润</div><div class="sv green" style="font-size:14px;font-weight:800;">' + fmtMoney(s.month) + '</div></div>' +
+      '<div><div style="font-size:10px;color:#888;">当月订单</div><div class="sv orange" style="font-size:15px;font-weight:800;">' + s.orders + '</div></div>' +
+      '</div></div>';
+  }).join('');
+}
+
 function switchTab(role, tab, btn) {
   // 隐藏该角色所有 tab-panel
   var prefix = role + '-tab-';
@@ -2885,6 +3004,7 @@ function switchTab(role, tab, btn) {
   // 显示目标 panel
   var panel = document.getElementById(prefix + tab);
   if (panel) panel.style.display = 'block';
+  if (role === 'agent' && tab === 'stores') updateAgentStoreMonth();
   // 更新底部 tab 高亮
   if (btn) {
     var footer = btn.closest('.phone-footer');
