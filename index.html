@@ -3432,6 +3432,19 @@ git push</pre>
           </tbody>
         </table>
 
+        <p style="margin-bottom:6px;font-weight:700;color:#333;">详情弹窗（表单快照）</p>
+        <div style="font-size:12px;color:#555;line-height:1.8;margin-bottom:8px;">点击列表行「<strong>详情</strong>」按钮，弹出本次审核申请的完整表单快照，便于运营审核时做信息核对。弹窗结构如下：</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px;">
+          <thead><tr style="background:#f5f7fa;"><th style="padding:5px 8px;border:1px solid #e8e8e8;">区域</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">内容</th></tr></thead>
+          <tbody>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;white-space:nowrap;">基本信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">申请单号（<code>CH-AUD-YYYYMMDDXXX</code>）、渠道名称、申请类型标签、提交时间、当前状态标签（橙/绿/红）</td></tr>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;white-space:nowrap;">变更字段对比</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">三列表格：<strong>字段名</strong> / <strong>当前值（旧，灰色）</strong> / <strong>申请变更为（新，蓝色高亮）</strong>；每条变更单独一行；支持：代理商电话、智能服务分润比例、延保分润比例、货车分润金额（普货/危货/特货）、提现手机号</td></tr>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;white-space:nowrap;">驳回原因</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">仅「<span style="color:#ff4d4f;">已驳回</span>」状态时显示，红色背景提示块，展示驳回具体原因文本</td></tr>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;white-space:nowrap;">操作日志</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">时间线：① 运营提交变更申请 → ② 系统自动生成审核单 → ③ 审核通过/驳回（含操作人）；审核通过节点绿色高亮</td></tr>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;white-space:nowrap;">底部操作按钮</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><strong>「待审核」</strong>：「驳回」（红）+ 「通过」（绿），驳回必须填写原因；<strong>「已处理」</strong>：仅「关闭」</td></tr>
+          </tbody>
+        </table>
+
         <p style="margin-bottom:4px;font-weight:700;color:#333;">边界与规则</p>
         <ul style="margin-left:1.2em;">
           <li><span style="color:#e67e00;">⚠ 审核通过前：新电话不可用于分润结算与提现验证；原旧值继续生效</span></li>
