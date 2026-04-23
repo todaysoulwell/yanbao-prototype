@@ -33,8 +33,80 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 .badge-store { background: #f9f0ff; color: #722ed1; }
 .badge-none { background: #f5f5f5; color: #888; }
 
+/* ── 页面显隐 ── */
+.page { display: none; }
+.page.active { display: block; }
+#page-channel-admin.active,
+#page-withdraw-admin.active,
+#page-store-mgmt.active,
+#page-channel-audit.active,
+#page-perm.active { display: block; width: 960px; max-width: calc(100vw - 80px); margin: 0 auto; }
+
 /* ── 布局 ── */
 .main { margin-top: 52px; padding: 20px; display: flex; justify-content: center; }
+
+/* ── 开发标注模式 ── */
+#dev-mode-btn { margin-left:8px; border:1px solid #d9d9d9 !important; font-size:12px; white-space:nowrap; flex-shrink:0; }
+#dev-mode-btn.on { background:#1677ff !important; color:#fff !important; border-color:#1677ff !important; }
+body.dev-inspect .phone *:not(#dev-tip):not(#dev-tip *):not(.dev-box-overlay):hover,
+body.dev-inspect .page.active > *:not(.side-panel):not(details):not(#dev-tip):not(.dev-box-overlay) *:not(#dev-tip *):not(.dev-box-overlay):hover,
+body.dev-inspect .page.active > *:not(.side-panel):not(details):not(#dev-tip):not(.dev-box-overlay):hover {
+  outline: 2px solid #1677ff !important;
+  outline-offset: 1px !important;
+  cursor: crosshair !important;
+}
+#dev-tip {
+  position: fixed; z-index: 99999;
+  background: #1a1a1a; color: #e8e8e8;
+  font-size: 11.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 10px 14px; border-radius: 10px;
+  pointer-events: none; display: none;
+  max-width: 300px; line-height: 1.9;
+  box-shadow: 0 6px 24px rgba(0,0,0,.5);
+  border: 1px solid #333;
+}
+#dev-tip .dt-tag { color: #61dafb; font-weight: 700; }
+#dev-tip .dt-key { color: #aaa; }
+#dev-tip .dt-val { color: #fff; font-weight: 600; }
+#dev-tip .dt-swatch { display:inline-block; width:11px; height:11px; border:1px solid rgba(255,255,255,.25); border-radius:2px; vertical-align:middle; margin-left:3px; }
+#dev-tip .dt-sep { border:none; border-top:1px solid #333; margin:5px 0; }
+/* box model overlays */
+.dev-box-overlay { position:fixed; pointer-events:none; z-index:99990; }
+#dev-box-margin  { background:rgba(246,178,107,.35); border:1px dashed rgba(246,140,30,.7); }
+#dev-box-padding { background:rgba(147,196,125,.35); border:1px dashed rgba(70,170,70,.7); }
+#dev-box-content { background:rgba(108,172,228,.2);  border:1px dashed rgba(70,130,200,.6); }
+/* 图例 */
+#dev-legend {
+  position:fixed; bottom:16px; right:16px; z-index:99998;
+  background:#1a1a1a; color:#ddd; font-size:11px;
+  font-family:ui-monospace,monospace; padding:8px 12px;
+  border-radius:8px; border:1px solid #333; display:none;
+  line-height:2; pointer-events:none;
+}
+#dev-legend span { display:inline-block; width:12px; height:12px; border-radius:2px; vertical-align:middle; margin-right:4px; }
+
+  position:fixed; top:52px; right:0; bottom:0; width:min(400px, 100vw); max-width:100%;
+  background:#fff; box-shadow:-4px 0 24px rgba(0,0,0,.12); z-index:99980;
+  display:none; flex-direction:column; font-size:13px;
+}
+mark.proto-ann-mark {
+  background: linear-gradient(transparent 62%, rgba(255,77,79,.42) 62%);
+  border-bottom: 2px solid #ff4d4f;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 1px;
+  color: inherit;
+}
+mark.proto-ann-mark:hover { background: rgba(255,77,79,.2); }
+mark.proto-ann-mark.proto-ann-flash { animation: protoAnnFlash .55s ease 2; }
+@keyframes protoAnnFlash {
+  0%, 100% { background: linear-gradient(transparent 62%, rgba(255,77,79,.42) 62%); }
+  50% { background: rgba(255,77,79,.32); }
+}
+
+body.dev-inspect .fi-icon,
+body.dev-inspect .tab-btn svg,
+body.dev-inspect .stock-pill-ico svg { cursor: pointer !important; }
 .page { display: none; width: 100%; max-width: 1160px; }
 .page.active { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
 /* 角色登录 + 三端小程序视图：左原型 / 右需求，各自独立纵向滚动（互不带动整页） */
@@ -80,6 +152,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif
 }
 /* 后台页（单列）专用：限定宽度 + 自动左右边距居中 */
 #page-intro.active,
+#page-h5-deploy.active,
 #page-refund.active,
 #page-channel-admin.active,
 #page-store-mgmt.active,
@@ -299,8 +372,10 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 
 /* 进销存产品类型筛选胶囊 */
 .stock-filter-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-.stock-pill { padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer;
+.stock-pill { display:inline-flex; align-items:center; gap:4px; padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:600; cursor:pointer;
   border:1px solid #e8e8e8; background:#f7f8fa; color:#666; transition:all .15s; }
+.stock-pill-ico { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; line-height:0; }
+.stock-pill-ico svg { display:block; }
 .stock-pill:hover { border-color:#1677ff; color:#1677ff; }
 .stock-pill.on { background:#1677ff; color:#fff; border-color:#1677ff; }
 .stock-pill.on-car-etc { background:#1677ff; color:#fff; border-color:#1677ff; }
@@ -327,9 +402,22 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <button class="nav-tab" onclick="go('refund')">退款页面</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
     <button class="nav-tab" onclick="go('flow')">业务时序图</button>
+    <button class="nav-tab" onclick="go('h5-deploy')">更新H5链接方式</button>
   </div>
   <div class="role-badge badge-none" id="badge">未登录</div>
+  <button class="nav-tab" id="dev-mode-btn" onclick="toggleDevMode()" title="开启后悬停查看标注；点击图标可下载 PNG">🔍 开发标注</button>
 </nav>
+
+<div id="dev-tip"></div>
+<div id="dev-box-margin"  class="dev-box-overlay"></div>
+<div id="dev-box-padding" class="dev-box-overlay"></div>
+<div id="dev-box-content" class="dev-box-overlay"></div>
+<div id="dev-legend">
+  <span style="background:rgba(246,178,107,.6);border:1px dashed rgba(246,140,30,.8);"></span>外距 margin&nbsp;&nbsp;
+  <span style="background:rgba(147,196,125,.6);border:1px dashed rgba(70,170,70,.8);"></span>内距 padding&nbsp;&nbsp;
+  <span style="background:rgba(108,172,228,.4);border:1px dashed rgba(70,130,200,.8);"></span>内容区<br>
+  <span style="font-size:10px;color:#888;">点击列表图标、进销存筛选图标或底部 Tab 图标 → 下载 PNG（3×）</span>
+</div>
 
 <div class="main">
 
@@ -366,6 +454,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
     <table class="req-tbl" style="font-size:12px;">
       <tr><th style="width:22%;">入口 Tab</th><th>说明</th></tr>
       <tr><td><strong>需求说明</strong></td><td>本页：需求边界与使用说明。</td></tr>
+      <tr><td><strong>更新H5链接方式</strong></td><td>本地终端四步：<code>cd</code> 进入仓库、<code>git pull</code>、<code>cp</code> 覆盖 <code>index.html</code>、<code>git add/commit/push</code>（含 <code>main</code>/<code>master</code> 分支说明）。</td></tr>
       <tr><td><strong>角色登录</strong></td><td>手机号验证码登录；演示账号快捷进入各角色小程序视图。</td></tr>
       <tr><td><strong>主管 / 销售视图</strong></td><td>总览、进销存（代理明细、产品筛选、激活率排序）、分润、提现记录、我的；销售数据范围为负责代理。</td></tr>
       <tr><td><strong>一级代理视图</strong></td><td>首页、进销存（批次不展示 SN/分润比例）、<strong>账户</strong>（提现；前置<strong>认证/签约</strong>；<strong>分润入账</strong>及<strong>提现审核通过/未通过/到账</strong>均可能推送<strong>微信订阅消息</strong>）、<strong>计费</strong>（本月汇总三类拆解；客车 ETC 卡片为<strong>延保</strong>口径）、<strong>我的</strong>（认证/签约入口）。</td></tr>
@@ -377,6 +466,8 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <tr><td><strong>业务时序图</strong></td><td>7 条 Mermaid 时序：登录路由、客车延保分润、货车ETC分润、记录仪分润、提现、销售归属、退款管控。</td></tr>
     </table>
   </div>
+
+  
 
   <div class="panel-card">
     <h3>核心业务规则摘要</h3>
@@ -531,6 +622,44 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 </div>
 
 <!-- ══════════════════════════════
+     页面：更新 H5 链接方式
+══════════════════════════════ -->
+<div class="page" id="page-h5-deploy">
+  <div class="panel-card">
+    <h3>更新 H5 链接方式</h3>
+    <p style="font-size:12.5px;color:#888;margin-bottom:20px;">按顺序在终端执行下列命令，将本机最新原型同步到 GitHub 仓库并更新线上页面。</p>
+
+    <section style="margin-bottom:22px;">
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">第一步：进入仓库文件夹</h4>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0 0 8px;">cd ~/Projects/yanbao-prototype</pre>
+      <p style="font-size:13px;color:#444;line-height:1.85;">执行完以后，终端左边应类似显示 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">yanbao-prototype</code>（不是 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">Projects</code>）。</p>
+    </section>
+
+    <section style="margin-bottom:22px;">
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">第二步：和 GitHub 对齐最新代码</h4>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0;">git pull</pre>
+    </section>
+
+    <section style="margin-bottom:22px;">
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">第三步：用你本机最新原型覆盖仓库里的页面</h4>
+      <p style="font-size:13px;color:#444;line-height:1.85;margin-bottom:10px;">（若仓库首页是 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">index.html</code>，就覆盖它；若你仓库里叫别的名字，把 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">index.html</code> 改成那个名字）</p>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0;white-space:pre-wrap;word-break:break-all;">cp "/Users/huisexiaoqi/Downloads/prototype_代理渠道延保分润系统.html" ./index.html</pre>
+    </section>
+
+    <section>
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">第四步：提交并上传（这会更新网页）</h4>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0 0 12px;white-space:pre-wrap;">git add index.html
+git commit -m "update prototype"
+git push</pre>
+      <p style="font-size:13px;color:#444;line-height:1.85;margin-bottom:8px;">若默认分支不是 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">main</code>，推送改成：</p>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0 0 12px;">git push origin main</pre>
+      <p style="font-size:13px;color:#444;line-height:1.85;margin-bottom:8px;">若报错说分支是 <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">master</code>，就：</p>
+      <pre style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.5;overflow-x:auto;margin:0;">git push origin master</pre>
+    </section>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
      页面 1：角色登录
 ══════════════════════════════ -->
 <div class="page active" id="page-login">
@@ -599,7 +728,8 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         <summary>功能说明</summary>
         <div class="req-body">
           手机号 + 短信验证码登录，<strong>不需要用户选择角色</strong>。<br>
-          登录成功后系统根据后台配置的角色自动路由跳转。
+          登录成功后系统根据后台配置的角色自动路由跳转。<br>
+          <strong>短信模版（对接）：</strong>模版 ID <strong>176380</strong>；签名 ID <strong>28681</strong>。
         </div>
       </details>
       <details class="req-tab">
@@ -772,9 +902,9 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <!-- 产品类型筛选 -->
           <div class="stock-filter-bar">
             <span class="stock-pill on" data-scope="mgr" data-type="all" onclick="filterStock('mgr','all')">全部</span>
-            <span class="stock-pill" data-scope="mgr" data-type="car-etc" onclick="filterStock('mgr','car-etc')">🚌 客车ETC</span>
-            <span class="stock-pill" data-scope="mgr" data-type="truck-etc" onclick="filterStock('mgr','truck-etc')">🚛 货车ETC</span>
-            <span class="stock-pill" data-scope="mgr" data-type="dvr" onclick="filterStock('mgr','dvr')">📷 记录仪</span>
+            <span class="stock-pill" data-scope="mgr" data-type="car-etc" onclick="filterStock('mgr','car-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C7.58 2 4 3.17 4 5v11c0 1.1.9 2 2 2h1v2h2v-2h6v2h2v-2h1c1.1 0 2-.9 2-2V5c0-1.83-3.58-3-8-3zm0 2c3.87 0 6 1.06 6 1.5S15.87 7.5 12 7.5 6 6.44 6 5.5 8.13 4 12 4zM6 13.5c0-.83 1.17-1.5 6-1.5s6 .67 6 1.5V17H6v-3.5z"/></svg></span>客车ETC</span>
+            <span class="stock-pill" data-scope="mgr" data-type="truck-etc" onclick="filterStock('mgr','truck-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>货车ETC</span>
+            <span class="stock-pill" data-scope="mgr" data-type="dvr" onclick="filterStock('mgr','dvr')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></span>记录仪</span>
           </div>
           <div class="card">
             <div class="card-t">全渠道进销存汇总</div>
@@ -939,7 +1069,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <div class="sec-t" style="margin-top:4px;">最新分润流水（全渠道）</div>
           <!-- 记录仪·智能服务订单 -->
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">智能服务 ¥29.9 · 20%</div>
@@ -949,7 +1079,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 货车ETC·设备激活（车型分档分润） -->
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥8.00</strong></div>
@@ -958,7 +1088,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥8.00</div><div class="fi-time">今天 11:05</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥15.00</strong></div>
@@ -967,7 +1097,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥15.00</div><div class="fi-time">昨天 16:02</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥18.00</strong></div>
@@ -977,7 +1107,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 记录仪·智能服务订单 -->
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">飞鱼科技渠道</div>
               <div class="fi-desc">智能服务 ¥19.9 · 15%</div>
@@ -987,7 +1117,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 延保 -->
           <div class="flow-item">
-            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;">🛡</div>
+            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">延保 ¥29.9 · 20%</div>
@@ -997,7 +1127,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例：记录仪订单退款 -->
           <div class="flow-item" style="background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">智能服务订单·退款</div>
               <div class="fi-desc" style="color:#aaa;">黄石新捷顺名车 · 智能服务 ¥19.9 · 退款扣回分润</div>
@@ -1013,7 +1143,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例：客车ETC延保退款 -->
           <div class="flow-item" style="background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">客车ETC·延保退款</div>
               <div class="fi-desc" style="color:#aaa;">飞鱼科技渠道 · 延保 ¥29.9 · 退款扣回分润</div>
@@ -1042,7 +1172,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <div class="sec-t">最新提现申请</div>
           <!-- 待审核 -->
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">申请金额：¥1,500.00 · 灵工平台</div>
@@ -1051,7 +1181,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">今天 10:21</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">申请金额：¥800.00 · 灵工平台</div>
@@ -1061,7 +1191,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 已打款 -->
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">打款金额：¥2,000.00 · 审核通过</div>
@@ -1070,7 +1200,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">飞鱼科技渠道</div>
               <div class="fi-desc">打款金额：¥500.00 · 审核通过</div>
@@ -1297,9 +1427,9 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <!-- 产品类型筛选 -->
           <div class="stock-filter-bar">
             <span class="stock-pill on" data-scope="sales" data-type="all" onclick="filterStock('sales','all')">全部</span>
-            <span class="stock-pill" data-scope="sales" data-type="car-etc" onclick="filterStock('sales','car-etc')">🚌 客车ETC</span>
-            <span class="stock-pill" data-scope="sales" data-type="truck-etc" onclick="filterStock('sales','truck-etc')">🚛 货车ETC</span>
-            <span class="stock-pill" data-scope="sales" data-type="dvr" onclick="filterStock('sales','dvr')">📷 记录仪</span>
+            <span class="stock-pill" data-scope="sales" data-type="car-etc" onclick="filterStock('sales','car-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C7.58 2 4 3.17 4 5v11c0 1.1.9 2 2 2h1v2h2v-2h6v2h2v-2h1c1.1 0 2-.9 2-2V5c0-1.83-3.58-3-8-3zm0 2c3.87 0 6 1.06 6 1.5S15.87 7.5 12 7.5 6 6.44 6 5.5 8.13 4 12 4zM6 13.5c0-.83 1.17-1.5 6-1.5s6 .67 6 1.5V17H6v-3.5z"/></svg></span>客车ETC</span>
+            <span class="stock-pill" data-scope="sales" data-type="truck-etc" onclick="filterStock('sales','truck-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>货车ETC</span>
+            <span class="stock-pill" data-scope="sales" data-type="dvr" onclick="filterStock('sales','dvr')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></span>记录仪</span>
           </div>
           <div class="card">
             <div class="card-t">我负责代理进销存汇总</div>
@@ -1418,7 +1548,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <div class="sec-t" style="margin-top:4px;">最新分润流水</div>
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">智能服务 ¥29.9 · 20%</div>
@@ -1427,7 +1557,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div class="fi-time">今天 14:32</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥8.00</strong></div>
@@ -1436,7 +1566,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥8.00</div><div class="fi-time">今天 11:05</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥15.00</strong></div>
@@ -1445,7 +1575,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥15.00</div><div class="fi-time">昨天 16:20</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">智能服务 ¥19.9 · 20%</div>
@@ -1455,7 +1585,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 延保 -->
           <div class="flow-item">
-            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;">🛡</div>
+            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">延保 ¥29.9 · 20%</div>
@@ -1465,7 +1595,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例：记录仪订单退款 -->
           <div class="flow-item" style="background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">智能服务订单·退款</div>
               <div class="fi-desc" style="color:#aaa;">黄石新捷顺名车 · 智能服务 ¥19.9 · 退款扣回分润</div>
@@ -1494,7 +1624,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <div class="sec-t">最新提现申请</div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">申请金额：¥1,500.00 · 灵工平台</div>
@@ -1503,7 +1633,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">今天 10:21</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">黄石新捷顺名车</div>
               <div class="fi-desc">打款金额：¥2,000.00 · 已到账</div>
@@ -1512,7 +1642,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-orange">💳</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">石新元汽配</div>
               <div class="fi-desc">申请金额：¥800.00 · 灵工平台</div>
@@ -1690,7 +1820,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <div class="sec-t">最近分润流水</div>
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">智能服务订单</div>
               <div class="fi-desc">智能服务 ¥29.9 · 20%</div>
@@ -1699,7 +1829,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥5.98</div><div class="fi-time">今天 14:32</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">货车ETC</div>
               <div class="fi-desc">设备激活 · 分润 <strong style="color:#52c41a;">¥8.00</strong></div>
@@ -1708,7 +1838,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥8.00</div><div class="fi-time">今天 11:05</div></div>
           </div>
           <div class="flow-item">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">智能服务订单</div>
               <div class="fi-desc">智能服务 ¥19.9 · 20%</div>
@@ -1718,7 +1848,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 延保 -->
           <div class="flow-item">
-            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;">🛡</div>
+            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">客车ETC·延保</div>
               <div class="fi-desc">延保 ¥29.9 · 20%</div>
@@ -1728,7 +1858,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例 -->
           <div class="flow-item" style="background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">智能服务订单·退款</div>
               <div class="fi-desc" style="color:#aaa;">智能服务 ¥19.9 · 退款扣回分润</div>
@@ -1747,9 +1877,9 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <!-- 产品筛选 Pill -->
           <div class="stock-filter-bar">
             <span class="stock-pill on" data-scope="agent" data-type="all" onclick="filterAgentStock('all')">全部</span>
-            <span class="stock-pill" data-scope="agent" data-type="car-etc" onclick="filterAgentStock('car-etc')">🚌 客车ETC</span>
-            <span class="stock-pill" data-scope="agent" data-type="truck-etc" onclick="filterAgentStock('truck-etc')">🚛 货车ETC</span>
-            <span class="stock-pill" data-scope="agent" data-type="dvr" onclick="filterAgentStock('dvr')">📷 记录仪</span>
+            <span class="stock-pill" data-scope="agent" data-type="car-etc" onclick="filterAgentStock('car-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C7.58 2 4 3.17 4 5v11c0 1.1.9 2 2 2h1v2h2v-2h6v2h2v-2h1c1.1 0 2-.9 2-2V5c0-1.83-3.58-3-8-3zm0 2c3.87 0 6 1.06 6 1.5S15.87 7.5 12 7.5 6 6.44 6 5.5 8.13 4 12 4zM6 13.5c0-.83 1.17-1.5 6-1.5s6 .67 6 1.5V17H6v-3.5z"/></svg></span>客车ETC</span>
+            <span class="stock-pill" data-scope="agent" data-type="truck-etc" onclick="filterAgentStock('truck-etc')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>货车ETC</span>
+            <span class="stock-pill" data-scope="agent" data-type="dvr" onclick="filterAgentStock('dvr')"><span class="stock-pill-ico"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></span>记录仪</span>
           </div>
           <!-- 汇总卡片（随筛选联动） -->
           <div class="card">
@@ -1833,10 +1963,20 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="inp-g" style="margin-bottom:8px;"><label>提现金额</label><input id="agent-withdraw-amt" class="inp-big" placeholder="0.00" value="1500.00" style="font-size:24px;padding:6px 0;"/></div>
             <button type="button" class="btn btn-primary" style="padding:11px;" onclick="tryAgentWithdrawApply()">申请提现</button>
             <div style="font-size:11px;color:#888;margin-top:8px;line-height:1.7;">提现后 1-3 工作日到账 · <strong style="color:#d46b08;">须完成实名认证与电子签约后方可提现</strong>（见「我的 — 认证/签约」）</div>
+            <!-- 演示触发区 -->
+            <div style="margin-top:12px;border-top:1px dashed #e8e8e8;padding-top:10px;">
+              <div style="font-size:11px;color:#aaa;margin-bottom:6px;">▸ 演示：点击体验各异常场景弹窗</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <button type="button" onclick="showAgentWithdrawGuard('auth')" style="flex:1;min-width:0;font-size:11px;padding:5px 4px;background:#fff7e6;color:#d46b08;border:1px solid #ffd591;border-radius:6px;cursor:pointer;">① 未认证</button>
+                <button type="button" onclick="showAgentWithdrawGuard('sign')" style="flex:1;min-width:0;font-size:11px;padding:5px 4px;background:#e6f4ff;color:#1677ff;border:1px solid #91caff;border-radius:6px;cursor:pointer;">② 未签约</button>
+                <button type="button" onclick="showAgentWithdrawGuard('over-balance')" style="flex:1;min-width:0;font-size:11px;padding:5px 4px;background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;border-radius:6px;cursor:pointer;">③ 超出余额</button>
+                <button type="button" onclick="showAgentWithdrawGuard('pending')" style="flex:1;min-width:0;font-size:11px;padding:5px 4px;background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;">④ 待审核中</button>
+              </div>
+            </div>
           </div>
           <div class="sec-t" style="margin-top:4px;">提现记录</div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">申请金额：¥2,000.00</div>
               <div class="fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
@@ -1845,7 +1985,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">2026-04-08</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-green">✓</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">申请金额：¥1,500.00</div>
               <div class="fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
@@ -1854,7 +1994,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-time">2026-03-15</div></div>
           </div>
           <div class="flow-item" style="align-items:flex-start;">
-            <div class="fi-icon ic-orange">⏳</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M6 2v6l4 4-4 4v6h12v-6l-4-4 4-4V2H6zm10 14.5V20H8v-3.5l4-4 4 4zM12 12l-4-4V4h8v4l-4 4z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">申请金额：¥1,500.00</div>
               <div class="fi-desc">灵工平台 · 运营审核中</div>
@@ -1904,7 +2044,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <div class="sec-t">计费流水列表</div>
           <!-- 记录仪·智能服务订单 -->
           <div class="flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥29.9\n购买时间：2026-04-10 14:32\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">智能服务订单</div>
               <div class="fi-desc">智能服务 ¥29.9 · 2026-04-10 14:32</div>
@@ -1914,7 +2054,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 货车ETC·设备激活 -->
           <div class="flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：轻卡普通货车\n类型：设备激活\n激活时间：2026-04-10 11:05\n分润金额：¥8.00\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">货车ETC</div>
               <div class="fi-desc">轻卡普通货车 · 设备激活 · 2026-04-10 11:05</div>
@@ -1923,7 +2063,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
             <div class="fi-right"><div class="fi-amt green">+¥8.00</div><div style="font-size:10px;"><span class="tag t-green" style="font-size:9px;">正常</span></div></div>
           </div>
           <div class="flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：重卡普通货车\n类型：设备激活\n激活时间：2026-04-09 18:20\n分润金额：¥15.00\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">货车ETC</div>
               <div class="fi-desc">重卡普通货车 · 设备激活 · 2026-04-09 18:20</div>
@@ -1933,7 +2073,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 记录仪·智能服务订单 -->
           <div class="flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥19.9\n购买时间：2026-04-09 08:48\n分润金额：¥3.98\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon ic-green">📷</div>
+            <div class="fi-icon ic-green"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">智能服务订单</div>
               <div class="fi-desc">智能服务 ¥19.9 · 2026-04-09 08:48</div>
@@ -1943,7 +2083,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 货车ETC·设备激活 -->
           <div class="flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：牵引车\n类型：设备激活\n激活时间：2026-04-09 07:15\n分润金额：¥18.00\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon ic-orange">🚛</div>
+            <div class="fi-icon ic-orange"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">货车ETC</div>
               <div class="fi-desc">牵引车 · 设备激活 · 2026-04-09 07:15</div>
@@ -1953,7 +2093,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 延保 -->
           <div class="flow-item" onclick="alert('计费详情\n类型：客车ETC-延保\n延保金额：¥29.9\n购买时间：2026-04-08 15:10\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
-            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;">🛡</div>
+            <div class="fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title">客车ETC·延保</div>
               <div class="fi-desc">延保 ¥29.9 · 2026-04-08 15:10</div>
@@ -1963,7 +2103,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例：记录仪订单退款 -->
           <div class="flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥19.9\n购买时间：2026-04-07 09:20\n退款时间：2026-04-08 11:03\n分润已扣回：−¥3.98\n状态：已退款')" style="cursor:pointer;background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">智能服务订单·退款</div>
               <div class="fi-desc" style="color:#aaa;">智能服务 ¥19.9 · 退款时间：2026-04-08 11:03</div>
@@ -1979,7 +2119,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           </div>
           <!-- 退款示例：客车ETC延保退款 -->
           <div class="flow-item" onclick="alert('计费详情\n类型：客车ETC-延保\n延保金额：¥29.9\n购买时间：2026-04-06 10:00\n退款时间：2026-04-07 14:22\n分润已扣回：−¥5.98\n状态：已退款')" style="cursor:pointer;background:#fff8f8;">
-            <div class="fi-icon ic-red" style="color:#cf1322;">↩</div>
+            <div class="fi-icon ic-red" style="color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
             <div class="fi-info">
               <div class="fi-title" style="color:#cf1322;">客车ETC·延保退款</div>
               <div class="fi-desc" style="color:#aaa;">延保 ¥29.9 · 退款时间：2026-04-07 14:22</div>
@@ -2064,7 +2204,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
               <div class="card-t">实名信息</div>
               <div class="inp-g" style="margin-bottom:10px;"><label>姓名</label><input id="agent-kyc-name" type="text" placeholder="与身份证一致" style="width:100%;padding:10px 12px;border:1px solid #e8e8e8;border-radius:8px;font-size:14px;"/></div>
               <div class="inp-g" style="margin-bottom:10px;"><label>开户行</label><input id="agent-kyc-bank" type="text" placeholder="例：中国工商银行××支行" style="width:100%;padding:10px 12px;border:1px solid #e8e8e8;border-radius:8px;font-size:14px;"/></div>
-              <div class="inp-g" style="margin-bottom:10px;"><label>银行卡号</label><input id="agent-kyc-cardno" type="text" inputmode="numeric" placeholder="本人一类储蓄卡" style="width:100%;padding:10px 12px;border:1px solid #e8e8e8;border-radius:8px;font-size:14px;"/></div>
+              <div class="inp-g" style="margin-bottom:10px;"><label>银行卡号</label><input id="agent-kyc-cardno" type="text" inputmode="numeric" placeholder="请填写银行卡号" style="width:100%;padding:10px 12px;border:1px solid #e8e8e8;border-radius:8px;font-size:14px;"/></div>
               <div class="inp-g" style="margin-bottom:10px;"><label>身份证号</label><input id="agent-kyc-idno" type="text" placeholder="18 位身份证号码" style="width:100%;padding:10px 12px;border:1px solid #e8e8e8;border-radius:8px;font-size:14px;"/></div>
               <div style="font-size:12px;color:#888;margin-bottom:8px;font-weight:600;">办理人身份证照片</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
@@ -2185,12 +2325,66 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <strong>提现表单</strong>：输入金额（数字键盘）→ 点击「申请提现」按钮。<br>
           <strong>提现前置校验（点击申请提现时触发）</strong>：
           <table class="req-tbl" style="margin-top:6px;">
-            <tr><th>校验条件</th><th>未满足时的处理</th></tr>
-            <tr><td>已认证（提交认证资料）</td><td>弹窗提示「请先完成实名认证才能提现」，按钮「去认证」→ 跳转「我的→认证/签约」页</td></tr>
-            <tr><td>已签约（完成电子签约）</td><td>弹窗提示「请先完成签约才能提现，签约后才可以提现」，按钮「去签约」→ 跳转签约页</td></tr>
-            <tr><td>金额 ≤ 0 或未填写</td><td>按钮置灰，不可点击</td></tr>
-            <tr><td>金额 ≤ 可提现余额</td><td>超出时提示「不能超过可提现余额」，不可提交</td></tr>
+            <tr><th style="width:22%;">校验条件</th><th style="width:38%;">未满足时的处理</th><th>弹窗完整文案</th></tr>
+
+            <!-- ① 未认证 -->
+            <tr>
+              <td><strong>① 未完成实名认证</strong><br><span style="color:#888;font-size:11px;">d.auth ≠ 'ok'</span></td>
+              <td>弹窗提示，引导去认证；点击「去认证」跳转「我的 → 认证/签约」详情页；点击「稍后」关闭弹窗</td>
+              <td>
+                <div style="background:#f9f9f9;border:1px solid #e8e8e8;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;">
+                  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1a1a1a;">请先完成实名认证才能提现</div>
+                  <div style="color:#555;margin-bottom:10px;">请提交<strong>姓名、开户行、银行卡号、身份证号</strong>及<strong>身份证正反面照片</strong>，完成实名认证。认证后还须完成电子签约才可提现。</div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="background:#1677ff;color:#fff;border-radius:6px;padding:6px 10px;text-align:center;font-size:12px;">去认证</div>
+                    <div style="background:#f5f5f5;color:#555;border-radius:6px;padding:5px 10px;text-align:center;font-size:12px;">稍后</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ② 已认证未签约 -->
+            <tr>
+              <td><strong>② 已认证，未完成电子签约</strong><br><span style="color:#888;font-size:11px;">d.auth='ok'，d.sign ≠ 'ok'</span></td>
+              <td>弹窗提示，引导去签约；点击「去签约」跳转签约页；点击「稍后」关闭弹窗</td>
+              <td>
+                <div style="background:#f9f9f9;border:1px solid #e8e8e8;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;">
+                  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1a1a1a;">请先完成签约才能提现</div>
+                  <div style="color:#555;margin-bottom:10px;"><strong>签约后才可以提现。</strong>请前往灵工平台完成电子协议签署，完成后回到「我的 — 认证/签约」点击「我已完成签约」确认。</div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="background:#1677ff;color:#fff;border-radius:6px;padding:6px 10px;text-align:center;font-size:12px;">去签约</div>
+                    <div style="background:#f5f5f5;color:#555;border-radius:6px;padding:5px 10px;text-align:center;font-size:12px;">稍后</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ③ 金额为空/≤0 -->
+            <tr>
+              <td><strong>③ 金额 ≤ 0 或未填写</strong></td>
+              <td>「申请提现」按钮置灰，不可点击，无弹窗</td>
+              <td><span style="color:#999;font-size:12px;">— 无弹窗，按钮本身置灰即为反馈 —</span></td>
+            </tr>
+
+            <!-- ④ 金额超出余额 -->
+            <tr>
+              <td><strong>④ 金额 &gt; 可提现余额</strong></td>
+              <td>弹窗提示超额，不可提交；点击「我知道了」关闭，用户可修改金额后重试</td>
+              <td>
+                <div style="background:#f9f9f9;border:1px solid #e8e8e8;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;">
+                  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1a1a1a;">超出可提现余额</div>
+                  <div style="color:#555;margin-bottom:10px;">输入金额不能超过可提现余额，请修改后重试。</div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="background:#f5f5f5;color:#555;border-radius:6px;padding:5px 10px;text-align:center;font-size:12px;">我知道了</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
           </table>
+          <div style="margin-top:6px;font-size:11.5px;color:#888;line-height:1.7;">
+            ⚠️ 校验顺序：① 认证 → ② 签约 → ③ 金额为空 → ④ 金额超额；任一不满足即弹出对应弹窗并中断提交。
+          </div>
           <strong>提现历史列表</strong>（按申请时间倒序）：申请金额 / 提现平台 / 状态标签 / 申请时间；「已拒绝」可点击查看拒绝原因，拒绝后金额自动退回余额。<br>
           <strong>提现申请 · 审核结果通过</strong>（运营在后台「提现审核」点击通过，且灵工打款链路正常）：<br>
           <table class="req-tbl" style="margin-top:6px;">
@@ -2477,7 +2671,6 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 </div>
 
-
 <!-- ══════════════════════════════
      页面：渠道管理
 ══════════════════════════════ -->
@@ -2497,10 +2690,10 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <thead><tr style="background:#f5f7fa;"><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">模块</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">字段名</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">是否必填</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">规则 / 说明</th></tr></thead>
           <tbody>
             <tr><td rowspan="2" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">① 基础信息</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">渠道名称</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#e74c3c;">必填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">≤50字，不可与现有渠道重名</td></tr>
-            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">渠道类型</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#e74c3c;">必填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉：线下 / 线上 / 准前装 / 前装 / 后装 / 直销</td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">渠道类型</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#e74c3c;">必填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉：电商 / 线上 / 线下 / 线下收费站ETC禁用（禁用项） / 准前装</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">② 产品类型</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#e74c3c;">必填（≥1项）</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">复选框，选项：客车ETC / 货车ETC / 记录仪；支持单选或多选，至少选一项；未选时提交拦截并在字段下方提示「请至少选择一种产品类型」</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">③ 记录仪适配套餐</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">记录仪适配套餐 + 数量</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">设备类型下拉（W1/W1-Z/ONE-11/ONE-10等）+ 数量输入框；可添加多行；行不完整时不允许提交</td></tr>
-            <tr><td rowspan="2" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">④ 销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#e74c3c;">必填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉选择（系统内销售账号列表），选中后手机号只读自动带出；原字段名「负责人」已更名为「销售人员」</td></tr>
+            <tr><td rowspan="2" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">④ 销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#888;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉选择（系统内销售账号列表），选中后手机号只读自动带出；原字段名「负责人」已更名为「销售人员」</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">销售人员联系方式</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">只读</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">由所选销售账号自动带出，不可手动编辑</td></tr>
             <tr><td rowspan="3" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">⑤ 代理商信息</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">代理商姓名</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">—</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">新增或变更此字段 → 触发渠道信息审核流程（见「渠道信息审核」页），审核通过前该手机号不可用于登录/提现</strong></td></tr>
@@ -2519,6 +2712,11 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
           <li><strong>关闭弹窗：</strong>有未保存内容时弹二次确认「确认放弃修改？」；保存失败时弹窗不关闭，提示错误原因</li>
           <li><strong>审核分流触发条件：</strong>代理商电话新增/变更、或任一分润比例/货车金额有填写 → 提交后提示「本次修改已进入审核流程，审核通过前变更不生效」，并生成待审核记录</li>
         </ul>
+
+        <div style="margin-top:14px;background:#fffbe6;border:1px solid #ffe58f;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7c5800;line-height:1.85;">
+          <strong>⚠️ 上线前初始化要求</strong><br/>
+          渠道管理模块整体上线前需完成初始化：现有渠道数据须由运营人员在后台统一录入，确保历史渠道配置（渠道类型、产品类型、分润比例、销售人员等）完整写入系统后，功能方可对外开放使用。
+        </div>
       </div>
     </details>
 
@@ -2571,7 +2769,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
         <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;"><span style="color:#ff4d4f;">*</span>渠道类型</div>
         <div style="flex:1;">
           <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
-            <option>线下</option><option>线上</option><option>准前装</option><option>前装</option><option>后装</option><option>直销</option>
+            <option value="">请选择渠道类型</option><option>电商</option><option>线上</option><option>线下</option><option>线下收费站ETC禁用</option><option>准前装</option>
           </select>
         </div>
       </div>
@@ -2679,7 +2877,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <div id="err-truck-max" style="display:none;font-size:11px;color:#ff4d4f;margin-bottom:10px;">⚠️ 货车分润金额每项不得超过 500 元</div>
       <hr style="border:none;border-top:1px dashed #eaeaea;margin:8px 0 12px;"/>
       <!-- 模块④ 销售人员 -->
-      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 销售人员 <span style="font-size:11px;font-weight:400;color:#e67e00;">（必填）</span></div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:5px 10px 5px 8px;border-radius:0 5px 5px 0;margin-bottom:10px;">模块④ 销售人员 <span style="font-size:11px;font-weight:400;color:#aaa;">（选填）</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
           <label style="display:block;font-size:11.5px;color:#777;margin-bottom:3px;">销售姓名</label>
@@ -2812,8 +3010,8 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   <div style="background:#fff;border-radius:12px;padding:20px 22px;max-width:320px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
     <div id="agent-withdraw-guard-title" style="font-size:16px;font-weight:800;color:#1a1a1a;margin-bottom:10px;">提示</div>
     <div id="agent-withdraw-guard-body" style="font-size:13px;color:#555;line-height:1.75;margin-bottom:18px;"></div>
-    <button type="button" onclick="goAgentKycFromWithdrawGuard()" class="btn btn-primary" style="width:100%;padding:11px;border:none;border-radius:8px;font-size:14px;cursor:pointer;">前往认证 / 签约</button>
-    <button type="button" onclick="closeAgentWithdrawGuard()" style="width:100%;margin-top:10px;padding:9px;background:#f5f5f5;color:#555;border:none;border-radius:8px;font-size:13px;cursor:pointer;">稍后</button>
+    <button id="agent-withdraw-guard-btn-primary" type="button" class="btn btn-primary" style="width:100%;padding:11px;border:none;border-radius:8px;font-size:14px;cursor:pointer;">去认证</button>
+    <button id="agent-withdraw-guard-btn-close" type="button" onclick="closeAgentWithdrawGuard()" style="width:100%;margin-top:10px;padding:9px;background:#f5f5f5;color:#555;border:none;border-radius:8px;font-size:13px;cursor:pointer;">稍后</button>
   </div>
 </div>
 
@@ -3761,9 +3959,10 @@ function go(name) {
     if (oc.indexOf("go('" + name + "')") >= 0 || oc.indexOf('go("' + name + '")') >= 0) t.classList.add('active');
   });
   const b = document.getElementById('badge');
-  const m = { intro:['📘 需求说明','badge-none'], login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], store:['🏬 门店','badge-store'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'store-mgmt':['🏪 门店管理','badge-mgr'], 'channel-audit':['📋 渠道信息审核','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], refund:['💰 退款页面','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
+  const m = { intro:['📘 需求说明','badge-none'], 'h5-deploy':['更新H5','badge-none'], login:['未登录','badge-none'], mgr:['🏢 主管','badge-mgr'], sales:['👔 销售','badge-sales'], agent:['🏪 一级代理','badge-agent'], store:['🏬 门店','badge-store'], 'channel-admin':['📡 渠道管理','badge-mgr'], 'store-mgmt':['🏪 门店管理','badge-mgr'], 'channel-audit':['📋 渠道信息审核','badge-mgr'], 'withdraw-admin':['💳 提现审核','badge-mgr'], refund:['💰 退款页面','badge-mgr'], perm:['权限对比','badge-none'], flow:['时序图','badge-none'] };
   if (m[name]) { b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1]; }
   if (name === 'store' && typeof updateStoreScope === 'function') setTimeout(function() { updateStoreScope(); }, 0);
+  window.__protoPageKey = name;
 }
 
 /** 从审核提示弹窗跳转至「渠道信息审核」页 */
@@ -3923,22 +4122,22 @@ function agentDemoMarkSigned() {
 
 function tryAgentWithdrawApply() {
   var d = window.agentKycDemo;
-  if (d.auth !== 'ok') {
-    showAgentWithdrawGuard('auth');
-    return;
-  }
-  if (d.sign !== 'ok') {
-    showAgentWithdrawGuard('sign');
-    return;
-  }
+  // ① 认证校验
+  if (d.auth !== 'ok') { showAgentWithdrawGuard('auth'); return; }
+  // ② 签约校验
+  if (d.sign !== 'ok') { showAgentWithdrawGuard('sign'); return; }
+  // ③ 金额为空/≤0 — 按钮已置灰，正常不会到这里；兜底不弹窗
   var amtEl = document.getElementById('agent-withdraw-amt');
   var raw = amtEl ? String(amtEl.value || '').replace(/,/g, '').trim() : '';
   var amt = parseFloat(raw);
-  if (!raw || isNaN(amt) || amt <= 0) {
-    alert('请输入有效的提现金额');
-    return;
-  }
-  alert('提现申请已提交\n预计1-3工作日到账\n灵工平台审核中');
+  if (!raw || isNaN(amt) || amt <= 0) return;
+  // ④ 金额超出余额
+  var balEl = document.getElementById('agent-balance-val');
+  var balRaw = balEl ? balEl.textContent.replace(/[^0-9.]/g, '') : '3286.50';
+  var balance = parseFloat(balRaw) || 3286.50;
+  if (amt > balance) { showAgentWithdrawGuard('over-balance'); return; }
+  // 全部校验通过 — 演示提交成功
+  showAgentWithdrawGuard('pending');
 }
 
 function showAgentWithdrawGuard(kind) {
@@ -3946,12 +4145,36 @@ function showAgentWithdrawGuard(kind) {
   var title = document.getElementById('agent-withdraw-guard-title');
   var body = document.getElementById('agent-withdraw-guard-body');
   if (!mask || !title || !body) return;
+  var btnPrimary = document.getElementById('agent-withdraw-guard-btn-primary');
+  var btnClose   = document.getElementById('agent-withdraw-guard-btn-close');
+  if (!mask || !title || !body) return;
+
+  // 重置按钮
+  if (btnPrimary) btnPrimary.style.display = '';
+  if (btnClose)   btnClose.style.display   = '';
+
   if (kind === 'auth') {
-    title.textContent = '需先完成实名认证';
-    body.innerHTML = '请先提交<strong>姓名、开户行、银行卡号、身份证号</strong>及<strong>办理人身份证正反面</strong>。完成认证后，还须完成电子签约方可提现。';
-  } else {
-    title.textContent = '需先完成电子签约';
-    body.innerHTML = '<strong>签约后才可以提现。</strong>请前往「我的 — 认证/签约」完成电子协议签署后再申请提现。';
+    title.textContent = '请先完成实名认证才能提现';
+    body.innerHTML = '请提交<strong>姓名、开户行、银行卡号、身份证号</strong>及<strong>身份证正反面照片</strong>，完成实名认证。认证后还须完成电子签约才可提现。';
+    if (btnPrimary) { btnPrimary.textContent = '去认证';  btnPrimary.onclick = function(){ goAgentKycFromWithdrawGuard(); }; }
+    if (btnClose)   { btnClose.textContent   = '稍后'; }
+  } else if (kind === 'sign') {
+    title.textContent = '请先完成签约才能提现';
+    body.innerHTML = '<strong>签约后才可以提现。</strong>请前往灵工平台完成电子协议签署，完成后回到「我的 — 认证/签约」点击「我已完成签约」确认。';
+    if (btnPrimary) { btnPrimary.textContent = '去签约'; btnPrimary.onclick = function(){ goAgentKycFromWithdrawGuard(); }; }
+    if (btnClose)   { btnClose.textContent   = '稍后'; }
+  } else if (kind === 'over-balance') {
+    title.textContent = '超出可提现余额';
+    var balEl = document.getElementById('agent-balance-val');
+    var balText = balEl ? balEl.textContent.trim() : '当前余额';
+    body.innerHTML = '输入金额不能超过可提现余额 <strong>' + balText + '</strong>，请修改后重试。';
+    if (btnPrimary) btnPrimary.style.display = 'none';
+    if (btnClose)   btnClose.textContent = '我知道了';
+  } else if (kind === 'pending') {
+    title.textContent = '您有待审核的提现申请';
+    body.innerHTML = '您已有一笔提现申请正在审核中，仍可继续提交新的申请。<br><span style="color:#aaa;font-size:11px;">如有疑问请联系运营。</span>';
+    if (btnPrimary) btnPrimary.style.display = 'none';
+    if (btnClose)   btnClose.textContent = '我知道了';
   }
   mask.style.display = 'flex';
 }
@@ -4226,11 +4449,6 @@ function saveChannelDialog() {
     return;
   }
   if (pte) pte.style.display = 'none';
-  var salesSel = document.getElementById('cm-sales-select');
-  if (!salesSel || !salesSel.value) {
-    alert('请选择销售人员');
-    return;
-  }
   var errAi = document.getElementById('err-ratio-ai');
   var errYb = document.getElementById('err-ratio-yb');
   if (errAi && errAi.style.display === 'block') {
@@ -4885,6 +5103,209 @@ document.addEventListener('DOMContentLoaded', function() {
     'refund_figure2_warranty_orders.PNG'
   ]);
 });
+
+/* ══ 开发标注模式 ══ */
+(function(){
+  var tip     = document.getElementById('dev-tip');
+  var boxM    = document.getElementById('dev-box-margin');
+  var boxP    = document.getElementById('dev-box-padding');
+  var boxC    = document.getElementById('dev-box-content');
+  var legend  = document.getElementById('dev-legend');
+  var active  = false;
+
+  function hideBoxes() {
+    [boxM, boxP, boxC].forEach(function(b){ if(b) b.style.display='none'; });
+  }
+
+  window.toggleDevMode = function() {
+    active = !active;
+    document.body.classList.toggle('dev-inspect', active);
+    var btn = document.getElementById('dev-mode-btn');
+    if (btn) {
+      btn.classList.toggle('on', active);
+      btn.textContent = active ? '✕ 关闭标注' : '🔍 开发标注';
+    }
+    if (!active) { tip.style.display = 'none'; hideBoxes(); if(legend) legend.style.display='none'; }
+    else { if(legend) legend.style.display='block'; }
+  };
+
+  function setBox(el, t, l, w, h) {
+    el.style.cssText += ';display:block;top:'+t+'px;left:'+l+'px;width:'+w+'px;height:'+h+'px;';
+  }
+
+  function drawBoxModel(el) {
+    var cs  = window.getComputedStyle(el);
+    var r   = el.getBoundingClientRect();
+    var mt  = parseFloat(cs.marginTop)||0,   mr = parseFloat(cs.marginRight)||0;
+    var mb  = parseFloat(cs.marginBottom)||0, ml= parseFloat(cs.marginLeft)||0;
+    var pt  = parseFloat(cs.paddingTop)||0,   pr= parseFloat(cs.paddingRight)||0;
+    var pb  = parseFloat(cs.paddingBottom)||0,pl= parseFloat(cs.paddingLeft)||0;
+    // margin box
+    setBox(boxM, r.top-mt, r.left-ml, r.width+ml+mr, r.height+mt+mb);
+    // padding box (border box = r)
+    setBox(boxP, r.top, r.left, r.width, r.height);
+    // content box
+    setBox(boxC, r.top+pt, r.left+pl, r.width-pl-pr, r.height-pt-pb);
+  }
+
+  function rgbToHex(rgb) {
+    var m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!m) return rgb;
+    return '#' + [m[1],m[2],m[3]].map(function(v){ return ('0'+parseInt(v).toString(16)).slice(-2); }).join('').toUpperCase();
+  }
+
+  function fmtSpacing(t,r,b,l) {
+    if (t===r && r===b && b===l) return t;
+    if (t===b && r===l) return t + ' ' + r;
+    return t + ' ' + r + ' ' + b + ' ' + l;
+  }
+
+  function swatch(color) {
+    return '<span class="dt-swatch" style="background:' + color + ';"></span>';
+  }
+
+  document.addEventListener('mouseover', function(e) {
+    if (!active) return;
+    var el = e.target;
+    if (!el || el === tip || tip.contains(el) || el.id === 'dev-mode-btn') return;
+    if (el.classList && el.classList.contains('dev-box-overlay')) return;
+    // 排除需求描述区：右侧需求面板(.side-panel) 和 后台页折叠需求块(details)
+    if (el.closest && (el.closest('.side-panel') || el.closest('details'))) return;
+    drawBoxModel(el);
+
+    var cs = window.getComputedStyle(el);
+    var rect = el.getBoundingClientRect();
+
+    var tag = el.tagName.toLowerCase();
+    var cls = (typeof el.className === 'string' && el.className.trim())
+      ? el.className.trim().split(/\s+/).slice(0,3).map(function(c){ return '.'+c; }).join('')
+      : '';
+
+    var lines = [];
+    lines.push('<span class="dt-tag">&lt;' + tag + cls + '&gt;</span>');
+    lines.push('<hr class="dt-sep">');
+
+    // 尺寸
+    lines.push('<span class="dt-key">尺寸　</span><span class="dt-val">' + Math.round(rect.width) + ' × ' + Math.round(rect.height) + ' px</span>');
+
+    // 字体
+    if (cs.fontSize) lines.push('<span class="dt-key">字号　</span><span class="dt-val">' + cs.fontSize + '</span>');
+    var fw = cs.fontWeight;
+    if (fw && fw !== '400' && fw !== 'normal') lines.push('<span class="dt-key">字重　</span><span class="dt-val">' + fw + '</span>');
+    if (cs.lineHeight && cs.lineHeight !== 'normal') lines.push('<span class="dt-key">行高　</span><span class="dt-val">' + cs.lineHeight + '</span>');
+
+    // 颜色
+    var color = cs.color;
+    if (color && color !== 'rgba(0, 0, 0, 0)') {
+      lines.push('<span class="dt-key">颜色　</span><span class="dt-val">' + rgbToHex(color) + swatch(color) + '</span>');
+    }
+    var bg = cs.backgroundColor;
+    if (bg && bg !== 'rgba(0, 0, 0, 0)') {
+      lines.push('<span class="dt-key">背景　</span><span class="dt-val">' + rgbToHex(bg) + swatch(bg) + '</span>');
+    }
+
+    // 间距
+    var pt=cs.paddingTop,pr=cs.paddingRight,pb=cs.paddingBottom,pl=cs.paddingLeft;
+    var mt=cs.marginTop,mr=cs.marginRight,mb=cs.marginBottom,ml=cs.marginLeft;
+    lines.push('<span class="dt-key">内距　</span><span class="dt-val">' + fmtSpacing(pt,pr,pb,pl) + '</span>');
+    if (mt!=='0px'||mr!=='0px'||mb!=='0px'||ml!=='0px')
+      lines.push('<span class="dt-key">外距　</span><span class="dt-val">' + fmtSpacing(mt,mr,mb,ml) + '</span>');
+
+    // 圆角
+    if (cs.borderRadius && cs.borderRadius !== '0px')
+      lines.push('<span class="dt-key">圆角　</span><span class="dt-val">' + cs.borderRadius + '</span>');
+
+    // 边框
+    if (cs.borderWidth && cs.borderWidth !== '0px' && cs.borderStyle !== 'none')
+      lines.push('<span class="dt-key">边框　</span><span class="dt-val">' + cs.borderWidth + ' ' + cs.borderStyle + ' ' + rgbToHex(cs.borderColor) + '</span>');
+
+    tip.innerHTML = lines.join('<br>');
+    tip.style.display = 'block';
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!active || tip.style.display === 'none') return;
+    var x = e.clientX + 16, y = e.clientY + 16;
+    if (x + 310 > window.innerWidth) x = e.clientX - 314;
+    if (y + tip.offsetHeight + 10 > window.innerHeight) y = e.clientY - tip.offsetHeight - 10;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  });
+
+  document.addEventListener('mouseout', function() {
+    if (!active) return;
+    tip.style.display = 'none';
+    hideBoxes();
+  });
+
+  /** 开发模式下：点击 .fi-icon / 进销存 .stock-pill 内 SVG / Tab 内 SVG → 导出 PNG */
+  function findExportableSvg(fromEl) {
+    if (!fromEl || !fromEl.closest) return null;
+    if (fromEl.closest('.side-panel') || fromEl.closest('details')) return null;
+    var fi = fromEl.closest('.fi-icon');
+    if (fi) return fi.querySelector('svg');
+    var inSvg = fromEl.closest('svg');
+    if (inSvg && inSvg.closest('.stock-pill')) return inSvg;
+    if (inSvg && inSvg.closest('.tab-btn')) return inSvg;
+    return null;
+  }
+
+  function downloadSvgAsPng(svgEl) {
+    var rect = svgEl.getBoundingClientRect();
+    var w = Math.max(1, Math.round(rect.width));
+    var h = Math.max(1, Math.round(rect.height));
+    var scale = 3;
+    var clone = svgEl.cloneNode(true);
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.removeAttribute('width');
+    clone.removeAttribute('height');
+    if (!clone.getAttribute('viewBox')) {
+      clone.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    }
+    var cs = window.getComputedStyle(svgEl);
+    clone.setAttribute('width', String(w * scale));
+    clone.setAttribute('height', String(h * scale));
+    clone.style.color = cs.color;
+    clone.style.fill = cs.fill && cs.fill !== 'none' ? cs.fill : cs.color;
+
+    var ser = new XMLSerializer().serializeToString(clone);
+    var url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(ser);
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = w * scale;
+      canvas.height = h * scale;
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(function(blob) {
+        if (!blob) { alert('PNG 生成失败，请换 Chrome / Safari 重试'); return; }
+        var name = 'proto-icon-' + w + 'x' + h + '-' + Date.now() + '.png';
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        a.click();
+        setTimeout(function() { URL.revokeObjectURL(a.href); }, 2000);
+      }, 'image/png');
+    };
+    img.onerror = function() {
+      alert('SVG 转图失败（可能含不支持的样式）');
+    };
+    img.src = url;
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!active) return;
+    var t = e.target;
+    if (!t || t.id === 'dev-mode-btn' || tip.contains(t)) return;
+    var svg = findExportableSvg(t);
+    if (!svg) return;
+    e.preventDefault();
+    e.stopPropagation();
+    downloadSvgAsPng(svg);
+  }, true);
+})();
 </script>
+
 </body>
 </html>
