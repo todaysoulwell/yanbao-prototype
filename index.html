@@ -85,67 +85,6 @@ body.dev-inspect .page.active > *:not(.side-panel):not(details):not(#dev-tip):no
 }
 #dev-legend span { display:inline-block; width:12px; height:12px; border-radius:2px; vertical-align:middle; margin-right:4px; }
 
-/* ── 原型评论（localStorage，本地 / H5 同源均可用） ── */
-#comment-btn { margin-left:4px; border:1px solid #d9d9d9 !important; font-size:12px; white-space:nowrap; flex-shrink:0; position:relative; }
-#comment-btn .cmt-badge { position:absolute; top:-5px; right:-6px; min-width:16px; height:16px; padding:0 4px; border-radius:8px; background:#ff4d4f; color:#fff; font-size:10px; font-weight:700; line-height:16px; text-align:center; display:none; }
-#comment-btn.has-unread .cmt-badge { display:inline-block; }
-#comment-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:99970; }
-#comment-backdrop.open { display:block; }
-#comment-panel {
-  position:fixed; top:52px; right:0; bottom:0; width:min(400px, 100vw); max-width:100%;
-  background:#fff; box-shadow:-4px 0 24px rgba(0,0,0,.12); z-index:99980;
-  display:none; flex-direction:column; font-size:13px;
-}
-#comment-panel.open { display:flex; }
-#comment-panel .cmt-head { flex-shrink:0; padding:14px 16px; border-bottom:1px solid #f0f0f0; display:flex; align-items:center; justify-content:space-between; gap:8px; }
-#comment-panel .cmt-head h3 { font-size:15px; font-weight:700; margin:0; color:#1a1a1a; }
-#comment-panel .cmt-meta { flex-shrink:0; padding:10px 16px; background:#fafafa; border-bottom:1px solid #f0f0f0; font-size:12px; color:#666; line-height:1.6; }
-#comment-panel .cmt-filter { display:flex; gap:8px; margin-top:8px; }
-#comment-panel .cmt-filter button { padding:4px 10px; border-radius:6px; border:1px solid #d9d9d9; background:#fff; cursor:pointer; font-size:12px; }
-#comment-panel .cmt-filter button.on { border-color:#1677ff; color:#1677ff; background:#f0f5ff; }
-#comment-panel .cmt-list { flex:1; overflow-y:auto; padding:12px 16px; }
-#comment-panel .cmt-item { border:1px solid #f0f0f0; border-radius:8px; padding:10px 12px; margin-bottom:10px; background:#fafafa; }
-#comment-panel .cmt-item-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:6px; font-size:11px; color:#888; }
-#comment-panel .cmt-item-page { display:inline-block; padding:1px 6px; border-radius:4px; background:#e6f4ff; color:#1677ff; font-size:10px; font-weight:600; }
-#comment-panel .cmt-item-text { color:#333; line-height:1.55; white-space:pre-wrap; word-break:break-word; font-size:12.5px; }
-#comment-panel .cmt-item-del { border:none; background:none; color:#ff4d4f; cursor:pointer; font-size:11px; padding:0; flex-shrink:0; }
-#comment-panel .cmt-foot { flex-shrink:0; border-top:1px solid #f0f0f0; padding:12px 16px 16px; background:#fff; }
-#comment-panel .cmt-foot textarea { width:100%; min-height:72px; padding:8px 10px; border:1px solid #d9d9d9; border-radius:6px; font-size:13px; resize:vertical; box-sizing:border-box; font-family:inherit; }
-#comment-panel .cmt-foot .cmt-row { display:flex; gap:8px; margin-bottom:8px; align-items:center; flex-wrap:wrap; }
-#comment-panel .cmt-foot input[type="text"] { flex:1; min-width:120px; padding:6px 10px; border:1px solid #d9d9d9; border-radius:6px; font-size:12px; }
-#comment-panel .cmt-foot .cmt-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-#comment-panel .cmt-foot .cmt-actions button { padding:6px 14px; border-radius:6px; border:1px solid #d9d9d9; background:#fff; cursor:pointer; font-size:12px; }
-#comment-panel .cmt-foot .cmt-actions .cmt-primary { background:#1677ff; color:#fff; border-color:#1677ff; }
-#comment-panel .cmt-empty { text-align:center; color:#bbb; padding:32px 16px; font-size:12px; }
-mark.proto-ann-mark {
-  background: linear-gradient(transparent 62%, rgba(255,77,79,.42) 62%);
-  border-bottom: 2px solid #ff4d4f;
-  cursor: pointer;
-  border-radius: 2px;
-  padding: 0 1px;
-  color: inherit;
-}
-mark.proto-ann-mark:hover { background: rgba(255,77,79,.2); }
-mark.proto-ann-mark.proto-ann-flash { animation: protoAnnFlash .55s ease 2; }
-@keyframes protoAnnFlash {
-  0%, 100% { background: linear-gradient(transparent 62%, rgba(255,77,79,.42) 62%); }
-  50% { background: rgba(255,77,79,.32); }
-}
-#comment-ann-preview {
-  margin-top:8px; padding:8px 10px; background:#fff2f0; border:1px solid #ffccc7; border-radius:6px;
-  font-size:11.5px; color:#a8071a; line-height:1.5; display:none;
-}
-#comment-ann-preview.has-sel { display:block; }
-#comment-ann-preview .cap { font-weight:700; margin-bottom:4px; color:#cf1322; }
-#comment-ann-preview q { display:block; padding:4px 0; font-style:normal; color:#434343; word-break:break-word; }
-#comment-panel .cmt-item.is-reply { background:#f5f5f5; border-color:#e8e8e8; }
-#comment-panel .cmt-anchor-snip { font-size:11px; color:#cf1322; margin-bottom:6px; padding:4px 8px; background:#fff2f0; border-radius:4px; border-left:3px solid #ff4d4f; }
-#comment-panel .cmt-actions-inline { margin-top:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-#comment-panel .cmt-actions-inline button { border:none; background:none; cursor:pointer; font-size:11.5px; padding:0; color:#1677ff; }
-#comment-panel .cmt-actions-inline .cmt-item-del { color:#ff4d4f; }
-#comment-reply-hint { display:none; margin-bottom:8px; padding:6px 10px; background:#f0f5ff; border:1px solid #adc6ff; border-radius:6px; font-size:12px; color:#1677ff; }
-#comment-sync-status { margin-top:8px; font-size:11px; line-height:1.5; }
-
 body.dev-inspect .fi-icon,
 body.dev-inspect .tab-btn svg,
 body.dev-inspect .stock-pill-ico svg { cursor: pointer !important; }
@@ -425,10 +364,6 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 .stock-pill.on-dvr { background:#52c41a; color:#fff; border-color:#52c41a; }
 
 </style>
-<script>
-/* 团队共享评论：Firebase 控制台新建项目 → 创建数据库（Firestore）→ 规则可先设为测试模式 → 项目设置里添加网页应用，把配置粘到下方并取消注释（详见需求说明「评论·云端」） */
-// window.YANBAO_FIREBASE = { apiKey:'', authDomain:'', projectId:'', storageBucket:'', messagingSenderId:'', appId:'' };
-</script>
 </head>
 <body>
 
@@ -436,14 +371,14 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 <nav class="top-nav">
   <div class="logo">🔐 小万延保分润 V1.4</div>
   <div class="nav-tabs">
-    <button class="nav-tab" onclick="go('intro')">需求说明</button>
-    <button class="nav-tab active" onclick="go('login')">角色登录</button>
+    <button class="nav-tab active" onclick="go('intro')">需求说明</button>
+    <button class="nav-tab" onclick="go('channel-admin')">渠道管理</button>
+    <button class="nav-tab" onclick="go('channel-audit')">渠道信息审核</button>
+    <button class="nav-tab" onclick="go('login')">角色登录</button>
     <button class="nav-tab" onclick="go('mgr')">主管视图</button>
     <button class="nav-tab" onclick="go('sales')">销售视图</button>
     <button class="nav-tab" onclick="go('agent')">一级代理视图</button>
-    <button class="nav-tab" onclick="go('channel-admin')">渠道管理</button>
     <button class="nav-tab" onclick="go('store-mgmt')">门店管理</button>
-    <button class="nav-tab" onclick="go('channel-audit')">渠道信息审核</button>
     <button class="nav-tab" onclick="go('withdraw-admin')">提现审核</button>
     <button class="nav-tab" onclick="go('refund')">退款页面</button>
     <button class="nav-tab" onclick="go('perm')">权限对比</button>
@@ -452,44 +387,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
   <div class="role-badge badge-none" id="badge">未登录</div>
   <button class="nav-tab" id="dev-mode-btn" onclick="toggleDevMode()" title="开启后悬停查看标注；点击图标可下载 PNG">🔍 开发标注</button>
-  <button class="nav-tab" id="comment-btn" type="button" onclick="toggleCommentPanel()" title="支持选区标注、回复；配置 Firebase 后全队共享">💬 评论<span class="cmt-badge" id="comment-badge">0</span></button>
 </nav>
-<div id="comment-backdrop" onclick="closeCommentPanel()"></div>
-<div id="comment-panel" aria-hidden="true">
-  <div class="cmt-head">
-    <h3>原型评论</h3>
-    <button type="button" class="nav-tab" style="padding:4px 10px;font-size:12px;" onclick="closeCommentPanel()">关闭</button>
-  </div>
-  <div class="cmt-meta">
-    <div>当前页面：<strong id="comment-page-label">—</strong></div>
-    <div class="cmt-filter">
-      <button type="button" id="cmt-filter-page" class="on" onclick="setCommentFilter('page')">只看本页</button>
-      <button type="button" id="cmt-filter-all" onclick="setCommentFilter('all')">全部</button>
-    </div>
-    <div style="margin-top:8px;font-size:11px;color:#999;">未配 Firebase 时仅本机；配置后全队看同一份。仍可导出/导入 JSON 备份。</div>
-    <div style="margin-top:10px;padding:8px 10px;background:#e6f4ff;border:1px solid #91caff;border-radius:6px;font-size:11.5px;color:#0958d8;line-height:1.55;">
-      <strong>选区标注：</strong>在<strong>手机原型</strong>或<strong>需求说明</strong>中拖选文字后再发送，页面会<strong>标红下划线</strong>；点标注可定位评论。<strong>回复</strong>为楼中楼；删主评会删掉其下全部回复。
-    </div>
-    <div id="comment-ann-preview"><div class="cap" style="font-weight:700;margin-bottom:4px;color:#cf1322;">将绑定的选区</div><q id="comment-ann-excerpt"></q></div>
-    <div id="comment-sync-status"></div>
-  </div>
-  <div class="cmt-list" id="comment-list"></div>
-  <div class="cmt-foot">
-    <div id="comment-reply-hint"></div>
-    <div class="cmt-row">
-      <label style="font-size:12px;color:#666;white-space:nowrap;">昵称</label>
-      <input type="text" id="comment-author" placeholder="选填，便于区分谁提的" maxlength="24"/>
-    </div>
-    <textarea id="comment-input" placeholder="输入评论或回复…"></textarea>
-    <div class="cmt-actions">
-      <button type="button" class="cmt-primary" id="comment-submit-btn" onclick="submitComment()">发表评论</button>
-      <button type="button" id="comment-cancel-reply" style="display:none;" onclick="cancelReplyToComment()">取消回复</button>
-      <button type="button" onclick="exportCommentsJson()">导出 JSON</button>
-      <button type="button" onclick="document.getElementById('comment-import-file').click()">导入 JSON</button>
-      <input type="file" id="comment-import-file" accept="application/json,.json" style="display:none" onchange="importCommentsJson(this)"/>
-    </div>
-  </div>
-</div>
 <div id="dev-tip"></div>
 <div id="dev-box-margin"  class="dev-box-overlay"></div>
 <div id="dev-box-padding" class="dev-box-overlay"></div>
@@ -506,11 +404,11 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 <!-- ══════════════════════════════
      页面 0：需求说明（整案导读）
 ══════════════════════════════ -->
-<div class="page" id="page-intro">
+<div class="page active" id="page-intro">
   <div class="panel-card">
     <h3>📘 需求说明 · 代理渠道延保分润系统</h3>
     <p style="font-size:13px;color:#555;line-height:1.9;margin-bottom:14px;">
-      本页面向产品、研发、测试与业务方说明<strong>本原型覆盖的需求边界与交付要点</strong>。详细字段与验收以 PRD 为准；下方为结构化导读，点击顶部「角色登录」可进入各端界面演示。
+      本页面向产品、研发、测试与业务方说明<strong>本原型覆盖的需求边界与交付要点</strong>。详细字段与验收以正式 PRD 为准；<strong>渠道管理</strong>的 PRD 级说明见下节「<strong>PRD：渠道管理</strong>」与「<strong>原型中包含的端与页面</strong>」对应行。通过顶部导航可切换各页，「<strong>更新H5链接方式</strong>」中提供当前线上可访问地址。
     </p>
     <div style="background:#f0f5ff;border:1px solid #bae0ff;border-radius:8px;padding:12px 14px;font-size:12.5px;color:#0958d9;line-height:1.85;margin-bottom:16px;">
       <strong>一句话：</strong>围绕<strong>客车 ETC / 货车 ETC / 记录仪</strong>三类产品的<strong>进销存、激活/绑定、分润计费与提现</strong>，为<strong>主管、销售、一级代理</strong>提供小程序能力，并为运营提供<strong> Web 后台</strong>（渠道、门店、分润配置、审核与权限隔离）。一级代理提现须<strong>认证/签约</strong>闭环；<strong>分润入账</strong>及<strong>提现审核通过 / 审核未通过 / 打款到账</strong>均触发<strong>微信订阅消息</strong>；后台提现审核与之一致校验。
@@ -532,35 +430,33 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
   </div>
 
   <div class="panel-card">
-    <h3>原型中包含的端与页面</h3>
-    <table class="req-tbl" style="font-size:12px;">
-      <tr><th style="width:22%;">入口 Tab</th><th>说明</th></tr>
-      <tr><td><strong>需求说明</strong></td><td>本页：需求边界与使用说明。</td></tr>
-      <tr><td><strong>更新H5链接方式</strong></td><td>本地终端四步：<code>cd</code> 进入仓库、<code>git pull</code>、<code>cp</code> 覆盖 <code>index.html</code>、<code>git add/commit/push</code>（含 <code>main</code>/<code>master</code> 分支说明）。</td></tr>
-      <tr><td><strong>角色登录</strong></td><td>手机号验证码登录；演示账号快捷进入各角色小程序视图。</td></tr>
-      <tr><td><strong>主管 / 销售视图</strong></td><td>总览、进销存（代理明细、产品筛选、激活率排序）、分润、提现记录、我的；销售数据范围为负责代理。</td></tr>
-      <tr><td><strong>一级代理视图</strong></td><td>首页、进销存（批次不展示 SN/分润比例）、<strong>账户</strong>（提现；前置<strong>认证/签约</strong>；<strong>分润入账</strong>及<strong>提现审核通过/未通过/到账</strong>均可能推送<strong>微信订阅消息</strong>）、<strong>计费</strong>（本月汇总三类拆解；客车 ETC 卡片为<strong>延保</strong>口径）、<strong>我的</strong>（认证/签约入口）。</td></tr>
-      <tr><td><strong>渠道管理</strong></td><td>Web 后台：<strong>参考截图区</strong>+弹窗「新增/修改渠道」。列表字段：<strong>销售人员姓名/联系方式</strong>；弹窗必填<strong>产品类型</strong>（客车ETC、货车ETC、记录仪，单选或多选）、套餐与分润、审核分流等。</td></tr>
-      <tr><td><strong>门店管理</strong></td><td>以<strong>参考截图</strong>为准；操作含<strong>生成专属二维码</strong>（渠道+门店唯一绑定），与渠道二维码区分。</td></tr>
-      <tr><td><strong>渠道信息审核 / 提现审核</strong></td><td>渠道敏感变更审核流程演示。<strong>提现审核</strong>：点击「通过」前校验代理<strong>认证+签约</strong>完成（与一级代理演示状态联动）；支持批量通过时的同类校验。</td></tr>
-      <tr><td><strong>退款页面</strong></td><td>后台订单退款入口界面截图 + 三分支退款逻辑演示：① 不参与分润 → 直接退款；② 参与分润但未提现 → 直接退款同时自动扣减代理可提现余额、小程序生成「退款扣回」流水；③ 参与分润且已提现 → 弹窗提示线下通知代理商全额退款。</td></tr>
-      <tr><td><strong>权限对比</strong></td><td>角色 × 能力矩阵。</td></tr>
-      <tr><td><strong>业务时序图</strong></td><td>7 条 Mermaid 时序：登录路由、客车延保分润、货车ETC分润、记录仪分润、提现、销售归属、退款管控。</td></tr>
-      <tr><td><strong>💬 评论</strong></td><td>侧栏：<strong>选区标注</strong>（拖选原型/需求文字）、<strong>回复</strong>、<strong>删除</strong>（含子回复）。默认仅本机 <strong>localStorage</strong>；在 HTML 中配置 <strong>Firebase Firestore</strong>（<code>window.YANBAO_FIREBASE</code>）后，开发与产品打开<strong>同一 H5</strong>即可<strong>共享同一份评论</strong>（需各自备可访问外网）。详见本页下文「评论·云端同步」。</td></tr>
-    </table>
+    <h3>PRD：渠道管理（Web 运营后台）</h3>
+    <p style="font-size:12.5px;color:#888;margin:0 0 12px;line-height:1.75;">以下与正式 PRD「渠道管理」章节对齐，供评审与研发验收；与现网列表字段、弹窗、审核流需一致实现。</p>
+    <ol style="font-size:12.5px;color:#333;line-height:1.95;margin:0 0 0 1.2em;padding:0;list-style:decimal;">
+      <li><strong>范围：</strong>运营在后台维护渠道主数据、产品类型、分润/套餐、销售与主管绑定等；敏感变更走「渠道信息审核」。列表展示以现网截图为准，列名 <strong>销售人员姓名 / 联系方式</strong>（原「负责人」已更名）。</li>
+      <li><strong>新增 / 修改弹窗（同一套表单）：</strong>新增为空白或默认值；<strong>修改</strong>仅加载<strong>已生效主数据</strong>（以最近一次审核<strong>通过</strong>的落库为准），无生效值则空；<strong>不将</strong>待审中变更、已驳回且未再次正式提交的稿<strong>混入</strong>修改态。审核<strong>通过</strong>后主数据按当次通过内容更新，再次打开「修改」即为最新已生效值。</li>
+      <li><strong>列表操作列：</strong>除「修改」外，在存在对应审核单时可进入<strong>审核中信息 / 已驳回信息 / 已通过信息</strong>。弹窗中展示当次提交在服务端保存的<strong>完整</strong>渠道信息（与弹窗/PRD 可配置项一一对应，非仅差异字段）。<strong>已驳回</strong>必须展示<strong>驳回原因</strong>；<strong>审核中/已驳回</strong>可保留简短表头说明，<strong>已通过</strong>不额外加「与主数据关系」类说明（以单号、时间与全量表为准，与实现一致）。</li>
+      <li><strong>审核触发：</strong>代理商电话新增或变更、或填写/变更分润比例与货车三档金额等，按 PRD 进入待审；在审期间线上业务行为以 PRD 为准（如电话审核通过前不可用于登录/提现等，详见「渠道信息审核」页）。</li>
+    </ol>
   </div>
 
   <div class="panel-card">
-    <h3>评论·云端同步（可选）</h3>
-    <p style="font-size:12.5px;color:#444;line-height:1.85;margin-bottom:10px;">不配 Firebase 时，评论只在各人浏览器里；要让<strong>开发、产品打开同一 H5 互相看到评论</strong>，按下列步骤一次性配置即可（免费额度通常够用）。</p>
-    <ol style="font-size:12.5px;color:#444;line-height:1.95;margin-left:1.2em;">
-      <li>打开 <a href="https://console.firebase.google.com" target="_blank" rel="noopener">Firebase 控制台</a> → 添加项目。</li>
-      <li><strong>Firestore Database</strong> → 创建数据库 → 可先选「以测试模式启动」（仅内部演示用；勿对公网开放敏感数据）。</li>
-      <li>项目设置 → 您的应用 → 添加 <strong>Web</strong> 应用 → 复制配置对象。</li>
-      <li>在本 HTML 的 <code>&lt;head&gt;</code> 末尾已有 <code>window.YANBAO_FIREBASE = { ... }</code> 占位，<strong>取消注释并粘贴完整配置</strong>，将文件推送到 GitHub Pages。</li>
-      <li>侧栏会显示「同步：已开启」；此后多人在同一链接上的评论、回复会<strong>实时同步</strong>。</li>
-    </ol>
-    <p style="font-size:12px;color:#888;margin-top:8px;">外网不可用时仍可用导出/导入 JSON；Firebase 规则与用量以官方文档为准。</p>
+    <h3>原型中包含的端与页面</h3>
+    <table class="req-tbl" style="font-size:12px;">
+      <tr><th style="width:22%;">入口 Tab</th><th>说明</th></tr>
+      <tr><td><strong>需求说明</strong></td><td>本页：需求边界与使用说明。默认从本页进入原型可最先阅读导读。</td></tr>
+      <tr><td><strong>渠道管理</strong></td><td>Web 后台：列表参考图 + 弹窗「新增/修改渠道」。<strong>修改=仅已生效主数据</strong>（无则空）；<strong>操作</strong>含 <strong>审核中/已驳回/已通过信息</strong>，展示当次保存的<strong>全量</strong>提交内容，<strong>已驳回</strong>须含<strong>驳回原因</strong>。字段与「PRD：渠道管理」、页内产品需求表一致；与「渠道信息审核」联动。</td></tr>
+      <tr><td><strong>渠道信息审核</strong></td><td>渠道敏感信息/分润配置变更的待审列表与单号详情、审核动作演示。</td></tr>
+      <tr><td><strong>角色登录</strong></td><td>手机号验证码登录；演示账号快捷进入各角色小程序视图。</td></tr>
+      <tr><td><strong>主管 / 销售视图</strong></td><td>总览、进销存（代理明细、产品筛选、激活率排序）、分润、提现记录、我的；销售数据范围为负责代理。</td></tr>
+      <tr><td><strong>一级代理视图</strong></td><td>首页、进销存（批次不展示 SN/分润比例）、<strong>账户</strong>（提现；前置<strong>认证/签约</strong>；<strong>分润入账</strong>及<strong>提现审核通过/未通过/到账</strong>均可能推送<strong>微信订阅消息</strong>）、<strong>计费</strong>（本月汇总三类拆解；客车 ETC 卡片为<strong>延保</strong>口径）、<strong>我的</strong>（认证/签约入口）。</td></tr>
+      <tr><td><strong>门店管理</strong></td><td>以<strong>参考截图</strong>为准；操作含<strong>生成专属二维码</strong>（渠道+门店唯一绑定），与渠道二维码区分。</td></tr>
+      <tr><td><strong>提现审核</strong></td><td>点击「通过」前校验代理<strong>认证+签约</strong>完成（与一级代理演示状态联动）；支持批量通过时的同类校验。</td></tr>
+      <tr><td><strong>退款页面</strong></td><td>后台订单退款入口界面截图 + 三分支退款逻辑演示：① 不参与分润 → 直接退款；② 参与分润但未提现 → 直接退款同时自动扣减代理可提现余额、小程序生成「退款扣回」流水；③ 参与分润且已提现 → 弹窗提示线下通知代理商全额退款。</td></tr>
+      <tr><td><strong>权限对比</strong></td><td>角色 × 能力矩阵。</td></tr>
+      <tr><td><strong>业务时序图</strong></td><td>7 条 Mermaid 时序：登录路由、客车延保分润、货车ETC分润、记录仪分润、提现、销售归属、退款管控。</td></tr>
+      <tr><td><strong>更新H5链接方式</strong></td><td>本原型 GitHub Pages 线上地址：<a href="https://todaysoulwell.github.io/yanbao-prototype/" target="_blank" rel="noopener">https://todaysoulwell.github.io/yanbao-prototype/</a>。本地更新后按该 Tab 内步骤 <code>cp</code> 覆盖仓库 <code>index.html</code> 并 <code>push</code> 即可更新线上（推送后约 1～3 分钟可刷新验证）。</td></tr>
+    </table>
   </div>
 
   <div class="panel-card">
@@ -571,7 +467,7 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
       <tr><td>流水与汇总</td><td>列表不展示设备 SN；不展示「退款补偿」类条目。一级代理「计费」<strong>本月汇总</strong>中客车 ETC 为<strong>延保</strong>笔数口径；流水列表仍可含客车激活等多类型演示行。</td></tr>
       <tr><td>进销存</td><td>主管/销售代理明细支持按产品筛选下的激活率或绑定率排序，默认从高到低。</td></tr>
       <tr><td>一级代理</td><td>进货批次不展示 SN、不展示分润比例；<strong>提现</strong>须先完成「认证/签约」；微信订阅消息含：<strong>① 分润入账</strong>；<strong>② 提现审核通过</strong>；<strong>③ 提现审核未通过</strong>；<strong>④ 提现到账</strong>（均需授权模板）。</td></tr>
-      <tr><td>渠道配置</td><td>弹窗必填<strong>产品类型</strong>（三类多选）；可选「是否展示进销存」；货车分润按车型分档单笔金额（演示单项≤500 元）；销售人员模块与列表字段对齐。</td></tr>
+      <tr><td>渠道配置</td><td>（PRD 渠道管理）弹窗必填<strong>产品类型</strong>（三类多选）。<strong>修改</strong>只读<strong>已生效</strong>，待审/已驳回未重提不混填；<strong>审核通过</strong>后落库，再次「修改」即最新主数据。列表<strong>操作</strong>可查看 <strong>审核中/已驳回/已通过</strong> 对应提交<strong>全量</strong>明细；<strong>已驳回</strong>必须带<strong>驳回原因</strong>。可选进销存展示；货车三档分润（演示≤500 元/档）；销售与列表列名「销售人员…」一致。</td></tr>
       <tr><td>门店后台</td><td>门店管理以截图还原列表；操作「生成专属二维码」绑定渠道+门店。</td></tr>
       <tr><td>提现审核</td><td>运营「通过」前校验代理<strong>已认证且已签约</strong>；未完成则拦截（原型中与一级代理「我的 — 认证/签约」演示状态联动，如黄石新捷顺名车）。</td></tr>
       <tr><td>后台订单退款</td><td>三分支判断：不涉及分润→直接退；涉及分润未提现→直接退+自动扣减代理余额+小程序「退款扣回」流水；涉及分润已提现→弹窗线下通知代理，详见「退款页面」。</td></tr>
@@ -721,7 +617,12 @@ code { font-size: 11px; background: #f5f5f5; padding: 1px 5px; border-radius: 4p
 <div class="page" id="page-h5-deploy">
   <div class="panel-card">
     <h3>更新 H5 链接方式</h3>
-    <p style="font-size:12.5px;color:#888;margin-bottom:20px;">按顺序在终端执行下列命令，将本机最新原型同步到 GitHub 仓库并更新线上页面。</p>
+    <div style="margin-bottom:18px;padding:12px 14px;background:#e6f4ff;border:1px solid #91caff;border-radius:8px;font-size:12.5px;color:#0958d9;line-height:1.75;">
+      <strong>当前线上地址（GitHub Pages）：</strong><br/>
+      <a href="https://todaysoulwell.github.io/yanbao-prototype/" target="_blank" rel="noopener" style="color:#1677ff;font-weight:600;word-break:break-all;">https://todaysoulwell.github.io/yanbao-prototype/</a><br/>
+      <span style="font-size:12px;color:#555;">仓库 <code>yanbao-prototype</code> 根目录为 <code>index.html</code> 时，上述根路径即打开本原型。推送后若未立即更新，可等待 1～3 分钟或强刷（⌘+Shift+R）。</span>
+    </div>
+    <p style="font-size:12.5px;color:#888;margin-bottom:20px;">按顺序在终端执行下列命令，将本机最新 <code>prototype_代理渠道延保分润系统.html</code> 同步为仓库中 <code>index.html</code> 并推送到 GitHub，以更新上列线上页。</p>
 
     <section style="margin-bottom:22px;">
       <h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#1a1a1a;">第一步：进入仓库文件夹</h4>
@@ -756,7 +657,7 @@ git push</pre>
 <!-- ══════════════════════════════
      页面 1：角色登录
 ══════════════════════════════ -->
-<div class="page active" id="page-login">
+<div class="page" id="page-login">
   <div class="phone-wrap">
     <div class="phone">
       <div class="phone-status"><span>9:41</span><span>📶 🔋</span></div>
@@ -2779,7 +2680,8 @@ git push</pre>
         <p style="margin-bottom:10px;"><strong>列表字段字段命名调整（现网后台列表，见本页「参考图」）：</strong>原有列表中的<strong>「负责人姓名」「负责人联系方式」</strong>统一更名为<strong>「销售人员姓名」「销售人员联系方式」</strong>（与弹窗④ 销售人员模块保持一致），其他列不变。</p>
 
         <p style="margin-bottom:6px;font-weight:700;color:#333;">弹窗字段详细说明（新增 / 修改渠道，两入口共用同一弹窗）</p>
-        <p style="margin-bottom:8px;color:#888;font-size:12px;">新增时标题显示「新增渠道」，表单全空/默认值；修改时标题显示「修改渠道」，所有字段回填当前渠道数据。</p>
+        <p style="margin-bottom:8px;color:#888;font-size:12px;">新增时标题为「新增渠道」，表单全空/默认值；<strong>修改</strong>时标题为「修改渠道」，表单只回填<strong>已生效主数据</strong>（以渠道主数据 / 最近一次审核<strong>通过</strong>并落库为准），未生效则该字段空。待审变更、已驳回且未再次提交并保存的稿<strong>不进入</strong>本弹窗。审核<strong>通过</strong>后，主数据更新为当次通过内容，<strong>下次「修改」即最新已生效</strong>（与需求说明「PRD：渠道管理」一致）。</p>
+        <p style="margin-bottom:10px;font-size:12px;color:#333;line-height:1.75;">列表<strong>操作</strong>列（现网同列，下方「模拟列表」演示）：<strong>修改</strong>打开上述弹窗。另设<strong>审核中信息 / 已驳回信息 / 已通过信息</strong>：在存在对应审核单时可点，否则可置灰。点击后打开<strong>当次保存的完整提交</strong>（全量字段，与表单/PRD 可配置项对应）；<strong>已驳回</strong>须带<strong>驳回原因</strong>；<strong>已通过</strong>以单号、时间与全量表展示为主（不额外加与主数据关系的长说明，与实现一致）。</p>
 
         <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px;">
           <thead><tr style="background:#f5f7fa;"><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">模块</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">字段名</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">是否必填</th><th style="padding:6px 8px;border:1px solid #e8e8e8;text-align:left;">规则 / 说明</th></tr></thead>
@@ -2791,11 +2693,11 @@ git push</pre>
             <tr><td rowspan="2" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">④ 销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">销售人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;color:#888;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉选择（系统内销售账号列表），选中后手机号只读自动带出；原字段名「负责人」已更名为「销售人员」</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">销售人员联系方式</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">只读</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">由所选销售账号自动带出，不可手动编辑</td></tr>
             <tr><td rowspan="3" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">⑤ 代理商信息</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">代理商姓名</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">—</td></tr>
-            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">新增或变更此字段 → 触发渠道信息审核流程（见「渠道信息审核」页），审核通过前该手机号不可用于登录/提现</strong></td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">新增或变更此字段，且分润填写框不为空时 → 触发渠道信息审核流程（见「渠道信息审核」页），审核通过前该手机号不可用于登录/提现；若分润字段全部为空，则电话变更不触发审核</strong></td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">是否展示进销存</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉：是 / 否；控制小程序一级代理端进销存Tab是否可见</td></tr>
             <tr><td rowspan="3" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">⑥ 分润配置</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">智能服务分润比例</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">数字输入（%），上限80；超出时提示「不能超过80%」并阻断提交；<strong style="color:#e67e00;">填写或变更此值 → 触发审核流程</strong></td></tr>
-            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">延保分润比例</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">同上，上限80；<strong style="color:#e67e00;">填写 → 触发审核</strong></td></tr>
-            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">货车分润金额（三档）</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填（联动）</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">轻卡/重卡/牵引三档，每档上限500元；<strong>若填写任一档，则三档均须填写</strong>，否则提示「请填写全部车型分润金额」；<strong style="color:#e67e00;">填写 → 触发审核</strong></td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">延保分润比例</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">同上，上限80；<strong style="color:#e67e00;">填写或变更此值 → 触发审核流程</strong></td></tr>
+            <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">货车分润金额（三档）</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填（联动）</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">轻卡/重卡/牵引三档，每档上限500元；<strong>若填写任一档，则三档均须填写</strong>，否则提示「请填写全部车型分润金额」；<strong style="color:#e67e00;">填写或变更此值 → 触发审核流程</strong></td></tr>
             <tr><td rowspan="2" style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:600;">⑦ 主管配置</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">主管人员</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">下拉多选，可绑定多名主管；选中后手机号只读展示（不可编辑）；主管有权查看该渠道全部数据（只读）</td></tr>
             <tr><td style="padding:6px 8px;border:1px solid #e8e8e8;">主管联系方式</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">只读</td><td style="padding:6px 8px;border:1px solid #e8e8e8;">由主管账号自动带出</td></tr>
           </tbody>
@@ -2805,7 +2707,7 @@ git push</pre>
         <ul style="margin-left:1.2em;font-size:12px;">
           <li><strong>提交时校验顺序：</strong>必填项空 → 产品类型未选 → 比例/金额超限 → 货车金额不完整 → 代理电话格式</li>
           <li><strong>关闭弹窗：</strong>有未保存内容时弹二次确认「确认放弃修改？」；保存失败时弹窗不关闭，提示错误原因</li>
-          <li><strong>审核分流触发条件：</strong>代理商电话新增/变更、或任一分润比例/货车金额有填写 → 提交后提示「本次修改已进入审核流程，审核通过前变更不生效」，并生成待审核记录</li>
+          <li><strong>审核分流触发条件：</strong>任一分润比例/货车金额字段有填写 → 触发审核，提交后提示「本次修改已进入审核流程，审核通过前变更不生效」并生成待审核记录；<strong>代理商电话新增/变更，仅在分润字段不为空时才随同进入审核流程；若分润字段全部为空，电话变更单独保存不触发审核</strong>；此时修改弹窗仍只回填<strong>已生效</strong>数据，不混入本次待审字段。</li>
         </ul>
 
         <div style="margin-top:14px;background:#fffbe6;border:1px solid #ffe58f;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7c5800;line-height:1.85;">
@@ -2833,13 +2735,53 @@ git push</pre>
       </div>
     </div>
 
-    <!-- 弹窗入口（列表以参考图为准，此处不画表格） -->
+    <!-- 弹窗入口 + 模拟列表（操作列与现网一致） -->
     <div class="panel-card" style="padding:20px 24px;">
       <div style="font-size:14px;font-weight:700;color:#333;margin-bottom:6px;">渠道维护</div>
-      <div style="font-size:12.5px;color:#888;margin-bottom:16px;line-height:1.6;">列表界面见上方参考图。点击下方按钮打开「新增渠道」或「修改渠道」弹窗，表单逻辑与现网一致。</div>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+      <div style="font-size:12.5px;color:#888;margin-bottom:12px;line-height:1.6;">列表主区见上方参考图。下方为<strong>模拟列表</strong>：操作列含「修改」及三态信息入口，点按后分别打开<strong>全量</strong>提交明细（与 PRD/弹窗模块一致）。<strong>修改</strong>仅回填<strong>已生效</strong>主数据：「李嘉馨」为完整示例，「新渠道-无生效」为全空（演示无则空）。</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;">
         <button type="button" onclick="openChannelDialog('add')" style="padding:8px 20px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;">+ 新增</button>
-        <button type="button" onclick="openChannelDialog('edit','李嘉馨')" style="padding:8px 20px;background:#fff;color:#1677ff;border:1.5px solid #1677ff;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;">修改（演示）</button>
+      </div>
+      <div style="overflow-x:auto;border:1px solid #e8e8e8;border-radius:8px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px;">
+          <thead>
+            <tr style="background:#f5f7fa;">
+              <th style="padding:10px 12px;border-bottom:1px solid #e8e8e8;text-align:left;font-weight:600;">渠道名称</th>
+              <th style="padding:10px 12px;border-bottom:1px solid #e8e8e8;text-align:left;font-weight:600;">销售人员</th>
+              <th style="padding:10px 12px;border-bottom:1px solid #e8e8e8;text-align:left;font-weight:600;">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">李嘉馨</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;">比利</td>
+              <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;vertical-align:top;line-height:1.9;">
+                <button type="button" onclick="openChannelDialog('edit','li-jiaxi')" class="btn btn-ghost btn-sm" style="margin-right:6px;">修改</button>
+                <span style="color:#ccc;">|</span>
+                <button type="button" onclick="openChannelSubmitDetail('li-jiaxi','pending')" style="background:none;border:none;color:#1677ff;cursor:pointer;padding:0 4px;font-size:12.5px;text-decoration:underline;">审核中信息</button>
+                <span style="color:#ccc;">|</span>
+                <button type="button" onclick="openChannelSubmitDetail('li-jiaxi','rejected')" style="background:none;border:none;color:#1677ff;cursor:pointer;padding:0 4px;font-size:12.5px;text-decoration:underline;">已驳回信息</button>
+                <span style="color:#ccc;">|</span>
+                <button type="button" onclick="openChannelSubmitDetail('li-jiaxi','approved')" style="background:none;border:none;color:#1677ff;cursor:pointer;padding:0 4px;font-size:12.5px;text-decoration:underline;">已通过信息</button>
+                <div style="font-size:11px;color:#999;margin-top:2px;">（演示三态均可点，对应不同提交单快照）</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;">新渠道-无生效</td>
+              <td style="padding:10px 12px;">—</td>
+              <td style="padding:10px 12px;vertical-align:top;line-height:1.9;">
+                <button type="button" onclick="openChannelDialog('edit','empty-new')" class="btn btn-ghost btn-sm" style="margin-right:6px;">修改</button>
+                <span style="color:#ccc;">|</span>
+                <span style="color:#bbb;cursor:not-allowed;padding:0 4px;">审核中信息</span>
+                <span style="color:#ccc;">|</span>
+                <span style="color:#bbb;cursor:not-allowed;padding:0 4px;">已驳回信息</span>
+                <span style="color:#ccc;">|</span>
+                <span style="color:#bbb;cursor:not-allowed;padding:0 4px;">已通过信息</span>
+                <div style="font-size:11px;color:#999;margin-top:2px;">无审核记录时三入口可置灰</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -2863,7 +2805,7 @@ git push</pre>
       <div style="display:flex;align-items:flex-start;margin-bottom:13px;font-size:13px;">
         <div style="flex:0 0 96px;color:#333;padding-top:7px;text-align:right;padding-right:10px;"><span style="color:#ff4d4f;">*</span>渠道类型</div>
         <div style="flex:1;">
-          <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+          <select id="cm-chan-type" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
             <option value="">请选择渠道类型</option><option>电商</option><option>线上</option><option>线下</option><option>线下收费站ETC禁用</option><option>准前装</option>
           </select>
         </div>
@@ -3020,6 +2962,28 @@ git push</pre>
     <div style="padding:10px 20px 16px;display:flex;justify-content:center;gap:10px;border-top:1px solid #f0f0f0;">
       <button onclick="saveChannelDialog()" style="padding:7px 30px;background:#1677ff;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;">确 认</button>
       <button onclick="closeChannelDialog()" style="padding:7px 22px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;cursor:pointer;">取 消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 渠道管理 · 本次提交信息明细（审核中/已驳回/已通过） -->
+<div id="channel-submit-detail-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;" onclick="if(event.target===this)closeChannelSubmitDetail()">
+  <div style="background:#fff;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.3);width:520px;max-width:96vw;max-height:86vh;overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #f0f0f0;">
+      <span id="channel-submit-detail-title" style="font-size:15px;font-weight:700;color:#333;">本次提交信息</span>
+      <button type="button" onclick="closeChannelSubmitDetail()" style="width:28px;height:28px;border:none;background:#f5f5f5;border-radius:6px;cursor:pointer;font-size:16px;color:#666;">✕</button>
+    </div>
+    <div style="padding:14px 18px 18px;font-size:12.5px;color:#333;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:12px;padding:10px 12px;background:#fafafa;border-radius:6px;border:1px solid #f0f0f0;">
+        <span>单号：<strong id="channel-submit-detail-id">—</strong></span>
+        <span>提交时间：<span id="channel-submit-detail-time">—</span></span>
+        <span>状态：<span id="channel-submit-detail-status">—</span></span>
+      </div>
+      <div id="channel-submit-detail-reject" style="display:none;margin-bottom:12px;padding:10px 12px;background:#fff2f0;border:1px solid #ffccc7;border-radius:6px;color:#a8071a;font-size:12.5px;line-height:1.65;">
+        <strong>驳回原因：</strong><span id="channel-submit-detail-reason-txt"></span>
+      </div>
+      <p id="channel-submit-detail-hint" style="font-size:12px;color:#888;margin:0 0 8px;">以下为本次提交时保存的<strong>完整渠道信息</strong>（与弹窗可编辑项一一对应）。</p>
+      <div id="channel-submit-detail-body" style="border:1px solid #e8e8e8;border-radius:6px;overflow:hidden;"></div>
     </div>
   </div>
 </div>
@@ -4121,7 +4085,6 @@ function go(name) {
   if (m[name]) { b.textContent = m[name][0]; b.className = 'role-badge ' + m[name][1]; }
   if (name === 'store' && typeof updateStoreScope === 'function') setTimeout(function() { updateStoreScope(); }, 0);
   window.__protoPageKey = name;
-  if (typeof syncCommentsUi === 'function') syncCommentsUi();
 }
 
 /** 从审核提示弹窗跳转至「渠道信息审核」页 */
@@ -4606,13 +4569,11 @@ function openChannelAuditFlow(channelName) {
 
 /** 是否需要走审核：代理商电话新增/变更，或填写了任一分润比例/货车金额 */
 function shouldSubmitChannelAudit() {
-  var apEl = document.getElementById('cm-agent-phone');
-  var curPhone = apEl ? (apEl.value || '').trim() : '';
-  var snap = window.__channelAgentPhoneSnapshot !== undefined && window.__channelAgentPhoneSnapshot !== null
-    ? String(window.__channelAgentPhoneSnapshot).trim() : '';
-  var phoneChanged = curPhone !== snap;
   var profit = typeof hasChannelProfitFilled === 'function' && hasChannelProfitFilled();
-  return phoneChanged || profit;
+  // 分润字段有填写时：无论电话是否变更，均触发审核
+  if (profit) return true;
+  // 分润字段全部为空时：电话新增/变更不单独触发审核
+  return false;
 }
 
 function closeChannelAuditModal() {
@@ -4672,55 +4633,191 @@ function toggleMore(moreId, toggleId) {
   btn.textContent = expanded ? '展开更多 5 个渠道 ▾' : '收起 ▴';
 }
 
+/** 渠道「修改」弹窗只读：已生效主数据；key 与模拟列表、演示入口一致 */
+var CHANNEL_LIVE = {
+  'li-jiaxi': {
+    name: '李嘉馨',
+    chanType: '线上',
+    product: { car_etc: true, truck_etc: false, dvr: true },
+    agentName: '上海某某汽服',
+    agentPhone: '13800138000',
+    showStock: 'yes',
+    ratioAi: '12',
+    ratioYb: '20',
+    truck: { light: '100', heavy: '120', tractor: '150' },
+    salesValue: '13611028532'
+  }
+};
+
+/** 本单/本次 提交快照（与审核状态对应；与 CHANNEL_LIVE 可刻意不同，用于演示“待审≠已生效”） */
+var CHANNEL_SUBMIT_SNAPSHOTS = {
+  'li-jiaxi': {
+    pending: {
+      id: 'CH-SUB-202604201030',
+      time: '2026-04-20 10:30',
+      statusLabel: '审核中',
+      statusClass: 't-orange',
+      rejectReason: '',
+      rows: [
+        ['渠道名称', '李嘉馨'],
+        ['渠道类型', '线上'],
+        ['产品类型', '客车ETC、记录仪（至少选一项，可多选）'],
+        ['记录仪适配套餐 + 数量', 'W1 + 3个月300分钟（×1）'],
+        ['货车产品套餐', '1934517434533629954-速通免押日结'],
+        ['代理商姓名', '上海某某汽服'],
+        ['代理商电话', '139****1234（新提交，待核）'],
+        ['是否展示进销存', '是'],
+        ['智能服务分润比例（%）', '16%'],
+        ['延保分润比例（%）', '22%'],
+        ['轻卡/重卡/牵引 货车分润（元）', '120 / 130 / 160'],
+        ['销售人员', '比利'],
+        ['销售人员联系方式', '136****8532（随所选销售自动带出）'],
+        ['主管人员/联系方式', '王浩 / 172****5749；张明 / 138****8001（演示）'],
+        ['备注', '随季度政策申请调高分润，待审']
+      ]
+    },
+    rejected: {
+      id: 'CH-SUB-202604181400',
+      time: '2026-04-18 14:00',
+      statusLabel: '已驳回',
+      statusClass: 't-red',
+      rejectReason: '分润配置超过商务约定区间，请与区域负责人确认后重新提交。',
+      rows: [
+        ['渠道名称', '李嘉馨'],
+        ['渠道类型', '线上'],
+        ['产品类型', '客车ETC、货车ETC、记录仪'],
+        ['记录仪适配套餐 + 数量', 'ONE-10 + 直播时间720分钟（×1）'],
+        ['货车产品套餐', '1934517434533629954-速通免押日结(电商版)'],
+        ['代理商姓名', '上海某某汽服'],
+        ['代理商电话', '138****9000（当次提交）'],
+        ['是否展示进销存', '是'],
+        ['智能服务分润比例（%）', '20%'],
+        ['延保分润比例（%）', '35%'],
+        ['轻卡/重卡/牵引 货车分润（元）', '200 / 200 / 200'],
+        ['销售人员', '比利'],
+        ['销售人员联系方式', '136****8532'],
+        ['主管人员/联系方式', '王浩 / 172****5749'],
+        ['备注', '活动期申请上调，未附区域负责人审批/邮件，故驳回']
+      ]
+    },
+    approved: {
+      id: 'CH-SUB-202604151640',
+      time: '2026-04-15 16:40',
+      statusLabel: '已通过',
+      statusClass: 't-green',
+      rejectReason: '',
+      rows: [
+        ['渠道名称', '李嘉馨'],
+        ['渠道类型', '线上'],
+        ['产品类型', '客车ETC、记录仪（至少选一项，可多选）'],
+        ['记录仪适配套餐 + 数量', 'W1 + 3个月300分钟（×1）'],
+        ['货车产品套餐', '1934517434533629954-速通免押日结'],
+        ['代理商姓名', '上海某某汽服'],
+        ['代理商电话', '138****0000（本单核准后已落库，与当前已生效主数据一致）'],
+        ['是否展示进销存', '是'],
+        ['智能服务分润比例（%）', '12%'],
+        ['延保分润比例（%）', '20%'],
+        ['轻卡/重卡/牵引 货车分润（元）', '100 / 120 / 150'],
+        ['销售人员', '比利'],
+        ['销售人员联系方式', '136****8532（随所选销售自动带出）'],
+        ['主管人员/联系方式', '王浩 / 172****5749；张明 / 138****8001（与通过时主数据一致）'],
+        ['备注', '（空）']
+      ]
+    }
+  }
+};
+
+function openChannelSubmitDetail(chKey, st) {
+  var pack = CHANNEL_SUBMIT_SNAPSHOTS[chKey] && CHANNEL_SUBMIT_SNAPSHOTS[chKey][st];
+  if (!pack) {
+    alert('无对应提交单演示数据。');
+    return;
+  }
+  var mask = document.getElementById('channel-submit-detail-mask');
+  document.getElementById('channel-submit-detail-title').textContent = '本次提交信息 · ' + pack.statusLabel;
+  document.getElementById('channel-submit-detail-id').textContent = pack.id;
+  document.getElementById('channel-submit-detail-time').textContent = pack.time;
+  document.getElementById('channel-submit-detail-status').innerHTML = '<span class="tag ' + (pack.statusClass || 't-blue') + '">' + pack.statusLabel + '</span>';
+  var rej = document.getElementById('channel-submit-detail-reject');
+  if (pack.rejectReason) {
+    rej.style.display = 'block';
+    document.getElementById('channel-submit-detail-reason-txt').textContent = pack.rejectReason;
+  } else {
+    rej.style.display = 'none';
+    document.getElementById('channel-submit-detail-reason-txt').textContent = '';
+  }
+  var hint = document.getElementById('channel-submit-detail-hint');
+  if (hint) hint.style.display = (st === 'approved') ? 'none' : 'block';
+  var body = document.getElementById('channel-submit-detail-body');
+  var tb = '<table style="width:100%;border-collapse:collapse;font-size:12.5px;">';
+  (pack.rows || []).forEach(function(r) {
+    tb += '<tr><td style="padding:8px 10px;background:#f9f9f9;border-bottom:1px solid #f0f0f0;white-space:nowrap;color:#666;width:38%;">' + r[0] + '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;word-break:break-all;">' + r[1] + '</td></tr>';
+  });
+  tb += '</table>';
+  body.innerHTML = tb;
+  if (mask) mask.style.display = 'flex';
+}
+
+function closeChannelSubmitDetail() {
+  var m = document.getElementById('channel-submit-detail-mask');
+  if (m) m.style.display = 'none';
+}
+
 function openChannelDialog(mode, name) {
+  window.__channelEditKey = (mode === 'edit' && name) ? name : '';
+  var live = (mode === 'edit' && name && CHANNEL_LIVE[name]) ? CHANNEL_LIVE[name] : null;
   var mask = document.getElementById('channel-modal-mask');
   mask.style.display = 'flex';
   document.getElementById('channel-modal-title').textContent = mode === 'add' ? '新增渠道' : '修改渠道';
-  document.getElementById('cm-name').value = mode === 'edit' ? (name || '') : '';
+  document.getElementById('cm-name').value = (live && live.name) || '';
+
+  var ct = document.getElementById('cm-chan-type');
+  if (ct) ct.value = (live && live.chanType) || '';
+
   ['cm-pt-car', 'cm-pt-truck', 'cm-pt-dvr'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) el.checked = false;
+    if (!el) return;
+    el.checked = false;
   });
-  if (mode === 'edit') {
-    var c1 = document.getElementById('cm-pt-car');
-    var c3 = document.getElementById('cm-pt-dvr');
-    if (c1) c1.checked = true;
-    if (c3) c3.checked = true;
+  if (live && live.product) {
+    if (document.getElementById('cm-pt-car') && live.product.car_etc) document.getElementById('cm-pt-car').checked = true;
+    if (document.getElementById('cm-pt-truck') && live.product.truck_etc) document.getElementById('cm-pt-truck').checked = true;
+    if (document.getElementById('cm-pt-dvr') && live.product.dvr) document.getElementById('cm-pt-dvr').checked = true;
   }
   var pte = document.getElementById('cm-pt-err');
   if (pte) pte.style.display = 'none';
-  document.getElementById('cm-agent-name').value = '';
+
+  document.getElementById('cm-agent-name').value = (live && live.agentName) || '';
   var cmStock = document.getElementById('cm-show-stock');
-  if (cmStock) cmStock.value = '';
+  if (cmStock) cmStock.value = (live && live.showStock) || '';
   var ap = document.getElementById('cm-agent-phone');
   var rai = document.getElementById('cm-ratio-ai');
   var ryb = document.getElementById('cm-ratio-yb');
-  if (rai) { rai.value = ''; rai.style.borderColor = '#d9d9d9'; }
-  if (ryb) { ryb.value = ''; ryb.style.borderColor = '#d9d9d9'; }
+  if (rai) { rai.value = (live && live.ratioAi) || ''; rai.style.borderColor = '#d9d9d9'; }
+  if (ryb) { ryb.value = (live && live.ratioYb) || ''; ryb.style.borderColor = '#d9d9d9'; }
   var eai = document.getElementById('err-ratio-ai');
   var eyb = document.getElementById('err-ratio-yb');
   if (eai) eai.style.display = 'none';
   if (eyb) eyb.style.display = 'none';
   ['cm-truck-light', 'cm-truck-heavy', 'cm-truck-tractor'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) { el.value = ''; el.style.borderColor = '#d9d9d9'; }
+    if (!el) return;
+    var k = id === 'cm-truck-light' ? 'light' : (id === 'cm-truck-heavy' ? 'heavy' : 'tractor');
+    el.value = (live && live.truck && live.truck[k]) || '';
+    el.style.borderColor = '#d9d9d9';
   });
   var et = document.getElementById('err-truck-partial');
   if (et) et.style.display = 'none';
   var etm = document.getElementById('err-truck-max');
   if (etm) etm.style.display = 'none';
-  if (ap) {
-    if (mode === 'edit') {
-      ap.value = '13800138000';
-    } else {
-      ap.value = '';
-    }
-  }
+  if (ap) ap.value = (live && live.agentPhone) || '';
   window.__channelAgentPhoneSnapshot = ap ? (ap.value || '').trim() : '';
+
   var ss = document.getElementById('cm-sales-select');
   var sp = document.getElementById('cm-sales-phone');
-  if (ss) ss.value = '';
-  if (sp) sp.value = '';
+  if (ss) ss.value = (live && live.salesValue) || '';
+  if (typeof syncStaffPhone === 'function') syncStaffPhone('cm-sales-select', 'cm-sales-phone');
+  else if (sp) sp.value = (live && live.salesValue) || '';
   resetMgrRows();
 }
 function closeChannelDialog() {
@@ -5355,6 +5452,7 @@ function protoImageFromFile(input, imgId, fallbackId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (typeof go === 'function') go('intro');
   function agentKycBindFileLbl(inputId, lblId) {
     var inp = document.getElementById(inputId);
     var lbl = document.getElementById(lblId);
@@ -5590,292 +5688,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!active) return;
     var t = e.target;
     if (!t || t.id === 'dev-mode-btn' || tip.contains(t)) return;
-    if (t.closest && (t.closest('#comment-panel') || t.closest('#comment-btn') || t.id === 'comment-backdrop')) return;
     var svg = findExportableSvg(t);
     if (!svg) return;
     e.preventDefault();
     e.stopPropagation();
     downloadSvgAsPng(svg);
   }, true);
-})();
-</script>
-<script>
-/* ══ 原型评论：localStorage；可选 Firestore 多人实时同步（window.YANBAO_FIREBASE） ══ */
-(function() {
-  var STORE = 'yanbao_prototype_comments_v1';
-  var AUTH_KEY = 'yanbao_proto_comment_author';
-  var FS_COLLECTION = 'yanbao_proto_shared_comments';
-  var FB_VER = '10.7.1';
-
-  var cloudDb = null;
-  var cloudCol = null;
-  var cloudOn = false;
-
-  var PAGE_LABELS = {
-    intro: '需求说明', 'h5-deploy': '更新H5链接方式', login: '角色登录', mgr: '主管视图', sales: '销售视图',
-    agent: '一级代理视图', store: '门店视图', 'channel-admin': '渠道管理', 'store-mgmt': '门店管理',
-    'channel-audit': '渠道信息审核', 'withdraw-admin': '提现审核', refund: '退款页面', perm: '权限对比', flow: '业务时序图'
-  };
-
-  function pageLabel(key) { return PAGE_LABELS[key] || key || '—'; }
-
-  function firebaseConfigOk() {
-    var c = window.YANBAO_FIREBASE;
-    return !!(c && String(c.projectId || '').trim() && String(c.apiKey || '').trim());
-  }
-
-  function setSyncStatus(html) {
-    var el = document.getElementById('comment-sync-status');
-    if (!el) return;
-    el.innerHTML = html || '';
-  }
-
-  function getComments() {
-    try {
-      var arr = JSON.parse(localStorage.getItem(STORE) || '[]');
-      return Array.isArray(arr) ? arr : [];
-    } catch (e) { return []; }
-  }
-
-  function saveComments(arr) {
-    try { localStorage.setItem(STORE, JSON.stringify(arr)); } catch (e) { alert('保存失败：' + e.message); }
-  }
-
-  function currentPageKey() {
-    return window.__protoPageKey || 'login';
-  }
-
-  function escHtml(s) {
-    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function renderCommentList() {
-    var list = document.getElementById('comment-list');
-    if (!list) return;
-    var mode = window.__commentFilter || 'page';
-    var key = currentPageKey();
-    var rows = getComments().slice().sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-    if (mode === 'page') rows = rows.filter(function(c) { return c.pageKey === key; });
-    if (!rows.length) {
-      list.innerHTML = '<div class="cmt-empty">暂无评论<br>在下方输入后点「发表评论」</div>';
-      return;
-    }
-    list.innerHTML = rows.map(function(c) {
-      return '<div class="cmt-item">' +
-        '<div class="cmt-item-top"><span><span class="cmt-item-page">' + escHtml(pageLabel(c.pageKey)) + '</span> · ' +
-        escHtml(c.author || '匿名') + ' · ' + new Date(c.ts).toLocaleString('zh-CN') + '</span>' +
-        '<button type="button" class="cmt-item-del" data-cmt-del="' + escHtml(c.id) + '">删除</button></div>' +
-        '<div class="cmt-item-text">' + escHtml(c.text) + '</div></div>';
-    }).join('');
-  }
-
-  function updateBadge() {
-    var btn = document.getElementById('comment-btn');
-    var badge = document.getElementById('comment-badge');
-    if (!badge || !btn) return;
-    var key = currentPageKey();
-    var n = getComments().filter(function(c) { return c.pageKey === key; }).length;
-    badge.textContent = n > 99 ? '99+' : String(n);
-    btn.classList.toggle('has-unread', n > 0);
-  }
-
-  window.syncCommentsUi = function() {
-    var lbl = document.getElementById('comment-page-label');
-    if (lbl) lbl.textContent = pageLabel(currentPageKey());
-    renderCommentList();
-    updateBadge();
-  };
-
-  window.toggleCommentPanel = function() {
-    var p = document.getElementById('comment-panel');
-    var bd = document.getElementById('comment-backdrop');
-    if (!p || !bd) return;
-    var open = !p.classList.contains('open');
-    p.classList.toggle('open', open);
-    bd.classList.toggle('open', open);
-    p.setAttribute('aria-hidden', open ? 'false' : 'true');
-    if (open) window.syncCommentsUi();
-  };
-
-  window.closeCommentPanel = function() {
-    var p = document.getElementById('comment-panel');
-    var bd = document.getElementById('comment-backdrop');
-    if (p) { p.classList.remove('open'); p.setAttribute('aria-hidden', 'true'); }
-    if (bd) bd.classList.remove('open');
-  };
-
-  window.setCommentFilter = function(mode) {
-    window.__commentFilter = mode;
-    var a = document.getElementById('cmt-filter-page');
-    var b = document.getElementById('cmt-filter-all');
-    if (a) a.classList.toggle('on', mode === 'page');
-    if (b) b.classList.toggle('on', mode === 'all');
-    renderCommentList();
-  };
-
-  function loadScript(src) {
-    return new Promise(function(resolve, reject) {
-      var s = document.createElement('script');
-      s.src = src;
-      s.async = true;
-      s.onload = function() { resolve(); };
-      s.onerror = function() { reject(new Error('加载失败: ' + src)); };
-      document.head.appendChild(s);
-    });
-  }
-
-  function initFirestore() {
-    if (!firebaseConfigOk() || typeof firebase === 'undefined') return;
-    try {
-      if (!firebase.apps || !firebase.apps.length) {
-        firebase.initializeApp(window.YANBAO_FIREBASE);
-      }
-      cloudDb = firebase.firestore();
-      cloudCol = cloudDb.collection(FS_COLLECTION);
-      cloudOn = true;
-      setSyncStatus('<span style="color:#389e0d;">● 云端同步已开启</span> · 集合 <code style="font-size:10px;">' + escHtml(FS_COLLECTION) + '</code> · 多人打开同一页面地址即可实时看到评论');
-      cloudCol.onSnapshot(function(snapshot) {
-        var arr = [];
-        snapshot.forEach(function(doc) {
-          var d = doc.data();
-          if (d && d.id) arr.push(d);
-        });
-        arr.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
-        saveComments(arr);
-        window.syncCommentsUi();
-      }, function(err) {
-        setSyncStatus('<span style="color:#cf1322;">● 同步出错：</span> ' + escHtml(err.message || String(err)) + ' · 请检查 Firestore 规则与网络');
-      });
-    } catch (e) {
-      cloudOn = false;
-      setSyncStatus('<span style="color:#cf1322;">● 初始化失败：</span> ' + escHtml(e.message || String(e)));
-    }
-  }
-
-  window.submitComment = function() {
-    var ta = document.getElementById('comment-input');
-    var au = document.getElementById('comment-author');
-    var text = (ta && ta.value || '').trim();
-    if (!text) { alert('请输入评论内容'); return; }
-    var key = currentPageKey();
-    var item = {
-      id: 'c' + Date.now() + '_' + Math.random().toString(36).slice(2, 9),
-      ts: Date.now(),
-      pageKey: key,
-      author: (au && au.value || '').trim(),
-      text: text
-    };
-    if (cloudOn && cloudCol) {
-      var arr0 = getComments();
-      arr0.push(item);
-      saveComments(arr0);
-      cloudCol.doc(item.id).set(item).catch(function(err) {
-        alert('写入云端失败：' + (err.message || err));
-        saveComments(getComments().filter(function(c) { return c.id !== item.id; }));
-        window.syncCommentsUi();
-      });
-    } else {
-      var arr = getComments();
-      arr.push(item);
-      saveComments(arr);
-    }
-    if (ta) ta.value = '';
-    window.syncCommentsUi();
-  };
-
-  var commentListEl = document.getElementById('comment-list');
-  if (commentListEl) commentListEl.addEventListener('click', function(e) {
-    var btn = e.target.closest && e.target.closest('[data-cmt-del]');
-    if (!btn) return;
-    var id = btn.getAttribute('data-cmt-del');
-    if (!id || !confirm('确定删除这条评论？')) return;
-    if (cloudOn && cloudCol) {
-      cloudCol.doc(id).delete().catch(function(err) {
-        alert('云端删除失败：' + (err.message || err));
-      });
-    } else {
-      saveComments(getComments().filter(function(c) { return c.id !== id; }));
-    }
-    window.syncCommentsUi();
-  });
-
-  window.exportCommentsJson = function() {
-    var payload = { exportedAt: new Date().toISOString(), version: 1, comments: getComments() };
-    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'yanbao-prototype-comments.json';
-    a.click();
-    setTimeout(function() { URL.revokeObjectURL(a.href); }, 2000);
-  };
-
-  window.importCommentsJson = function(input) {
-    var f = input.files && input.files[0];
-    if (!f) return;
-    var reader = new FileReader();
-    reader.onload = function() {
-      try {
-        var data = JSON.parse(reader.result);
-        var arr = data.comments;
-        if (!Array.isArray(arr)) { alert('文件格式不正确：缺少 comments 数组'); input.value = ''; return; }
-        if (!confirm('用文件中的 ' + arr.length + ' 条评论' + (cloudOn ? '写入云端（并覆盖同名文档）' : '覆盖本地') + '？')) { input.value = ''; return; }
-        if (cloudOn && cloudCol && cloudDb) {
-          var toWrite = arr.filter(function(c) { return c && c.id; });
-          var idx = 0;
-          function commitNext() {
-            if (idx >= toWrite.length) {
-              alert('已提交到云端');
-              return Promise.resolve();
-            }
-            var batch = cloudDb.batch();
-            var n = 0;
-            while (idx < toWrite.length && n < 400) {
-              var c = toWrite[idx++];
-              batch.set(cloudCol.doc(c.id), c);
-              n++;
-            }
-            return batch.commit().then(commitNext);
-          }
-          commitNext().then(function() { window.syncCommentsUi(); }).catch(function(err) {
-            alert('导入云端失败：' + (err.message || err));
-          });
-        } else {
-          saveComments(arr);
-          window.syncCommentsUi();
-          alert('导入成功');
-        }
-      } catch (err) { alert('解析失败：' + err.message); }
-      input.value = '';
-    };
-    reader.readAsText(f);
-  };
-
-  window.cancelReplyToComment = function() {};
-
-  document.addEventListener('DOMContentLoaded', function() {
-    window.__commentFilter = 'page';
-    var ap = document.querySelector('.page.active');
-    if (ap && ap.id && ap.id.indexOf('page-') === 0) window.__protoPageKey = ap.id.slice(5);
-    var au = document.getElementById('comment-author');
-    if (au) {
-      try { au.value = localStorage.getItem(AUTH_KEY) || ''; } catch (e) {}
-      au.addEventListener('change', function() {
-        try { localStorage.setItem(AUTH_KEY, au.value.trim()); } catch (e) {}
-      });
-    }
-    if (firebaseConfigOk()) {
-      var base = 'https://www.gstatic.com/firebasejs/' + FB_VER + '/';
-      loadScript(base + 'firebase-app-compat.js')
-        .then(function() { return loadScript(base + 'firebase-firestore-compat.js'); })
-        .then(function() { initFirestore(); })
-        .catch(function(err) {
-          setSyncStatus('<span style="color:#cf1322;">● 无法加载 Firebase SDK：</span> ' + escHtml(err.message || String(err)));
-        });
-    } else {
-      setSyncStatus('<span style="color:#888;">○ 未配置 <code>window.YANBAO_FIREBASE</code>，评论仅保存在本机。配置步骤见需求说明「评论·云端同步」或下方说明。</span>');
-    }
-    if (typeof window.syncCommentsUi === 'function') window.syncCommentsUi();
-  });
 })();
 </script>
 </body>
