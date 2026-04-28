@@ -481,54 +481,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </div>
           </div>
           <div class="mp-body" style="margin-top:-18px;">
-            <!-- 认证签约卡片 -->
-            <div style="background:#fff;border-radius:14px;margin:0 12px 10px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;">
-              <div style="padding:10px 14px 6px;font-size:12px;font-weight:700;color:#333;border-bottom:1px solid #f5f5f5;">认证 / 签约状态</div>
-              <div class="kyc-row" onclick="showKycModal()" style="cursor:pointer;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f8f8f8;">
+            <!-- 认证签约入口（单行，点击打开内页） -->
+            <div onclick="openKycSheetMvp()" style="background:#fff;border-radius:14px;margin:0 12px 10px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;cursor:pointer;">
+              <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
                 <div style="display:flex;align-items:center;gap:10px;">
-                  <div style="width:32px;height:32px;border-radius:8px;background:#f6ffed;display:flex;align-items:center;justify-content:center;font-size:16px;">🪪</div>
+                  <div style="width:34px;height:34px;border-radius:10px;background:#e6f4ff;display:flex;align-items:center;justify-content:center;font-size:16px;">📋</div>
                   <div>
-                    <div style="font-size:12.5px;font-weight:600;color:#1a1a1a;">实名认证</div>
-                    <div style="font-size:10px;color:#aaa;margin-top:1px;">姓名 · 身份证 · 银行卡</div>
+                    <div style="font-size:13px;font-weight:700;color:#1a1a1a;">认证 / 签约</div>
+                    <div style="font-size:10px;color:#aaa;margin-top:2px;">灵工实名资料与电子签约</div>
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <span class="tag t-green" style="font-size:10px;">已认证</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#bbb" stroke-width="2" stroke-linecap="round"/></svg>
-                </div>
-              </div>
-              <div class="kyc-row" onclick="showSignModal()" style="cursor:pointer;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <div style="width:32px;height:32px;border-radius:8px;background:#fff7e6;display:flex;align-items:center;justify-content:center;font-size:16px;">📄</div>
-                  <div>
-                    <div style="font-size:12.5px;font-weight:600;color:#1a1a1a;">电子签约</div>
-                    <div style="font-size:10px;color:#aaa;margin-top:1px;">灵工平台协议</div>
-                  </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span class="tag t-orange" style="font-size:10px;">待签约</span>
+                  <span id="mvp-kyc-brief" style="font-size:11px;color:#fa8c16;font-weight:600;">未认证 · 未签约</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#bbb" stroke-width="2" stroke-linecap="round"/></svg>
                 </div>
               </div>
             </div>
-            <!-- 微信通知 -->
+            <!-- 账号基本信息 -->
             <div style="background:#fff;border-radius:14px;margin:0 12px 10px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;">
-              <div style="padding:10px 14px 6px;font-size:12px;font-weight:700;color:#333;border-bottom:1px solid #f5f5f5;">微信服务通知</div>
-              <div style="padding:8px 14px 4px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f8f8f8;">
-                  <div style="font-size:12px;color:#333;">新分润入账提醒</div>
-                  <div style="width:28px;height:16px;border-radius:8px;background:#52c41a;position:relative;"><div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f8f8f8;">
-                  <div style="font-size:12px;color:#333;">提现审核结果通知</div>
-                  <div style="width:28px;height:16px;border-radius:8px;background:#52c41a;position:relative;"><div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;"></div></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;">
-                  <div style="font-size:12px;color:#999;">提现到账通知</div>
-                  <div style="width:28px;height:16px;border-radius:8px;background:#e8e8e8;position:relative;cursor:pointer;" title="点击去授权"><div style="width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;"></div></div>
-                </div>
+              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f5f5f5;">
+                <span style="font-size:12px;color:#888;">登录手机号</span>
+                <span style="font-size:12px;font-weight:600;color:#333;font-family:monospace;">139****9920</span>
               </div>
-              <div style="padding:6px 14px 10px;font-size:10px;color:#aaa;">提现到账通知未授权，<span style="color:#1677ff;cursor:pointer;">去授权 →</span></div>
+              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f5f5f5;">
+                <span style="font-size:12px;color:#888;">所属渠道</span>
+                <span style="font-size:12px;color:#333;">黄石新捷顺名车</span>
+              </div>
+              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:12px;color:#888;">账号状态</span>
+                <span class="tag t-green" style="font-size:10px;">正常</span>
+              </div>
             </div>
           </div>
           <div class="mp-tabbar">
@@ -546,6 +528,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
           </div>
         </div>
+
+        <!-- ▸ 认证/签约 · 全屏内页（手机壳内覆盖层） -->
+        <div id="mvp-kyc-sheet" style="display:none;position:absolute;inset:0;z-index:80;background:#f7f8fa;flex-direction:column;border-radius:28px;overflow:hidden;">
+          <!-- 顶栏 -->
+          <div style="flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid #eee;">
+            <button type="button" onclick="closeKycSheetMvp()" style="border:none;background:#f0f2f5;color:#333;font-size:18px;width:34px;height:34px;border-radius:10px;cursor:pointer;line-height:1;">‹</button>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:800;color:#1a1a1a;">认证 / 签约</div>
+              <div style="font-size:10px;color:#888;margin-top:1px;">完成认证并签约后可申请提现</div>
+            </div>
+          </div>
+          <!-- 内容区 -->
+          <div style="flex:1;overflow-y:auto;padding:12px 12px 20px;">
+            <!-- 当前状态卡片 -->
+            <div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:8px;">当前状态</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:12px;color:#555;">认证状态</span>
+                <span id="mvp-tag-auth" class="tag t-orange" style="font-size:10px;">未认证</span>
+                <div style="width:1px;height:14px;background:#e8e8e8;"></div>
+                <span style="font-size:12px;color:#555;">签约状态</span>
+                <span id="mvp-tag-sign" class="tag t-orange" style="font-size:10px;">未签约</span>
+              </div>
+            </div>
+            <!-- 已全部完成（隐藏，完成后显示） -->
+            <div id="mvp-kyc-all-done" style="display:none;background:#f6ffed;border:1px solid #b7eb8f;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:700;color:#389e0d;margin-bottom:5px;">✅ 已完成认证与签约</div>
+              <div style="font-size:12px;color:#555;line-height:1.75;">您可前往「账户」页申请提现。提现仍须经运营审核及灵工打款流程。</div>
+            </div>
+            <!-- 实名认证表单（未认证时展示） -->
+            <div id="mvp-kyc-form-wrap" style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
+              <div style="font-size:12px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:4px 8px;border-radius:0 5px 5px 0;margin-bottom:12px;">实名信息</div>
+              <div style="margin-bottom:10px;">
+                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 姓名</div>
+                <input id="mvp-kyc-name" type="text" placeholder="与身份证一致" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+              </div>
+              <div style="margin-bottom:10px;">
+                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 开户行</div>
+                <input id="mvp-kyc-bank" type="text" placeholder="例：中国工商银行××支行" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+              </div>
+              <div style="margin-bottom:10px;">
+                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 银行卡号</div>
+                <input id="mvp-kyc-cardno" type="text" placeholder="请填写银行卡号" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+              </div>
+              <div style="margin-bottom:12px;">
+                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 身份证号</div>
+                <input id="mvp-kyc-idno" type="text" placeholder="18位身份证号码" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;"/>
+              </div>
+              <div style="font-size:11px;color:#666;margin-bottom:6px;font-weight:600;">身份证照片（<span style="color:#ff4d4f;">*</span>正反面）</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+                <div>
+                  <div style="font-size:10px;color:#888;margin-bottom:3px;">人像面</div>
+                  <div style="border:1px dashed #d9d9d9;border-radius:8px;padding:14px 8px;text-align:center;font-size:11px;color:#1677ff;cursor:pointer;background:#fafafa;">📷<br/>点击上传</div>
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#888;margin-bottom:3px;">国徽面</div>
+                  <div style="border:1px dashed #d9d9d9;border-radius:8px;padding:14px 8px;text-align:center;font-size:11px;color:#1677ff;cursor:pointer;background:#fafafa;">📷<br/>点击上传</div>
+                </div>
+              </div>
+              <button type="button" onclick="submitKycFormMvp()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">提交认证资料</button>
+              <div id="mvp-kyc-err" style="display:none;margin-top:8px;font-size:11px;color:#ff4d4f;text-align:center;"></div>
+            </div>
+            <!-- 电子签约（认证通过后展示） -->
+            <div id="mvp-sign-block" style="display:none;background:#fff7e6;border:1px solid #ffd591;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:700;color:#873800;margin-bottom:8px;">下一步：电子签约</div>
+              <p style="font-size:12px;color:#873800;line-height:1.85;margin-bottom:12px;"><strong>签约后才可以提现。</strong>请前往灵工平台完成电子协议签署；签署完成后返回本页，点击下方确认状态。</p>
+              <button type="button" onclick="alert('演示：跳转灵工平台 H5 或小程序')" style="width:100%;padding:10px;background:#1677ff;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">前往灵工平台签约 →</button>
+              <button type="button" onclick="markSignedMvp()" style="width:100%;padding:10px;background:#fff;border:1px solid #ffd591;color:#d46b08;border-radius:8px;font-size:12px;cursor:pointer;">我已完成签约（演示）</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -597,21 +651,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <p style="margin-bottom:8px;font-weight:700;color:#333;">个人资料展示</p>
           <div class="req-rule-item"><span class="rk">渠道名称</span><span class="rv">展示该代理商所属渠道名称，取后台渠道管理配置</span></div>
           <div class="req-rule-item"><span class="rk">登录手机号</span><span class="rv">脱敏展示（中间4位替换为 ****）</span></div>
+          <div class="req-rule-item"><span class="rk">账号状态</span><span class="rv">正常 / 已禁用，取后台渠道配置状态</span></div>
           <hr class="form-sep"/>
-          <p style="margin-bottom:8px;font-weight:700;color:#333;">实名认证（提现前必须完成）</p>
-          <div class="req-rule-item"><span class="rk">必填字段</span><span class="rv">姓名、身份证号、银行卡号（请填写银行卡号）、身份证正反面照片</span></div>
-          <div class="req-rule-item"><span class="rk">状态流转</span><span class="rv">未认证 → 审核中 → 已认证 / 驳回（演示默认已认证）</span></div>
-          <div class="req-rule-item"><span class="rk">已认证</span><span class="rv">展示绿色"已认证"标签，点击可查看认证信息（只读）</span></div>
+          <p style="margin-bottom:8px;font-weight:700;color:#333;">认证/签约入口</p>
+          <div class="req-rule-item"><span class="rk">入口样式</span><span class="rv">单行卡片，右侧实时展示当前状态摘要（未认证·未签约 / 已认证·未签约 / 已认证·已签约）</span></div>
+          <div class="req-rule-item"><span class="rk">点击行为</span><span class="rv">打开手机壳内全屏认证内页（非弹窗），覆盖当前页面，左上角有返回按钮</span></div>
           <hr class="form-sep"/>
-          <p style="margin-bottom:8px;font-weight:700;color:#333;">电子签约（实名认证通过后才可发起）</p>
-          <div class="req-rule-item"><span class="rk">签约方式</span><span class="rv">点击跳转灵工平台 H5 / 小程序完成协议签署</span></div>
-          <div class="req-rule-item"><span class="rk">回调确认</span><span class="rv">签约完成后返回小程序，点击"我已完成签约"按钮，系统查询灵工状态后更新</span></div>
-          <div class="req-rule-item"><span class="rk">状态标签</span><span class="rv">待签约（橙）/ 签约中 / 已签约（绿）</span></div>
+          <p style="margin-bottom:8px;font-weight:700;color:#333;">认证内页 · 实名认证（第一步，提现前必须完成）</p>
+          <div class="req-rule-item"><span class="rk">必填字段</span><span class="rv">姓名、开户行、银行卡号（占位符：请填写银行卡号）、身份证号、身份证正反面照片</span></div>
+          <div class="req-rule-item"><span class="rk">提交校验</span><span class="rv">所有必填字段均填写后方可提交；缺填则提示"请填写所有必填字段"</span></div>
+          <div class="req-rule-item"><span class="rk">提交成功</span><span class="rv">认证状态切换为「已认证」；实名表单隐藏，显示电子签约区块</span></div>
           <hr class="form-sep"/>
-          <p style="margin-bottom:8px;font-weight:700;color:#333;">微信服务通知授权</p>
-          <div class="req-rule-item"><span class="rk">通知类型</span><span class="rv">① 新分润入账提醒 ② 提现审核结果通知 ③ 提现到账通知</span></div>
-          <div class="req-rule-item"><span class="rk">授权状态</span><span class="rv">已授权（开关绿色）/ 未授权（开关灰色），点击"去授权"跳转微信订阅授权页</span></div>
-          <div class="req-rule-item"><span class="rk">提现到账通知</span><span class="rv">需单独授权，默认未开启，底部提示引导</span></div>
+          <p style="margin-bottom:8px;font-weight:700;color:#333;">认证内页 · 电子签约（第二步，实名认证通过后才可发起）</p>
+          <div class="req-rule-item"><span class="rk">签约方式</span><span class="rv">点击「前往灵工平台签约 →」跳转灵工平台 H5 / 小程序完成协议签署</span></div>
+          <div class="req-rule-item"><span class="rk">回调确认</span><span class="rv">签约完成后返回小程序，点击「我已完成签约」，系统查询灵工状态并更新为「已签约」</span></div>
+          <div class="req-rule-item"><span class="rk">全部完成</span><span class="rv">签约状态更新后，显示绿色"已完成认证与签约"提示卡，代理商可前往账户页申请提现</span></div>
         </div>
       </details>
     </div>
@@ -1281,74 +1335,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
 </div>
 
 <!-- ═══ 弹窗：实名认证 ═══ -->
-<div class="modal-mask" id="kyc-mask" onclick="if(event.target===this)closeKycModal()">
-  <div class="modal-box">
-    <div class="modal-head">
-      <span class="modal-head-title">实名认证</span>
-      <button class="modal-close" onclick="closeKycModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="steps" style="margin-bottom:20px;">
-        <div class="step"><div class="step-dot sd-done">1</div><div class="step-lbl">实名认证</div></div>
-        <div class="step-line"></div>
-        <div class="step"><div class="step-dot sd-wait">2</div><div class="step-lbl">电子签约</div></div>
-      </div>
-      <div class="form-row">
-        <div class="form-label"><span class="req-star">*</span>真实姓名</div>
-        <div class="form-ctrl"><input type="text" placeholder="请输入与银行卡一致的姓名"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-label"><span class="req-star">*</span>身份证号</div>
-        <div class="form-ctrl"><input type="text" placeholder="请输入身份证号码"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-label"><span class="req-star">*</span>银行卡号</div>
-        <div class="form-ctrl">
-          <input type="text" placeholder="请填写银行卡号"/>
-          <div class="form-hint">请填写本人一类储蓄卡</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-label"><span class="req-star">*</span>身份证照片</div>
-        <div class="form-ctrl">
-          <div style="display:flex;gap:10px;">
-            <div style="flex:1;height:64px;border:1px dashed #d9d9d9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;cursor:pointer;flex-direction:column;gap:4px;">📷<span>正面</span></div>
-            <div style="flex:1;height:64px;border:1px dashed #d9d9d9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;cursor:pointer;flex-direction:column;gap:4px;">📷<span>反面</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-primary" onclick="alert('提交成功（演示）\n认证通过后，请返回「我的」进行电子签约');closeKycModal()">提交认证</button>
-      <button class="btn btn-ghost" onclick="closeKycModal()">取 消</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ 弹窗：电子签约 ═══ -->
-<div class="modal-mask" id="sign-mask" onclick="if(event.target===this)closeSignModal()">
-  <div class="modal-box modal-box-sm">
-    <div class="modal-head">
-      <span class="modal-head-title">电子签约</span>
-      <button class="modal-close" onclick="closeSignModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="steps" style="margin-bottom:14px;">
-        <div class="step"><div class="step-dot sd-done">1</div><div class="step-lbl">实名认证</div></div>
-        <div class="step-line"></div>
-        <div class="step"><div class="step-dot sd-active">2</div><div class="step-lbl">电子签约</div></div>
-      </div>
-      <div class="info-box">请前往<strong>灵工平台</strong>完成电子协议签署。签署完成后回到此页点击「我已完成签约」，系统将自动同步状态。</div>
-      <div style="margin:14px 0;text-align:center;">
-        <button style="padding:10px 24px;background:#1677ff;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;" onclick="alert('演示：跳转灵工平台 H5 或小程序')">前往灵工平台签约 →</button>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-primary" onclick="alert('签约确认成功（演示）');closeSignModal()">我已完成签约</button>
-      <button class="btn btn-ghost" onclick="closeSignModal()">稍后再说</button>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ 弹窗：门店二维码 ═══ -->
 <div class="modal-mask" id="store-qr-mask" onclick="if(event.target===this)document.getElementById('store-qr-mask').style.display='none'">
@@ -1495,10 +1481,58 @@ function submitWithdrawApply() {
 }
 
 /* ── 认证/签约弹窗 ── */
-function showKycModal() { document.getElementById('kyc-mask').style.display = 'flex'; }
-function closeKycModal() { document.getElementById('kyc-mask').style.display = 'none'; }
-function showSignModal() { document.getElementById('sign-mask').style.display = 'flex'; }
-function closeSignModal() { document.getElementById('sign-mask').style.display = 'none'; }
+/* ── 认证/签约 内页 ── */
+var _mvpAuth = false, _mvpSign = false;
+function openKycSheetMvp() {
+  var sheet = document.getElementById('mvp-kyc-sheet');
+  sheet.style.display = 'flex';
+}
+function closeKycSheetMvp() {
+  document.getElementById('mvp-kyc-sheet').style.display = 'none';
+  _updateKycBriefMvp();
+}
+function _updateKycBriefMvp() {
+  var brief = document.getElementById('mvp-kyc-brief');
+  var tagAuth = document.getElementById('mvp-tag-auth');
+  var tagSign = document.getElementById('mvp-tag-sign');
+  if (_mvpAuth && _mvpSign) {
+    brief.textContent = '已认证 · 已签约';
+    brief.style.color = '#52c41a';
+  } else if (_mvpAuth) {
+    brief.textContent = '已认证 · 未签约';
+    brief.style.color = '#fa8c16';
+  } else {
+    brief.textContent = '未认证 · 未签约';
+    brief.style.color = '#fa8c16';
+  }
+  tagAuth.textContent = _mvpAuth ? '已认证' : '未认证';
+  tagAuth.className = 'tag ' + (_mvpAuth ? 't-green' : 't-orange');
+  tagSign.textContent = _mvpSign ? '已签约' : '未签约';
+  tagSign.className = 'tag ' + (_mvpSign ? 't-green' : 't-orange');
+}
+function submitKycFormMvp() {
+  var name = (document.getElementById('mvp-kyc-name').value || '').trim();
+  var bank = (document.getElementById('mvp-kyc-bank').value || '').trim();
+  var card = (document.getElementById('mvp-kyc-cardno').value || '').trim();
+  var id   = (document.getElementById('mvp-kyc-idno').value || '').trim();
+  var err  = document.getElementById('mvp-kyc-err');
+  if (!name || !bank || !card || !id) {
+    err.style.display = 'block';
+    err.textContent = '请填写所有必填字段';
+    return;
+  }
+  err.style.display = 'none';
+  _mvpAuth = true;
+  _updateKycBriefMvp();
+  document.getElementById('mvp-kyc-form-wrap').style.display = 'none';
+  document.getElementById('mvp-sign-block').style.display = 'block';
+}
+function markSignedMvp() {
+  _mvpSign = true;
+  _updateKycBriefMvp();
+  document.getElementById('mvp-sign-block').style.display = 'none';
+  document.getElementById('mvp-kyc-all-done').style.display = 'block';
+}
 
 /* ── 提现审核操作 ── */
 function doWithdrawApprove(channelName, signStatus) {
