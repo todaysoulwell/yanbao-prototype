@@ -134,6 +134,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
 /* ── 进销存标签列 ── */
 .inv-cell{font-size:12px;color:#333;}
 .inv-label{color:#888;font-size:11px;}
+/* ── 退款截图区 ── */
+.refund-shot-wrap{margin-bottom:18px;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;background:#fafafa;}
+.refund-shot-wrap img{display:block;width:100%;height:auto;vertical-align:top;}
+.refund-shot-cap{font-size:12.5px;font-weight:700;color:#333;padding:10px 14px;background:#f0f5ff;border-bottom:1px solid #e6f0ff;}
+.refund-shot-fallback{padding:40px 16px;text-align:center;color:#888;font-size:12px;line-height:1.75;background:#f5f5f5;}
+.t-gray{background:#f5f5f5;color:#888;}
 @media(max-width:768px){.phone-wrap{justify-content:center;}.panel-card{padding:14px;}.stat-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
@@ -730,38 +736,164 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
   </div>
 </div>
 
-<!-- ═══ PAGE：退款规则 ═══ -->
+<!-- ═══ PAGE：退款页面 ═══ -->
 <div class="page" id="page-refund">
-  <details class="req-block" open>
-    <summary>💰 退款规则 · 产品需求<span class="hint">（点击展开）</span></summary>
-    <div class="req-content">
-      <div class="warn-box">
-        <strong>核心规则：已提现的订单，系统不支持线上退款。</strong><br/>
-        一旦代理商针对某笔分润发起提现申请并经运营审核通过（或已提交至灵工平台），该笔分润对应的原始订单进入「提现锁定」状态，用户无法通过正常退款入口发起退款。
+  <div class="panel-card">
+    <h3>💰 退款页面 · 后台订单退款</h3>
+    <p style="font-size:13px;color:#555;line-height:1.9;margin-bottom:12px;">
+      下列为<strong>现有系统管理平台</strong>中与退款相关的界面截图占位。请将截图命名为 <code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">refund_figure1_package_orders.png</code>、<code style="background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:12px;">refund_figure2_warranty_orders.png</code>，与本 HTML 放在同一目录即可自动展示。
+    </p>
+  </div>
+
+  <div class="panel-card" style="padding-top:12px;">
+    <div class="refund-shot-wrap">
+      <div class="refund-shot-cap">图1 · 套餐信息 — 订单记录（列表操作「退款」）</div>
+      <img id="proto-img-refund-1" alt="套餐信息-订单记录" style="display:none;width:100%;height:auto;vertical-align:top;"/>
+      <div id="proto-fallback-refund-1" class="refund-shot-fallback" style="display:none;">未加载到 <strong>refund_figure1_package_orders.png</strong>。请确认与本 HTML 同目录，或使用下方「从本机选择」。</div>
+      <div style="padding:8px 12px;font-size:12px;color:#555;background:#fafafa;border-top:1px solid #eee;">
+        <span style="margin-right:8px;">从本机选择图片：</span>
+        <input type="file" accept="image/*" style="font-size:12px;max-width:100%;" onchange="protoImgFromFileMvp(this,'proto-img-refund-1','proto-fallback-refund-1')"/>
       </div>
-      <p style="margin-top:10px;font-weight:700;color:#333;margin-bottom:6px;">判断逻辑</p>
-      <table style="width:100%;border-collapse:collapse;font-size:12px;">
-        <thead><tr style="background:#f5f7fa;"><th style="padding:5px 8px;border:1px solid #e8e8e8;">订单状态</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">是否允许退款</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">说明</th></tr></thead>
+    </div>
+    <div class="refund-shot-wrap">
+      <div class="refund-shot-cap">图2 · ETC 运营管理 — 延保服务订单（列表操作「退款」）</div>
+      <img id="proto-img-refund-2" alt="延保服务订单" style="display:none;width:100%;height:auto;vertical-align:top;"/>
+      <div id="proto-fallback-refund-2" class="refund-shot-fallback" style="display:none;">未加载到 <strong>refund_figure2_warranty_orders.png</strong>。同上，或使用下方选择文件。</div>
+      <div style="padding:8px 12px;font-size:12px;color:#555;background:#fafafa;border-top:1px solid #eee;">
+        <span style="margin-right:8px;">从本机选择图片：</span>
+        <input type="file" accept="image/*" style="font-size:12px;max-width:100%;" onchange="protoImgFromFileMvp(this,'proto-img-refund-2','proto-fallback-refund-2')"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-card">
+    <h3>退款交互规则演示</h3>
+    <p style="font-size:12.5px;color:#555;line-height:1.85;margin-bottom:12px;">
+      运营在订单列表点击<strong>退款</strong>时，系统按以下三种情形判断处理方式：
+    </p>
+    <div style="overflow-x:auto;margin-bottom:14px;">
+      <table class="admin-tbl" style="min-width:780px;">
+        <thead>
+          <tr>
+            <th>来源页面</th>
+            <th>订单号（演示）</th>
+            <th>所属渠道</th>
+            <th>分润情况</th>
+            <th style="min-width:90px;">操作</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">分润已入账，代理商未申请提现</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><span class="tag t-green">允许退款</span></td><td style="padding:5px 8px;border:1px solid #e8e8e8;">退款成功后对应分润冲正扣回</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">分润已入账，提现申请待审核中</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><span class="tag t-orange">待确认</span></td><td style="padding:5px 8px;border:1px solid #e8e8e8;">策略待产品确认（拦截 or 允许后冲正）</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">提现已审核通过 / 已提交灵工</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><span class="tag t-red">不允许退款</span></td><td style="padding:5px 8px;border:1px solid #e8e8e8;">系统拦截线上退款入口；如需退款走人工处理</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">订单无分润（未命中任何渠道）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><span class="tag t-green">允许退款</span></td><td style="padding:5px 8px;border:1px solid #e8e8e8;">正常退款流程，不影响分润</td></tr>
+          <tr>
+            <td>套餐订单记录</td>
+            <td style="font-family:monospace;font-size:12px;">TC2026042000881</td>
+            <td>直营/无分润渠道</td>
+            <td><span class="tag t-gray">不参与分润</span></td>
+            <td><button type="button" class="btn btn-ghost btn-sm" style="color:#ff4d4f;border-color:#ffccc7;" onclick="tryAdminRefund('no-profit',{channelName:'直营/无分润渠道',orderAmount:99})">退款</button></td>
+          </tr>
+          <tr>
+            <td>延保服务订单</td>
+            <td style="font-family:monospace;font-size:12px;">YB2026042100301</td>
+            <td>武汉驾车通</td>
+            <td><span class="tag t-blue">涉及分润 · 未提现</span></td>
+            <td><button type="button" class="btn btn-ghost btn-sm" style="color:#ff4d4f;border-color:#ffccc7;" onclick="tryAdminRefund('profit-not-withdrawn',{channelName:'武汉驾车通',orderAmount:29.9,profitAmount:5.98})">退款</button></td>
+          </tr>
+          <tr>
+            <td>延保服务订单</td>
+            <td style="font-family:monospace;font-size:12px;">YB2026042100129</td>
+            <td>黄石新捷顺名车</td>
+            <td><span class="tag t-orange">涉及分润 · 已提现</span></td>
+            <td><button type="button" class="btn btn-ghost btn-sm" style="color:#ff4d4f;border-color:#ffccc7;" onclick="tryAdminRefund('profit-withdrawn',{channelName:'黄石新捷顺名车',agentName:'张明',agentPhone:'13800138001',orderAmount:29.9,profitAmount:5.98,refundAmount:23.92})">退款</button></td>
+          </tr>
         </tbody>
       </table>
     </div>
-  </details>
-  <div class="panel-card">
-    <div style="font-size:14px;font-weight:700;color:#333;margin-bottom:12px;">退款限制示意</div>
-    <div class="flow-row">
-      <div class="flow-node fn-blue">订单支付成功<br/><small>分润入账</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node fn-orange">代理商申请提现<br/><small>审核中</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node fn-green">运营审核通过<br/><small>打款灵工</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="background:#fff1f0;color:#ff4d4f;">原订单<br/><small>禁止线上退款</small></div>
+    <div style="font-size:12.5px;color:#444;line-height:1.9;background:#fafafa;border-radius:8px;padding:14px 16px;border:1px dashed #d9d9d9;">
+      <strong>三种情形说明：</strong><br>
+      <span style="color:#389e0d;">① 不参与分润</span> — 直接退款，退款信息同步至小程序（用户端），代理侧无影响。<br>
+      <span style="color:#1677ff;">② 参与分润 · 分润未被提现</span> — 可直接退款；系统同步从代理「可提现余额」扣除该笔分润金额，并在小程序分润流水中生成「退款扣回」记录；退款信息同步至小程序。<br>
+      <span style="color:#d46b08;">③ 参与分润 · 分润已提现</span> — 不可自动退款；弹窗提示运营线下通知代理商：代理需向用户全额退款，运营则线下退还给代理商扣除分润后的余额。
     </div>
+  </div>
+
+  <div class="panel-card">
+    <details>
+      <summary style="font-size:13px;font-weight:700;color:#1677ff;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;">📋 退款页面 · 产品需求 <span style="font-size:11px;font-weight:400;color:#bbb;">（点击展开）</span></summary>
+      <div style="padding:10px 0 0;font-size:12.5px;color:#444;line-height:1.9;">
+        <p style="font-weight:700;color:#333;margin-bottom:6px;">退款判断逻辑（三分支）</p>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px;">
+          <thead><tr style="background:#f5f7fa;">
+            <th style="padding:5px 8px;border:1px solid #e8e8e8;width:24%;">情形</th>
+            <th style="padding:5px 8px;border:1px solid #e8e8e8;width:38%;">判断条件</th>
+            <th style="padding:5px 8px;border:1px solid #e8e8e8;">处理方式</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">① 不参与分润</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">订单所属渠道未配置分润规则，或该笔订单类型不触发分润</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">弹确认弹窗，确认后<strong>直接发起退款</strong>；退款信息同步至小程序；代理可提现余额不变</td>
+            </tr>
+            <tr style="background:#f0f7ff;">
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">② 参与分润 · 未提现</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">订单已产生分润入账记录，但对应分润金额仍在代理「可提现余额」中（尚未提现）</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">弹确认弹窗，展示订单金额、分润金额（将被扣除）；确认后<strong>直接退款</strong>，同时系统自动扣减代理可提现余额，小程序分润流水新增「退款扣回」条目（红色负数，标「退款」）；退款信息同步至小程序</td>
+            </tr>
+            <tr>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">③ 参与分润 · 已提现</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">订单分润已通过提现申请，并已打款至代理银行账户</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;"><strong>不可自动退款</strong>；弹提示弹窗，告知运营需线下通知代理商：①代理向用户全额退款；②运营线下将扣除分润后的余额退给代理商；弹窗展示：渠道名、代理姓名、手机号、订单金额、分润金额（已提现）、线下退款金额</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-weight:700;color:#333;margin-bottom:6px;">小程序同步说明</p>
+        <ul style="margin:0 0 10px;padding-left:18px;font-size:12px;color:#555;line-height:1.85;">
+          <li>情形①②退款成功后，退款记录均需实时同步至代理小程序（如延保订单详情、计费Tab）</li>
+          <li>情形②退款后，代理小程序分润流水增加「↩ 退款扣回」条目：红色背景、负数金额、标签「已退款」+「分润已扣回」</li>
+          <li>情形②退款后，代理小程序首页/提现页的「可提现余额」需实时刷新（减去对应分润金额）</li>
+          <li>情形③为纯线下流程，系统不自动变更代理余额，依赖运营与代理线下沟通完成</li>
+        </ul>
+        <p style="font-weight:700;color:#333;margin-bottom:6px;">「未提现」的判断规则</p>
+        <div style="font-size:12px;color:#555;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:10px 12px;line-height:1.8;">
+          系统需记录每笔分润的「入账时间」与「提现关联关系」。判断该分润是否已被提现的依据：该分润金额所在的结算周期是否已生成「已完成」状态的提现记录。若已存在已打款提现记录，则视为「已提现」，走情形③；否则走情形②。<br>
+          <strong>边界情形</strong>：若代理申请了提现但提现审核「待审核/审核中」，暂按「未提现」处理（因未实际到账）。
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- 退款弹窗 A：不参与分润 / 涉及分润未提现 → 直接退款 -->
+<div id="refund-direct-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1001;align-items:center;justify-content:center;" onclick="if(event.target===this)closeRefundDirectModal();">
+  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:480px;width:100%;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
+    <div id="rdm-title" style="font-size:15px;font-weight:700;color:#1677ff;margin-bottom:14px;">退款确认</div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:12px;">
+      <tr><td style="color:#888;padding:6px 0;width:46%;vertical-align:top;">渠道名称</td><td style="padding:6px 0;font-weight:600;" id="rdm-channel">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">订单金额</td><td style="padding:6px 0;font-weight:600;color:#1677ff;" id="rdm-order-amt">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;" id="rdm-profit-label">分润金额<i style="font-size:11px;color:#bbb;font-style:normal;">（将从余额扣除）</i></td><td style="padding:6px 0;font-weight:600;color:#cf1322;" id="rdm-profit-amt"></td></tr>
+    </table>
+    <div id="rdm-tip" style="font-size:12.5px;line-height:1.85;padding:12px 14px;border-radius:8px;margin-bottom:16px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" onclick="closeRefundDirectModal()" style="flex:1;padding:10px;background:#f5f5f5;color:#555;border:none;border-radius:6px;font-size:13px;cursor:pointer;">取消</button>
+      <button type="button" onclick="confirmRefundDirect()" style="flex:2;padding:10px;background:#cf1322;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600;">确认退款</button>
+    </div>
+  </div>
+</div>
+
+<!-- 退款弹窗 B：涉及分润且已提现 → 线下处理 -->
+<div id="refund-profit-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1001;align-items:center;justify-content:center;" onclick="if(event.target===this)closeRefundProfitModal();">
+  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:520px;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
+    <div style="font-size:15px;font-weight:700;color:#d46b08;margin-bottom:14px;">⚠️ 退款 · 该订单分润已被提现</div>
+    <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:12px;">
+      <tr><td style="color:#888;padding:6px 0;width:42%;vertical-align:top;">分润的渠道名称</td><td style="padding:6px 0;font-weight:600;" id="rpm-channel">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">代理人姓名</td><td style="padding:6px 0;font-weight:600;" id="rpm-agent-name">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">代理人手机号</td><td style="padding:6px 0;font-weight:600;font-family:monospace;" id="rpm-agent-phone">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">订单金额</td><td style="padding:6px 0;font-weight:600;color:#1677ff;" id="rpm-order-amt">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">分润金额<i style="font-size:11px;color:#bbb;font-style:normal;">（已提现至代理银行卡）</i></td><td style="padding:6px 0;font-weight:600;" id="rpm-profit-amt">—</td></tr>
+      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">需线下退款金额<i style="font-size:11px;color:#bbb;font-style:normal;">（扣除分润）</i></td><td style="padding:6px 0;font-weight:800;color:#cf1322;font-size:15px;" id="rpm-refund-amt">—</td></tr>
+    </table>
+    <div style="font-size:12.5px;color:#873800;line-height:1.85;padding:12px 14px;background:#fff7e6;border:1px solid #ffd591;border-radius:8px;margin-bottom:16px;">
+      该订单对应的分润金额已被代理提现，无法系统自动扣回。需线下通知代理商向用户全额退款，并将扣除分润后的金额线下退还给代理商，详见退款管控流程。
+    </div>
+    <button type="button" onclick="closeRefundProfitModal()" style="width:100%;padding:10px;background:#1677ff;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600;">我知道了</button>
   </div>
 </div>
 
@@ -1251,6 +1383,67 @@ function showStoreQr(storeName, channelName) {
   var payload = 'https://store.example.com/bind?store=' + encodeURIComponent(storeName) + '&channel=' + encodeURIComponent(channelName);
   document.getElementById('store-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(payload);
   document.getElementById('store-qr-mask').style.display = 'flex';
+}
+
+/* ── 金额格式化 ── */
+function fmtMoney(n) {
+  var x = Number(n);
+  if (isNaN(x)) return '—';
+  return '¥' + x.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/* ── 退款三分支逻辑 ── */
+function tryAdminRefund(scenario, data) {
+  data = data || {};
+  var set = function(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; };
+  var show = function(id, visible) { var el = document.getElementById(id); if (el) el.style.display = visible ? '' : 'none'; };
+  if (scenario === 'no-profit') {
+    set('rdm-title', '退款确认 · 该订单不参与分润');
+    set('rdm-channel', data.channelName || '直营/无分润渠道');
+    set('rdm-order-amt', fmtMoney(data.orderAmount));
+    set('rdm-profit-amt', '');
+    show('rdm-profit-label', false);
+    var tip = document.getElementById('rdm-tip');
+    if (tip) { tip.style.background='#f6ffed'; tip.style.border='1px solid #b7eb8f'; tip.style.color='#389e0d'; tip.innerHTML='该订单<strong>不参与代理商分润</strong>，退款将直接通过原路退还给用户，退款信息同步至小程序。'; }
+    document.getElementById('refund-direct-modal-mask').style.display = 'flex';
+  } else if (scenario === 'profit-not-withdrawn') {
+    set('rdm-title', '退款确认 · 分润未提现，可直接退款');
+    set('rdm-channel', data.channelName || '—');
+    set('rdm-order-amt', fmtMoney(data.orderAmount));
+    set('rdm-profit-amt', '−' + fmtMoney(data.profitAmount));
+    show('rdm-profit-label', true);
+    var tip2 = document.getElementById('rdm-tip');
+    if (tip2) { tip2.style.background='#fffbe6'; tip2.style.border='1px solid #ffe58f'; tip2.style.color='#7c5800'; tip2.innerHTML='该订单参与代理商分润，但对应分润<strong>尚未被提现</strong>，可直接退款。<br>退款后系统将自动从代理「可提现余额」中扣除分润金额 <strong style="color:#cf1322;">' + fmtMoney(data.profitAmount) + '</strong>，并在小程序分润流水中生成「退款扣回」记录，退款信息同步至小程序。'; }
+    document.getElementById('refund-direct-modal-mask').style.display = 'flex';
+  } else if (scenario === 'profit-withdrawn') {
+    set('rpm-channel', data.channelName || '—');
+    set('rpm-agent-name', data.agentName || '—');
+    set('rpm-agent-phone', data.agentPhone || '—');
+    set('rpm-order-amt', fmtMoney(data.orderAmount));
+    set('rpm-profit-amt', fmtMoney(data.profitAmount));
+    set('rpm-refund-amt', fmtMoney(data.refundAmount));
+    document.getElementById('refund-profit-modal-mask').style.display = 'flex';
+  }
+}
+function confirmRefundDirect() {
+  closeRefundDirectModal();
+  alert('退款成功！\n退款信息已同步至代理端小程序，可提现余额已相应调整（如涉及分润扣回）。');
+}
+function closeRefundDirectModal() { var m = document.getElementById('refund-direct-modal-mask'); if (m) m.style.display = 'none'; }
+function closeRefundProfitModal() { var m = document.getElementById('refund-profit-modal-mask'); if (m) m.style.display = 'none'; }
+
+/* ── 图片从本机载入（退款截图区） ── */
+function protoImgFromFileMvp(input, imgId, fallbackId) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById(imgId);
+    var fb = document.getElementById(fallbackId);
+    if (img) { img.src = e.target.result; img.style.display = 'block'; }
+    if (fb) fb.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
 }
 
 /* ── 销售人员手机号联动 ── */
