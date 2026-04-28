@@ -624,6 +624,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
   <details class="req-block" open>
     <summary>📋 渠道管理 · 产品需求（MVP）<span class="hint">（点击展开）</span></summary>
     <div class="req-content">
+
+      <p style="margin-bottom:8px;font-weight:700;color:#333;">列表页概览</p>
+      <div class="req-rule-item"><span class="rk">统计卡片</span><span class="rv">渠道总数 / 记录仪已激活设备数 / 客车ETC已激活设备数 / 货车ETC已激活设备数</span></div>
+      <div class="req-rule-item"><span class="rk">搜索筛选</span><span class="rv">按渠道名称或代理商电话关键词搜索；按产品类型（全部/客车ETC/货车ETC/记录仪）筛选</span></div>
+      <div class="req-rule-item"><span class="rk">列表字段</span><span class="rv">渠道名称 / 产品类型标签 / 代理商电话（脱敏）/ 各产品「进货数/激活数+激活率」/ 分润余额</span></div>
+      <div class="req-rule-item"><span class="rk">操作列</span><span class="rv">「修改」按钮：打开编辑弹窗回填当前数据；「进销存」按钮：弹出该渠道进销存明细</span></div>
+
+      <hr class="form-sep"/>
       <p style="margin-bottom:8px;font-weight:700;color:#333;">系统审核码机制（MVP 审核流简化方案）</p>
       <div class="flow-row">
         <div class="flow-node fn-blue">运营填写渠道信息<br/><small>含敏感字段</small></div>
@@ -632,20 +640,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="flow-arrow">→</div>
         <div class="flow-node fn-green">码验证通过<br/><small>变更立即生效</small></div>
       </div>
-      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话 / 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写时，提交须输入系统审核码；码错误则不允许提交。</div>
-      <p style="margin-bottom:6px;font-weight:700;color:#333;">弹窗字段（新增 / 修改渠道共用）</p>
+      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话（分润不为空时）/ 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写/变更时，提交须输入6位系统审核码；码错误则不允许提交。演示模式下任意6位字符均通过。</div>
+
+      <hr class="form-sep"/>
+      <p style="margin-bottom:6px;font-weight:700;color:#333;">新增/修改弹窗字段详细说明</p>
       <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px;">
         <thead><tr style="background:#f5f7fa;"><th style="padding:5px 8px;border:1px solid #e8e8e8;">模块</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">字段</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">必填</th><th style="padding:5px 8px;border:1px solid #e8e8e8;">规则</th></tr></thead>
         <tbody>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">① 基础信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">渠道名称</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">≤50字，不可重名</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">① 基础信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">渠道类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">电商/线上/线下/线下收费站ETC禁用/准前装</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">② 产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填≥1</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">复选：客车ETC / 货车ETC / 记录仪</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">③ 代理商</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商姓名</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">—</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">③ 代理商</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">填写且分润不为空时 → 需输入系统审核码；用于代理商登录及提现</strong></td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">④ 分润配置</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">记录仪智能服务分润比例</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">%，上限80；<strong style="color:#e67e00;">填写或变更 → 触发审核码校验</strong></td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">④ 分润配置</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">客车ETC延保分润比例</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">同上，上限80；<strong style="color:#e67e00;">填写或变更 → 触发审核码校验</strong></td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">④ 分润配置</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车ETC分润金额（三档）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填联动</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">轻卡/重卡/牵引，每档≤500元；任一有值须三档齐填；<strong style="color:#e67e00;">填写 → 触发审核码校验</strong></td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">⑤ 其他</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">备注</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">内部备注，不对外展示</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">基础信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">渠道名称</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">≤50字，不可重名</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">基础信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">渠道类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">电商 / 线上 / 线下 / 线下收费站ETC禁用 / 准前装</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填≥1</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">复选：客车ETC / 货车ETC / 记录仪；至少勾选一项</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">记录仪适配套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">设备型号 + 套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">设备类型（W1/W1-Z/ONE-11等）+ 套餐（直播720分钟/120分钟/3月300分钟/3月无限）两列联动，可添加多行；行填写不完整时不允许提交</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">速通免押日结 / 速通免押日结（电商版）</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商姓名</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">—</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">填写且分润字段不为空时 → 需输入系统审核码；手机号用于代理商登录小程序及提现</strong></td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">是否展示进销存</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">控制代理商小程序端进销存 Tab 是否可见；默认不展示</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块① 智能服务分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">智能服务分润比例（%）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">0~80，超出弹出校验提示；<strong style="color:#e67e00;">填写或变更 → 触发系统审核码校验</strong></td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块② 延保服务分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">延保服务分润比例（%）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">同上，上限80；<strong style="color:#e67e00;">填写或变更 → 触发系统审核码校验</strong></td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块③ 货车分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">轻卡普通货车（元）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填联动</td><td style="padding:5px 8px;border:1px solid #e8e8e8;" rowspan="3">三档金额（轻卡/重卡/牵引），每档≤500元；任一有值须三档齐填，否则不允许提交；<strong style="color:#e67e00;">填写或变更 → 触发系统审核码校验</strong></td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块③ 货车分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">重卡普通货车（元）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填联动</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块③ 货车分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">牵引车（元）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填联动</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块④ 销售人员</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">销售姓名 + 手机号</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">从在职销售下拉选择姓名后自动带出手机号（只读）</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块⑤ 主管配置</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">主管姓名 + 手机号</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">从主管名单下拉选择后自动带出手机号（只读）；可添加多行，可删除；同一渠道可配置多名主管</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">其他</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">备注</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">内部备注，不对代理商展示</td></tr>
         </tbody>
       </table>
     </div>
