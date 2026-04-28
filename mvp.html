@@ -795,10 +795,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cm-pt-truck"/> 货车ETC</label>
             <label style="display:inline-flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;"><input type="checkbox" id="cm-pt-dvr"/> 记录仪</label>
           </div>
+          <div style="font-size:11px;color:#888;margin-top:5px;">必选，至少勾选一项；支持多选。</div>
           <div class="form-err" id="cm-pt-err">请至少选择一种产品类型</div>
         </div>
       </div>
+      <!-- 记录仪适配套餐 -->
+      <div class="form-row">
+        <div class="form-label">记录仪适配套餐</div>
+        <div class="form-ctrl">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <select style="flex:0 0 130px;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+              <option value="">请选择设备类型</option>
+              <option>W1</option><option>W1-Z</option><option>ONE-11</option><option>ONE-10</option>
+              <option>ONE-10-SE</option><option>ONE-10-TSE</option><option>ONE-10-ULTRA</option>
+            </select>
+            <select style="flex:1;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+              <option value="">请选择套餐</option>
+              <option>直播时间720分钟</option><option>直播时间120分钟</option>
+              <option>3个月300分钟</option><option>3个月无限</option>
+            </select>
+            <button type="button" style="width:28px;height:30px;border:1px solid #d9d9d9;border-radius:5px;background:#fafafa;cursor:pointer;font-size:16px;color:#888;">＋</button>
+          </div>
+          <div style="font-size:11px;color:#aaa;margin-top:3px;">非必填，可添加多行；行不完整时不允许提交</div>
+        </div>
+      </div>
+      <!-- 货车产品套餐 -->
+      <div class="form-row">
+        <div class="form-label">货车产品套餐</div>
+        <div class="form-ctrl">
+          <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+            <option value="">请选择货车产品套餐</option>
+            <option>速通免押日结</option>
+            <option>速通免押日结（电商版）</option>
+          </select>
+        </div>
+      </div>
       <hr class="form-sep"/>
+      <!-- 代理商信息 -->
       <div class="sec-head">代理商信息</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
@@ -808,41 +841,102 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div>
           <div style="font-size:11.5px;color:#777;margin-bottom:3px;">代理商电话</div>
           <input id="cm-agent-phone" type="text" placeholder="选填" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
-          <div class="form-warn">填写后将用于代理商登录及提现</div>
+          <div class="form-warn">填写且分润不为空时需输入系统审核码；用于代理商登录及提现</div>
         </div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11.5px;color:#777;margin-bottom:3px;">是否展示进销存</div>
+        <select id="cm-show-stock" style="width:100%;max-width:260px;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+          <option value="">请选择</option><option value="yes">是</option><option value="no">否</option>
+        </select>
+        <div style="font-size:11px;color:#aaa;margin-top:3px;">控制代理商小程序端进销存 Tab 是否可见</div>
       </div>
       <hr class="form-sep"/>
-      <div class="sec-head">分润配置 <span style="font-size:11px;font-weight:400;color:#aaa;">（填写任一项均需系统审核码验证）</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-        <div>
-          <div style="font-size:11.5px;color:#777;margin-bottom:3px;">记录仪·智能服务分润比例（%）</div>
-          <input id="cm-ratio-dvr" type="number" placeholder="0 ~ 80" min="0" max="80" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+      <!-- 分润配置 -->
+      <div class="sec-head">模块① 智能服务分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="max-width:260px;margin-bottom:10px;">
+        <div style="font-size:11.5px;color:#777;margin-bottom:3px;">智能服务分润比例（%）</div>
+        <input id="cm-ratio-dvr" type="number" placeholder="0 ~ 80" min="0" max="80" oninput="checkRatioMvp(this,'err-ratio-dvr')" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        <div id="err-ratio-dvr" style="display:none;font-size:11px;color:#ff4d4f;margin-top:3px;">⚠️ 分润比例不可超过 80%</div>
+        <div style="font-size:11px;color:#e67e00;margin-top:3px;">填写或变更 → 触发系统审核码校验</div>
+      </div>
+      <hr class="form-sep"/>
+      <div class="sec-head">模块② 延保服务分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填）</span></div>
+      <div style="max-width:260px;margin-bottom:10px;">
+        <div style="font-size:11.5px;color:#777;margin-bottom:3px;">延保服务分润比例（%）</div>
+        <input id="cm-ratio-car" type="number" placeholder="0 ~ 80" min="0" max="80" oninput="checkRatioMvp(this,'err-ratio-car')" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        <div id="err-ratio-car" style="display:none;font-size:11px;color:#ff4d4f;margin-top:3px;">⚠️ 分润比例不可超过 80%</div>
+        <div style="font-size:11px;color:#e67e00;margin-top:3px;">填写或变更 → 触发系统审核码校验</div>
+      </div>
+      <hr class="form-sep"/>
+      <div class="sec-head">模块③ 货车分润 <span style="font-size:11px;font-weight:400;color:#aaa;">（选填，若填写须三项齐全）</span></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;line-height:1.5;">轻卡/重卡/牵引车为分润金额（元），<strong>单项不超过 500</strong>；可全部留空；若填写任一项，则三项均需填写。</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:4px;">
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
+          <span style="font-size:12px;color:#555;">轻卡普通货车</span>
+          <input id="cm-truck-light" type="number" placeholder="金额（元），≤500" min="0" max="500" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
         </div>
-        <div>
-          <div style="font-size:11.5px;color:#777;margin-bottom:3px;">客车ETC·延保分润比例（%）</div>
-          <input id="cm-ratio-car" type="number" placeholder="0 ~ 80" min="0" max="80" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
+          <span style="font-size:12px;color:#555;">重卡普通货车</span>
+          <input id="cm-truck-heavy" type="number" placeholder="金额（元），≤500" min="0" max="500" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;">
+          <span style="font-size:12px;color:#555;">牵引车</span>
+          <input id="cm-truck-tractor" type="number" placeholder="金额（元），≤500" min="0" max="500" style="padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
         </div>
       </div>
-      <div style="font-size:11.5px;color:#777;margin-bottom:6px;">货车ETC·分润金额（元，须三档齐填）</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;">
+      <div class="form-err" id="cm-truck-err" style="margin-bottom:4px;">⚠️ 货车分润已部分填写，请补全轻卡、重卡、牵引车三项金额</div>
+      <div id="cm-truck-max-err" style="display:none;font-size:11px;color:#ff4d4f;margin-bottom:4px;">⚠️ 货车分润金额每项不得超过 500 元</div>
+      <hr class="form-sep"/>
+      <!-- 销售人员 -->
+      <div class="sec-head">模块④ 销售人员 <span style="font-size:11px;font-weight:400;color:#aaa;">（选填）</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div>
-          <div style="font-size:11px;color:#aaa;margin-bottom:3px;">轻卡普通货车</div>
-          <input id="cm-truck-light" type="number" placeholder="≤500" min="0" max="500" style="width:100%;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <div style="font-size:11.5px;color:#777;margin-bottom:3px;">销售姓名</div>
+          <select id="cm-sales-select" onchange="syncSalesPhone()" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+            <option value="">请选择销售人员</option>
+            <option value="13800138001">张明</option>
+            <option value="13900139002">李娜</option>
+            <option value="13700137003">王浩</option>
+            <option value="13611028532">比利</option>
+          </select>
         </div>
         <div>
-          <div style="font-size:11px;color:#aaa;margin-bottom:3px;">重卡普通货车</div>
-          <input id="cm-truck-heavy" type="number" placeholder="≤500" min="0" max="500" style="width:100%;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
-        </div>
-        <div>
-          <div style="font-size:11px;color:#aaa;margin-bottom:3px;">牵引车</div>
-          <input id="cm-truck-tractor" type="number" placeholder="≤500" min="0" max="500" style="width:100%;padding:6px 8px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;"/>
+          <div style="font-size:11.5px;color:#777;margin-bottom:3px;">手机号</div>
+          <input id="cm-sales-phone" type="text" readonly placeholder="根据姓名自动带出" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#f5f5f5;color:#333;"/>
         </div>
       </div>
-      <div class="form-err" id="cm-truck-err">货车分润已部分填写，请补全轻卡、重卡、牵引车三项金额</div>
+      <div style="font-size:11px;color:#aaa;margin-bottom:4px;">下拉选项来自在职销售名单（演示数据）；选中后回填手机号。</div>
+      <hr class="form-sep"/>
+      <!-- 主管配置 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div class="sec-head" style="margin-bottom:0;">模块⑤ 主管 <span style="font-size:11px;font-weight:400;color:#aaa;">（非必填 · 可设多人）</span></div>
+        <button type="button" onclick="addMgrRowMvp()" style="padding:4px 12px;font-size:12px;border:1px solid #1677ff;color:#1677ff;background:#fff;border-radius:5px;cursor:pointer;">＋ 添加主管</button>
+      </div>
+      <div id="mgr-rows-mvp" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+        <div class="mgr-row-mvp" style="display:grid;grid-template-columns:1fr 1fr 52px;gap:8px;align-items:end;">
+          <div>
+            <div style="font-size:11.5px;color:#777;margin-bottom:3px;">姓名</div>
+            <select class="mgr-sel-mvp" onchange="syncMgrPhoneMvp(this)" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
+              <option value="">请选择主管</option>
+              <option value="17200375749">王浩</option>
+              <option value="13800138001">张明</option>
+              <option value="13500001000">赵骅臻</option>
+              <option value="13611028532">刘洪煌</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:11.5px;color:#777;margin-bottom:3px;">手机号</div>
+            <input class="mgr-phone-mvp" type="text" readonly placeholder="根据姓名自动带出" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#f5f5f5;color:#333;"/>
+          </div>
+          <button type="button" class="mgr-remove-mvp" onclick="removeMgrRowMvp(this)" style="display:none;height:32px;padding:0 8px;font-size:12px;border:1px solid #ffccc7;color:#ff4d4f;background:#fff;border-radius:5px;cursor:pointer;margin-top:18px;">删除</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#aaa;margin-bottom:4px;">可添加多条；同一渠道可配置多名主管。</div>
       <hr class="form-sep"/>
       <div class="form-row">
         <div class="form-label">备注</div>
-        <div class="form-ctrl"><textarea placeholder="内部备注（选填）" style="min-height:48px;resize:vertical;"></textarea></div>
+        <div class="form-ctrl"><textarea placeholder="内部备注（选填）" style="min-height:48px;resize:vertical;width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;font-family:inherit;"></textarea></div>
       </div>
     </div>
     <div class="modal-foot">
@@ -1157,6 +1251,56 @@ function showStoreQr(storeName, channelName) {
   var payload = 'https://store.example.com/bind?store=' + encodeURIComponent(storeName) + '&channel=' + encodeURIComponent(channelName);
   document.getElementById('store-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(payload);
   document.getElementById('store-qr-mask').style.display = 'flex';
+}
+
+/* ── 销售人员手机号联动 ── */
+function syncSalesPhone() {
+  var sel = document.getElementById('cm-sales-select');
+  var phone = document.getElementById('cm-sales-phone');
+  if (sel && phone) phone.value = sel.value || '';
+}
+
+/* ── 主管行管理 ── */
+function addMgrRowMvp() {
+  var box = document.getElementById('mgr-rows-mvp');
+  var tpl = '<div class="mgr-row-mvp" style="display:grid;grid-template-columns:1fr 1fr 52px;gap:8px;align-items:end;">'
+    + '<div><div style="font-size:11.5px;color:#777;margin-bottom:3px;">姓名</div>'
+    + '<select class="mgr-sel-mvp" onchange="syncMgrPhoneMvp(this)" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">'
+    + '<option value="">请选择主管</option>'
+    + '<option value="17200375749">王浩</option><option value="13800138001">张明</option>'
+    + '<option value="13500001000">赵骅臻</option><option value="13611028532">刘洪煌</option>'
+    + '</select></div>'
+    + '<div><div style="font-size:11.5px;color:#777;margin-bottom:3px;">手机号</div>'
+    + '<input class="mgr-phone-mvp" type="text" readonly placeholder="根据姓名自动带出" style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#f5f5f5;color:#333;"/></div>'
+    + '<button type="button" class="mgr-remove-mvp" onclick="removeMgrRowMvp(this)" style="height:32px;padding:0 8px;font-size:12px;border:1px solid #ffccc7;color:#ff4d4f;background:#fff;border-radius:5px;cursor:pointer;margin-top:18px;">删除</button>'
+    + '</div>';
+  var div = document.createElement('div');
+  div.innerHTML = tpl;
+  box.appendChild(div.firstChild);
+  updateMgrRemoveBtnsMvp();
+}
+function removeMgrRowMvp(btn) {
+  var row = btn.closest('.mgr-row-mvp');
+  if (row) row.parentNode.removeChild(row);
+  updateMgrRemoveBtnsMvp();
+}
+function updateMgrRemoveBtnsMvp() {
+  var rows = document.querySelectorAll('#mgr-rows-mvp .mgr-row-mvp');
+  rows.forEach(function(r) {
+    var btn = r.querySelector('.mgr-remove-mvp');
+    if (btn) btn.style.display = rows.length > 1 ? 'block' : 'none';
+  });
+}
+function syncMgrPhoneMvp(sel) {
+  var row = sel.closest('.mgr-row-mvp');
+  if (row) { var ph = row.querySelector('.mgr-phone-mvp'); if (ph) ph.value = sel.value || ''; }
+}
+
+/* ── 分润比例上限校验 ── */
+function checkRatioMvp(input, errId) {
+  var v = parseFloat(input.value);
+  var err = document.getElementById(errId);
+  if (err) err.style.display = (!isNaN(v) && v > 80) ? 'block' : 'none';
 }
 
 /* 初始化 */
