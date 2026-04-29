@@ -333,8 +333,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <input id="mvp-withdraw-amt" type="number" placeholder="0.00" value="1500.00" style="width:100%;border:none;border-bottom:2px solid #e8e8e8;font-size:22px;font-weight:700;color:#1a1a1a;padding:4px 0;outline:none;background:transparent;"/>
               </div>
               <button onclick="applyWithdrawMvp()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(22,119,255,.3);">申请提现</button>
-              <!-- 校验 / 成功提示行 -->
-              <div id="mvp-withdraw-msg" style="display:none;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.6;"></div>
               <div style="font-size:10px;color:#888;margin-top:7px;line-height:1.7;">提现后 1-3 工作日到账 · <strong style="color:#d46b08;">须完成实名认证与电子签约后方可提现</strong></div>
               <!-- 演示按钮区 -->
               <div style="margin-top:10px;border-top:1px dashed #e8e8e8;padding-top:8px;">
@@ -577,6 +575,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
               我的
             </button>
+          </div>
+        </div>
+
+        <!-- ▸ 小程序内弹窗（校验提示 / 成功提示） -->
+        <div id="mp-dialog-mask" style="display:none;position:absolute;inset:0;z-index:200;background:rgba(0,0,0,.45);border-radius:44px;align-items:center;justify-content:center;">
+          <div style="background:#fff;border-radius:16px;width:76%;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.18);">
+            <div style="padding:22px 18px 14px;text-align:center;">
+              <div id="mp-dialog-icon" style="font-size:28px;margin-bottom:8px;"></div>
+              <div id="mp-dialog-title" style="font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:6px;"></div>
+              <div id="mp-dialog-body" style="font-size:12px;color:#666;line-height:1.7;"></div>
+            </div>
+            <div id="mp-dialog-btns" style="border-top:1px solid #f0f0f0;display:flex;">
+              <!-- 按钮由 JS 动态填充 -->
+            </div>
           </div>
         </div>
 
@@ -1597,62 +1609,114 @@ function confirmSysCode() {
 var _BALANCE = 3286.50;
 var _hasPendingWithdraw = false; /* 演示：是否存在待审核中的提现 */
 
-function _showWithdrawMsg(type, html) {
-  /* type: 'error' | 'warn' | 'success' */
-  var el = document.getElementById('mvp-withdraw-msg');
-  var styles = {
-    error:   'background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;',
-    warn:    'background:#fff7e6;color:#d46b08;border:1px solid #ffd591;',
-    success: 'background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;'
-  };
-  el.style.cssText = 'display:block;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.6;' + (styles[type] || styles.error);
-  el.innerHTML = html;
-  clearTimeout(el._timer);
-  if (type === 'success') {
-    el._timer = setTimeout(function(){ el.style.display = 'none'; }, 4000);
-  }
+/* ── 小程序内弹窗 ── */
+function _showMpDialog(opts) {
+  /* opts: { icon, title, body, type:'error'|'warn'|'success', buttons:[{label,primary,onClick}] } */
+  var mask   = document.getElementById('mp-dialog-mask');
+  var icons  = { error:'⚠️', warn:'⚠️', success:'✅' };
+  document.getElementById('mp-dialog-icon').textContent  = opts.icon  || icons[opts.type] || '💬';
+  document.getElementById('mp-dialog-title').textContent = opts.title || '';
+  document.getElementById('mp-dialog-body').textContent  = opts.body  || '';
+  /* 按钮 */
+  var btnsEl = document.getElementById('mp-dialog-btns');
+  btnsEl.innerHTML = '';
+  var btns = opts.buttons || [{ label:'我知道了', primary:true }];
+  btns.forEach(function(b, i) {
+    var btn = document.createElement('button');
+    btn.textContent = b.label;
+    btn.style.cssText = 'flex:1;border:none;padding:13px 0;font-size:14px;cursor:pointer;background:#fff;'
+      + (i > 0 ? 'border-left:1px solid #f0f0f0;' : '')
+      + (b.primary ? 'color:#1677ff;font-weight:700;' : 'color:#888;');
+    btn.onclick = function() {
+      mask.style.display = 'none';
+      if (b.onClick) b.onClick();
+    };
+    btnsEl.appendChild(btn);
+  });
+  mask.style.display = 'flex';
+}
+function _closeMpDialog() { document.getElementById('mp-dialog-mask').style.display = 'none'; }
+
+function _showWithdrawMsg(type, title, body, extraBtns) {
+  var btns = extraBtns || [];
+  btns.push({ label: '我知道了', primary: true });
+  _showMpDialog({ type: type, title: title, body: body, buttons: btns });
 }
 
 function applyWithdrawMvp() {
   /* 1. 认证校验 */
   if (!_mvpAuth) {
-    _showWithdrawMsg('error', '⚠️ <strong>尚未完成实名认证</strong><br>请前往「我的 → 认证/签约」完成认证后再申请提现。');
+    _showWithdrawMsg('error',
+      '尚未完成实名认证',
+      '请前往「我的 → 认证/签约」完成实名认证后，再申请提现。',
+      [{ label:'去认证', onClick: function(){ switchMpTab('mine'); openKycSheetMvp(); } }]
+    );
     return;
   }
   /* 2. 签约校验 */
   if (!_mvpSign) {
-    _showWithdrawMsg('warn', '⚠️ <strong>尚未完成电子签约</strong><br>请前往「我的 → 认证/签约」完成签约后再申请提现。');
+    _showWithdrawMsg('warn',
+      '尚未完成电子签约',
+      '认证已通过，还需完成电子签约后方可提现。',
+      [{ label:'去签约', onClick: function(){ switchMpTab('mine'); openKycSheetMvp(); } }]
+    );
     return;
   }
   /* 3. 待审核校验 */
   if (_hasPendingWithdraw) {
-    _showWithdrawMsg('warn', '⏳ <strong>已有提现申请待审核</strong><br>请等待当前申请审核完成后再次提交。');
+    _showWithdrawMsg('warn',
+      '已有提现申请待审核',
+      '请等待当前提现申请审核完成后，再次提交新的申请。'
+    );
     return;
   }
   /* 4. 金额校验 */
   var amt = parseFloat((document.getElementById('mvp-withdraw-amt').value || '0'));
   if (!amt || amt <= 0) {
-    _showWithdrawMsg('error', '⚠️ <strong>请输入提现金额</strong>');
+    _showWithdrawMsg('error', '请输入提现金额', '提现金额不能为空，请填写后重试。');
     return;
   }
   if (amt > _BALANCE) {
-    _showWithdrawMsg('error', '⚠️ <strong>提现金额超出可提现余额</strong><br>最多可提现 ¥' + _BALANCE.toFixed(2) + '，请修改后重试。');
+    _showWithdrawMsg('error',
+      '提现金额超出余额',
+      '最多可提现 ¥' + _BALANCE.toFixed(2) + '，请修改金额后重试。'
+    );
     return;
   }
   /* 5. 校验通过 */
-  _showWithdrawMsg('success', '✅ <strong>提现申请已提交！</strong><br>申请金额：¥' + amt.toFixed(2) + ' · 预计 1-3 工作日到账，审核结果将通过微信通知推送。');
+  _showMpDialog({
+    type: 'success',
+    icon: '✅',
+    title: '提现申请已提交',
+    body: '申请金额：¥' + amt.toFixed(2) + '\n预计 1-3 个工作日到账，审核结果将通过微信通知推送。',
+    buttons: [{ label:'知道了', primary: true }]
+  });
 }
 
-/* 演示按钮：强制触发各异常场景（不改变全局 KYC 状态） */
+/* 演示按钮：强制触发各异常场景 */
 function showAgentWithdrawGuard(scenario) {
   if (scenario === 'auth') {
-    _showWithdrawMsg('error', '⚠️ <strong>尚未完成实名认证</strong><br>请前往「我的 → 认证/签约」完成认证后再申请提现。');
+    _showWithdrawMsg('error',
+      '尚未完成实名认证',
+      '请前往「我的 → 认证/签约」完成实名认证后，再申请提现。',
+      [{ label:'去认证', onClick: function(){ switchMpTab('mine'); openKycSheetMvp(); } }]
+    );
   } else if (scenario === 'sign') {
-    _showWithdrawMsg('warn', '⚠️ <strong>尚未完成电子签约</strong><br>请前往「我的 → 认证/签约」完成签约后再申请提现。');
+    _showWithdrawMsg('warn',
+      '尚未完成电子签约',
+      '认证已通过，还需完成电子签约后方可提现。',
+      [{ label:'去签约', onClick: function(){ switchMpTab('mine'); openKycSheetMvp(); } }]
+    );
   } else if (scenario === 'over-balance') {
-    _showWithdrawMsg('error', '⚠️ <strong>提现金额超出可提现余额</strong><br>最多可提现 ¥3,286.50，请修改后重试。');
+    _showWithdrawMsg('error',
+      '提现金额超出余额',
+      '最多可提现 ¥3,286.50，请修改金额后重试。'
+    );
   } else if (scenario === 'pending') {
-    _showWithdrawMsg('warn', '⏳ <strong>已有提现申请待审核</strong><br>请等待当前申请审核完成后再次提交。');
+    _showWithdrawMsg('warn',
+      '已有提现申请待审核',
+      '请等待当前提现申请审核完成后，再次提交新的申请。'
+    );
   }
 }
 
