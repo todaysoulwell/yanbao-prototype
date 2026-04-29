@@ -388,7 +388,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              计费
+              分润
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -397,18 +397,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           </div>
         </div>
 
-        <!-- ▸ Tab：计费 -->
+        <!-- ▸ Tab：分润 -->
         <div id="mp-tab-profit" class="mp-page" style="display:none;">
           <div class="mp-header" style="background:linear-gradient(145deg,#0958d9 0%,#1677ff 100%);padding:14px 16px 16px;">
-            <div style="font-size:11px;opacity:.75;margin-bottom:3px;">计费记录</div>
-            <div style="font-size:16px;font-weight:700;">本月计费汇总</div>
+            <div style="font-size:11px;opacity:.75;margin-bottom:3px;">分润记录</div>
+            <div style="font-size:16px;font-weight:700;">本月分润汇总</div>
           </div>
           <div class="mp-body">
             <!-- 本月汇总卡 -->
             <div style="background:#fff;border-radius:12px;margin:10px 12px 8px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.06);">
-              <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">本月计费记录汇总</div>
+              <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">本月分润记录汇总</div>
               <div style="display:flex;gap:4px;margin-bottom:10px;">
-                <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#52c41a;">166</div><div style="font-size:9px;color:#888;">计费笔数</div></div>
+                <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#52c41a;">166</div><div style="font-size:9px;color:#888;">分润笔数</div></div>
                 <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#1677ff;">¥992</div><div style="font-size:9px;color:#888;">本月分润</div></div>
                 <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#fa8c16;">0</div><div style="font-size:9px;color:#888;">退款订单</div></div>
               </div>
@@ -431,10 +431,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
               </div>
             </div>
             <!-- 流水列表 -->
-            <div style="font-size:11px;font-weight:700;color:#555;padding:2px 14px 6px;">计费流水列表</div>
+            <div style="font-size:11px;font-weight:700;color:#555;padding:2px 14px 6px;">分润流水列表</div>
             <div style="background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);">
               <!-- 记录仪·智能服务 -->
-              <div class="mp-flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥29.9\n购买时间：2026-04-10 14:32\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
+              <div class="mp-flow-item" onclick="alert('分润详情\n产品：记录仪\n类型：智能服务 ¥29.9\n购买时间：2026-04-10 14:32\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
                 <div class="mp-fi-icon" style="background:#f6ffed;color:#52c41a;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
                 <div class="mp-fi-body">
                   <div class="mp-fi-title">智能服务订单</div>
@@ -444,7 +444,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥5.98</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
               </div>
               <!-- 货车ETC·轻卡 -->
-              <div class="mp-flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：轻卡普通货车\n激活时间：2026-04-10 11:05\n分润金额：¥8.00\n状态：正常')" style="cursor:pointer;">
+              <div class="mp-flow-item" onclick="alert('分润详情\n产品：货车ETC\n车型：轻卡普通货车\n激活时间：2026-04-10 11:05\n分润金额：¥8.00\n状态：正常')" style="cursor:pointer;">
                 <div class="mp-fi-icon" style="background:#fff7e6;color:#fa8c16;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
                 <div class="mp-fi-body">
                   <div class="mp-fi-title">货车ETC</div>
@@ -454,7 +454,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥8.00</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
               </div>
               <!-- 货车ETC·重卡 -->
-              <div class="mp-flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：重卡普通货车\n激活时间：2026-04-09 18:20\n分润金额：¥15.00\n状态：正常')" style="cursor:pointer;">
+              <div class="mp-flow-item" onclick="alert('分润详情\n产品：货车ETC\n车型：重卡普通货车\n激活时间：2026-04-09 18:20\n分润金额：¥15.00\n状态：正常')" style="cursor:pointer;">
                 <div class="mp-fi-icon" style="background:#fff7e6;color:#fa8c16;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
                 <div class="mp-fi-body">
                   <div class="mp-fi-title">货车ETC</div>
@@ -464,7 +464,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥15.00</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
               </div>
               <!-- 客车ETC·延保 -->
-              <div class="mp-flow-item" onclick="alert('计费详情\n类型：客车ETC-延保\n延保金额：¥29.9\n购买时间：2026-04-08 15:10\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
+              <div class="mp-flow-item" onclick="alert('分润详情\n类型：客车ETC-延保\n延保金额：¥29.9\n购买时间：2026-04-08 15:10\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
                 <div class="mp-fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
                 <div class="mp-fi-body">
                   <div class="mp-fi-title">客车ETC·延保</div>
@@ -474,7 +474,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#722ed1;">+¥5.98</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
               </div>
               <!-- 退款示例 -->
-              <div class="mp-flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥19.9\n退款时间：2026-04-08 11:03\n分润已扣回：−¥3.98\n状态：已退款')" style="cursor:pointer;background:#fff8f8;">
+              <div class="mp-flow-item" onclick="alert('分润详情\n产品：记录仪\n类型：智能服务 ¥19.9\n退款时间：2026-04-08 11:03\n分润已扣回：−¥3.98\n状态：已退款')" style="cursor:pointer;background:#fff8f8;">
                 <div class="mp-fi-icon" style="background:#fff1f0;color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
                 <div class="mp-fi-body">
                   <div class="mp-fi-title" style="color:#cf1322;">智能服务订单·退款</div>
@@ -484,7 +484,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#cf1322;">−¥3.98</div><span class="tag t-red" style="font-size:9px;">分润已扣回</span></div>
               </div>
             </div>
-            <div style="text-align:center;color:#bbb;font-size:11px;padding:4px 0 10px;">共 166 笔计费记录 · 上拉加载更多</div>
+            <div style="text-align:center;color:#bbb;font-size:11px;padding:4px 0 10px;">共 166 笔分润记录 · 上拉加载更多</div>
           </div>
           <div class="mp-tabbar">
             <button class="mp-tabbar-item" onclick="switchMpTab('account')">
@@ -493,7 +493,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
             <button class="mp-tabbar-item active" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              计费
+              分润
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -564,7 +564,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              计费
+              分润
             </button>
             <button class="mp-tabbar-item active" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1112,7 +1112,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         </table>
         <p style="font-weight:700;color:#333;margin-bottom:6px;">小程序同步说明</p>
         <ul style="margin:0 0 10px;padding-left:18px;font-size:12px;color:#555;line-height:1.85;">
-          <li>情形①②退款成功后，退款记录均需实时同步至代理小程序（如延保订单详情、计费Tab）</li>
+          <li>情形①②退款成功后，退款记录均需实时同步至代理小程序（如延保订单详情、分润Tab）</li>
           <li>情形②退款后，代理小程序分润流水增加「↩ 退款扣回」条目：红色背景、负数金额、标签「已退款」+「分润已扣回」</li>
           <li>情形②退款后，代理小程序首页/提现页的「可提现余额」需实时刷新（减去对应分润金额）</li>
           <li>情形③为纯线下流程，系统不自动变更代理余额，依赖运营与代理线下沟通完成</li>
