@@ -193,7 +193,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <tbody>
             <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">代理商小程序（账户 + 分润明细）</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-green">✅ 做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">仅代理商角色；含待提现、已提现、申请提现</td></tr>
             <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">代理商实名认证 + 电子签约</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-green">✅ 做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">提现前置；签约对接灵工平台</td></tr>
-            <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">微信订阅通知（分润/提现）</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-grey">❌ 不做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">二期；MVP 阶段暂不接入微信订阅通知</td></tr>
+            <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">微信订阅通知（分润/提现）</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-green">✅ 做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">分润入账、提现审核通过/未通过、打款到账</td></tr>
             <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">主管 / 销售小程序视图</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-grey">❌ 不做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">二期，权限暂不区分</td></tr>
             <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">渠道管理（分润配置 + 激活绑定率查询）</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-green">✅ 做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">列表展示各渠道激活绑定率、分润金额、销售人员；弹窗配置分润比例/金额；权限暂不区分销售/主管</td></tr>
             <tr><td style="padding:6px 10px;border:1px solid #e8e8e8;">渠道信息审核（系统审核码方式）</td><td style="padding:6px 10px;border:1px solid #e8e8e8;"><span class="tag t-green">✅ 做</span></td><td style="padding:6px 10px;border:1px solid #e8e8e8;">新建/变更敏感字段时需填写系统审核码方可生效，替代二期多人审批流</td></tr>
@@ -224,7 +224,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
     <details class="req-block">
       <summary>📱 微信订阅通知（代理商端）<span class="hint">（点击展开）</span></summary>
       <div class="req-content">
-        <div class="warn-box" style="margin-bottom:10px;background:#fff7e6;border-left-color:#fa8c16;">⚠ MVP 阶段暂不做微信订阅通知，本节内容仅供参考，延至二期实现。</div>
         <table style="width:100%;border-collapse:collapse;font-size:12px;">
           <thead><tr style="background:#f5f7fa;"><th style="padding:6px 10px;border:1px solid #e8e8e8;">#</th><th style="padding:6px 10px;border:1px solid #e8e8e8;">通知类型</th><th style="padding:6px 10px;border:1px solid #e8e8e8;">触发时机</th><th style="padding:6px 10px;border:1px solid #e8e8e8;">关键内容</th></tr></thead>
           <tbody>
@@ -938,8 +937,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
     <summary>📋 提现审核 · 产品需求<span class="hint">（点击展开）</span></summary>
     <div class="req-content">
       <div class="req-rule-item"><span class="rk">审核前置校验</span><span class="rv">运营点击「通过」前，系统自动校验代理商已完成<strong>实名认证</strong>且已完成<strong>电子签约</strong>；任一未完成则拦截并提示</span></div>
-      <div class="req-rule-item"><span class="rk">驳回须填原因</span><span class="rv">驳回时必须填写原因，原因写入记录（微信通知二期支持）</span></div>
-      <div class="req-rule-item"><span class="rk">通过后流程</span><span class="rv">审核通过 → 灵工平台打款（微信通知二期支持）</span></div>
+      <div class="req-rule-item"><span class="rk">驳回须填原因</span><span class="rv">驳回时必须填写原因，原因写入记录并下发微信通知给代理商</span></div>
+      <div class="req-rule-item"><span class="rk">通过后流程</span><span class="rv">审核通过 → 下发「审核通过」微信通知 → 灵工平台打款 → 打款成功后下发「提现到账」通知</span></div>
       <div class="req-rule-item"><span class="rk">退款限制联动</span><span class="rv">提现通过后对应订单不可线上退款（见「退款规则」页）</span></div>
     </div>
   </details>
