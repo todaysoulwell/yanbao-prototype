@@ -43,6 +43,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
 .fi-desc{font-size:11px;color:#999;margin-top:2px;}
 .fi-amt{font-size:13px;font-weight:700;color:#1677ff;white-space:nowrap;margin-left:8px;}
 .fi-amt-green{color:#52c41a;}
+/* ── 手机内 flow-item（对齐v2.0计费/流水样式） ── */
+.mp-flow-item{display:flex;align-items:flex-start;padding:10px 14px;border-bottom:1px solid #f5f5f5;gap:10px;cursor:default;}
+.mp-flow-item:last-child{border-bottom:none;}
+.mp-fi-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mp-fi-body{flex:1;min-width:0;}
+.mp-fi-title{font-size:12.5px;font-weight:700;color:#1a1a1a;margin-bottom:2px;}
+.mp-fi-desc{font-size:10.5px;color:#888;margin-bottom:3px;}
+.mp-fi-right{flex-shrink:0;text-align:right;min-width:52px;}
+.mp-fi-amt{font-size:13px;font-weight:700;}
+.mp-fi-time{font-size:10px;color:#aaa;margin-top:2px;}
+/* ── 手机内 steps ── */
+.mp-steps{display:flex;align-items:center;padding:10px 14px 6px;}
+.mp-step{display:flex;flex-direction:column;align-items:center;flex:1;font-size:9px;color:#888;}
+.mp-step-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-bottom:3px;}
+.mp-sd-done{background:#52c41a;color:#fff;}
+.mp-sd-now{background:#1677ff;color:#fff;}
+.mp-sd-wait{background:#e8e8e8;color:#999;}
+.mp-step-line{height:2px;flex:1;margin-bottom:18px;}
+.mp-sl-done{background:#52c41a;}
+.mp-sl-wait{background:#e8e8e8;}
 /* ── 余额卡 ── */
 .balance-card{background:linear-gradient(135deg,#1677ff,#36a3f7);border-radius:14px;padding:18px 18px 14px;color:#fff;margin:0 12px 10px;}
 .bc-label{font-size:11px;opacity:.8;margin-bottom:4px;}
@@ -287,83 +307,98 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="phone-status" style="background:linear-gradient(135deg,#0958d9,#1677ff);"><span style="font-weight:600;">9:41</span><div class="dyn-island" style="background:#0650c6;box-shadow:0 0 0 1.5px #0a3fa0;"></div><span style="display:flex;align-items:center;gap:5px;"><svg width="14" height="10" viewBox="0 0 14 10" fill="#fff"><rect x="0" y="4" width="2" height="6" rx="1"/><rect x="3" y="2.5" width="2" height="7.5" rx="1"/><rect x="6" y="1" width="2" height="9" rx="1"/><rect x="9" y="0" width="2" height="10" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M7.5 2.5C9.8 2.5 11.9 3.5 13.3 5.1L14.5 3.8C12.8 1.9 10.3.8 7.5.8s-5.3 1.1-7 3L1.7 5.1C3.1 3.5 5.2 2.5 7.5 2.5z" fill="#fff" opacity=".5"/><path d="M7.5 5.5c1.6 0 3 .7 4 1.8l1.2-1.3C11.2 4.4 9.4 3.8 7.5 3.8s-3.7.6-5.2 2.2L3.5 7.3c1-1.1 2.4-1.8 4-1.8z" fill="#fff" opacity=".75"/><path d="M7.5 8.5c.8 0 1.5.3 2 .9L11 8.1C10.1 7.1 8.8 6.5 7.5 6.5S4.9 7.1 4 8.1l1.5 1.3c.5-.6 1.2-.9 2-.9z" fill="#fff"/><circle cx="7.5" cy="10" r="1" fill="#fff"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="#fff" stroke-width="1" opacity=".4"/><rect x="1" y="2" width="17" height="8" rx="1.5" fill="#fff"/><path d="M23 4v4a2 2 0 000-4z" fill="#fff" opacity=".4"/></svg></span></div>
         <!-- ▸ Tab：账户 -->
         <div id="mp-tab-account" class="mp-page">
-          <!-- 头部 -->
-          <div class="mp-header" style="background:linear-gradient(145deg,#0958d9 0%,#1677ff 60%,#4096ff 100%);padding:14px 16px 28px;position:relative;">
+          <div class="mp-header" style="background:linear-gradient(145deg,#0958d9 0%,#1677ff 60%,#4096ff 100%);padding:14px 16px 28px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;">
               <div>
-                <div style="font-size:11px;opacity:.75;margin-bottom:2px;">代理商账户</div>
-                <div style="font-size:14px;font-weight:700;letter-spacing:.3px;">黄石新捷顺名车</div>
+                <div style="font-size:11px;opacity:.75;margin-bottom:2px;">分润账户</div>
+                <div style="font-size:14px;font-weight:700;">黄石新捷顺名车</div>
               </div>
               <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:14px;">🔔</div>
             </div>
           </div>
-          <!-- 余额卡（悬浮在 header 上） -->
+          <!-- 分润账户卡 -->
           <div style="margin:-18px 12px 0;position:relative;z-index:2;">
-            <div style="background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(22,119,255,.18);padding:16px 18px 14px;">
-              <div style="font-size:11px;color:#888;margin-bottom:4px;">待提现余额（元）</div>
-              <div style="font-size:30px;font-weight:800;color:#1a1a1a;letter-spacing:-1px;margin-bottom:12px;">3,680.00</div>
-              <div style="display:flex;gap:0;border-top:1px solid #f5f5f5;padding-top:10px;">
-                <div style="flex:1;text-align:center;">
-                  <div style="font-size:10px;color:#aaa;margin-bottom:3px;">累计分润</div>
-                  <div style="font-size:13px;font-weight:700;color:#333;">¥12,450.00</div>
-                </div>
-                <div style="width:1px;background:#f0f0f0;"></div>
-                <div style="flex:1;text-align:center;">
-                  <div style="font-size:10px;color:#aaa;margin-bottom:3px;">已提现</div>
-                  <div style="font-size:13px;font-weight:700;color:#333;">¥8,770.00</div>
+            <div style="background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(22,119,255,.18);padding:16px 18px 14px;border:1.5px solid #bae0ff;">
+              <div style="font-size:11px;color:#1677ff;font-weight:700;margin-bottom:4px;">💳 分润账户</div>
+              <div style="font-size:11px;color:#555;margin-bottom:3px;">可提现余额</div>
+              <div style="font-size:30px;font-weight:800;color:#1677ff;margin-bottom:8px;letter-spacing:-1px;">¥3,286.<span style="font-size:18px;">50</span></div>
+              <div style="display:flex;gap:10px;font-size:11px;color:#888;margin-bottom:14px;">
+                <span>本月新增 <strong style="color:#52c41a;">¥1,246</strong></span>
+                <span>·</span>
+                <span>累计提现 <strong style="color:#333;">¥8,500</strong></span>
+              </div>
+              <!-- 提现金额 -->
+              <div style="margin-bottom:8px;">
+                <div style="font-size:11px;color:#666;margin-bottom:4px;">提现金额</div>
+                <input id="mvp-withdraw-amt" type="number" placeholder="0.00" value="1500.00" style="width:100%;border:none;border-bottom:2px solid #e8e8e8;font-size:22px;font-weight:700;color:#1a1a1a;padding:4px 0;outline:none;background:transparent;"/>
+              </div>
+              <button onclick="showWithdrawApply()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(22,119,255,.3);">申请提现</button>
+              <div style="font-size:10px;color:#888;margin-top:7px;line-height:1.7;">提现后 1-3 工作日到账 · <strong style="color:#d46b08;">须完成实名认证与电子签约后方可提现</strong></div>
+              <!-- 演示按钮区 -->
+              <div style="margin-top:10px;border-top:1px dashed #e8e8e8;padding-top:8px;">
+                <div style="font-size:10px;color:#aaa;margin-bottom:6px;">▸ 演示：点击体验各异常场景弹窗</div>
+                <div style="display:flex;flex-wrap:wrap;gap:5px;">
+                  <button onclick="showAgentWithdrawGuard('auth')" style="flex:1;min-width:0;font-size:10px;padding:5px 3px;background:#fff7e6;color:#d46b08;border:1px solid #ffd591;border-radius:6px;cursor:pointer;">① 未认证</button>
+                  <button onclick="showAgentWithdrawGuard('sign')" style="flex:1;min-width:0;font-size:10px;padding:5px 3px;background:#e6f4ff;color:#1677ff;border:1px solid #91caff;border-radius:6px;cursor:pointer;">② 未签约</button>
+                  <button onclick="showAgentWithdrawGuard('over-balance')" style="flex:1;min-width:0;font-size:10px;padding:5px 3px;background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;border-radius:6px;cursor:pointer;">③ 超出余额</button>
+                  <button onclick="showAgentWithdrawGuard('pending')" style="flex:1;min-width:0;font-size:10px;padding:5px 3px;background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;">④ 待审核中</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="mp-body" style="padding-top:14px;">
-            <!-- 申请提现按钮 -->
-            <div style="padding:0 12px 12px;">
-              <button onclick="showWithdrawApply()" style="width:100%;padding:12px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;box-shadow:0 4px 12px rgba(22,119,255,.35);">申请提现</button>
-            </div>
             <!-- 提现记录 -->
-            <div class="mp-section">
-              <div class="mp-sec-title" style="display:flex;justify-content:space-between;align-items:center;">
-                <span>近期提现记录</span>
-                <span style="font-size:11px;color:#1677ff;font-weight:500;cursor:pointer;">全部</span>
-              </div>
-              <!-- 已到账 -->
-              <div class="fi-item">
-                <div style="width:32px;height:32px;border-radius:8px;background:#f6ffed;display:flex;align-items:center;justify-content:center;font-size:15px;margin-right:10px;flex-shrink:0;">💰</div>
-                <div class="fi-left">
-                  <div class="fi-main">提现申请</div>
-                  <div class="fi-desc">2026-04-20 · <span style="color:#52c41a;font-size:10px;font-weight:600;">● 已到账</span></div>
+            <div style="font-size:12px;font-weight:700;color:#555;padding:0 14px 8px;">提现记录</div>
+            <div style="background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);">
+              <div class="mp-flow-item">
+                <div class="mp-fi-icon" style="background:#f6ffed;color:#52c41a;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">申请金额：¥2,000.00</div>
+                  <div class="mp-fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
+                  <span class="tag t-green" style="font-size:9px;">已到账</span>
                 </div>
-                <div style="font-size:13px;font-weight:700;color:#52c41a;white-space:nowrap;margin-left:6px;">-¥2,000</div>
+                <div class="mp-fi-right"><div class="mp-fi-time">2026-04-08</div></div>
               </div>
-              <!-- 审核中 -->
-              <div class="fi-item">
-                <div style="width:32px;height:32px;border-radius:8px;background:#fff7e6;display:flex;align-items:center;justify-content:center;font-size:15px;margin-right:10px;flex-shrink:0;">⏳</div>
-                <div class="fi-left">
-                  <div class="fi-main">提现申请</div>
-                  <div class="fi-desc">2026-04-10 · <span style="color:#fa8c16;font-size:10px;font-weight:600;">● 审核中</span></div>
+              <div class="mp-flow-item">
+                <div class="mp-fi-icon" style="background:#f6ffed;color:#52c41a;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">申请金额：¥1,500.00</div>
+                  <div class="mp-fi-desc">灵工平台 · 已打款至尾号6688银行卡</div>
+                  <span class="tag t-green" style="font-size:9px;">已到账</span>
                 </div>
-                <div style="font-size:13px;font-weight:700;color:#fa8c16;white-space:nowrap;margin-left:6px;">-¥1,500</div>
+                <div class="mp-fi-right"><div class="mp-fi-time">2026-03-15</div></div>
               </div>
-              <!-- 已驳回 -->
-              <div class="fi-item">
-                <div style="width:32px;height:32px;border-radius:8px;background:#fff1f0;display:flex;align-items:center;justify-content:center;font-size:15px;margin-right:10px;flex-shrink:0;">✕</div>
-                <div class="fi-left">
-                  <div class="fi-main">提现申请</div>
-                  <div class="fi-desc">2026-03-28 · <span style="color:#ff4d4f;font-size:10px;font-weight:600;">● 已驳回</span> <span style="font-size:10px;color:#bbb;">金额超限</span></div>
+              <div class="mp-flow-item">
+                <div class="mp-fi-icon" style="background:#fff7e6;color:#fa8c16;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M6 2v6l4 4-4 4v6h12v-6l-4-4 4-4V2H6zm10 14.5V20H8v-3.5l4-4 4 4zM12 12l-4-4V4h8v4l-4 4z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">申请金额：¥1,500.00</div>
+                  <div class="mp-fi-desc">灵工平台 · 运营审核中</div>
+                  <span class="tag t-orange" style="font-size:9px;">审核中</span>
                 </div>
-                <div style="font-size:13px;font-weight:700;color:#ff4d4f;white-space:nowrap;margin-left:6px;">-¥5,000</div>
+                <div class="mp-fi-right"><div class="mp-fi-time">今天 10:21</div></div>
+              </div>
+            </div>
+            <!-- 提现步骤条 -->
+            <div style="background:#fff;border-radius:12px;margin:0 12px 10px;box-shadow:0 1px 6px rgba(0,0,0,.06);">
+              <div class="mp-steps">
+                <div class="mp-step"><div class="mp-step-dot mp-sd-done">✓</div><div>灵工注册</div></div>
+                <div class="mp-step-line mp-sl-done"></div>
+                <div class="mp-step"><div class="mp-step-dot mp-sd-now">2</div><div>申请提现</div></div>
+                <div class="mp-step-line mp-sl-wait"></div>
+                <div class="mp-step"><div class="mp-step-dot mp-sd-wait">3</div><div>运营审核</div></div>
+                <div class="mp-step-line mp-sl-wait"></div>
+                <div class="mp-step"><div class="mp-step-dot mp-sd-wait">4</div><div>打款到账</div></div>
               </div>
             </div>
           </div>
-          <!-- tabbar -->
-          <div class="mp-tabbar" style="padding-bottom:env(safe-area-inset-bottom);">
+          <div class="mp-tabbar">
             <button class="mp-tabbar-item active" onclick="switchMpTab('account')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="3" y="5" width="18" height="14" rx="3" fill="currentColor" opacity=".15"/><rect x="3" y="9" width="18" height="3" fill="currentColor"/><rect x="7" y="14" width="5" height="2" rx="1" fill="currentColor"/></svg>
               账户
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              分润明细
+              计费
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -372,70 +407,94 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           </div>
         </div>
 
-        <!-- ▸ Tab：分润明细 -->
+        <!-- ▸ Tab：计费 -->
         <div id="mp-tab-profit" class="mp-page" style="display:none;">
           <div class="mp-header" style="background:linear-gradient(145deg,#0958d9 0%,#1677ff 100%);padding:14px 16px 16px;">
-            <div style="font-size:11px;opacity:.75;margin-bottom:3px;">分润明细</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <div style="font-size:16px;font-weight:700;">共 24 笔入账</div>
-              <div style="font-size:11px;background:rgba(255,255,255,.2);border-radius:20px;padding:2px 10px;">本月 ¥239.50</div>
-            </div>
+            <div style="font-size:11px;opacity:.75;margin-bottom:3px;">计费记录</div>
+            <div style="font-size:16px;font-weight:700;">本月计费汇总</div>
           </div>
           <div class="mp-body">
-            <!-- 筛选 Tabs（胶囊式） -->
-            <div style="display:flex;gap:6px;padding:10px 12px 4px;overflow-x:auto;">
-              <button style="padding:5px 14px;background:#1677ff;color:#fff;border:none;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">全部</button>
-              <button style="padding:5px 14px;background:#fff;color:#555;border:1px solid #e8e8e8;border-radius:20px;font-size:11px;cursor:pointer;white-space:nowrap;">记录仪</button>
-              <button style="padding:5px 14px;background:#fff;color:#555;border:1px solid #e8e8e8;border-radius:20px;font-size:11px;cursor:pointer;white-space:nowrap;">客车ETC</button>
-              <button style="padding:5px 14px;background:#fff;color:#555;border:1px solid #e8e8e8;border-radius:20px;font-size:11px;cursor:pointer;white-space:nowrap;">货车ETC</button>
-            </div>
-            <div class="mp-section" style="padding:4px 14px;">
-              <!-- 记录仪条目 -->
-              <div class="fi-item" style="align-items:center;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#722ed1;margin-right:10px;flex-shrink:0;"></div>
-                <div class="fi-left">
-                  <div class="fi-main" style="display:flex;align-items:center;gap:5px;">智能服务分润 <span class="tag t-purple" style="font-size:9px;padding:1px 5px;">记录仪</span></div>
-                  <div class="fi-desc">IMEI: 867···321 · 04-22 14:30</div>
-                </div>
-                <div class="fi-amt" style="color:#1677ff;">+¥29.90</div>
+            <!-- 本月汇总卡 -->
+            <div style="background:#fff;border-radius:12px;margin:10px 12px 8px;padding:12px 14px;box-shadow:0 1px 6px rgba(0,0,0,.06);">
+              <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">本月计费记录汇总</div>
+              <div style="display:flex;gap:4px;margin-bottom:10px;">
+                <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#52c41a;">166</div><div style="font-size:9px;color:#888;">计费笔数</div></div>
+                <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#1677ff;">¥992</div><div style="font-size:9px;color:#888;">本月分润</div></div>
+                <div style="flex:1;text-align:center;"><div style="font-size:18px;font-weight:800;color:#fa8c16;">0</div><div style="font-size:9px;color:#888;">退款订单</div></div>
               </div>
-              <!-- 客车ETC条目 -->
-              <div class="fi-item" style="align-items:center;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1677ff;margin-right:10px;flex-shrink:0;"></div>
-                <div class="fi-left">
-                  <div class="fi-main" style="display:flex;align-items:center;gap:5px;">延保服务分润 <span class="tag t-blue" style="font-size:9px;padding:1px 5px;">客车ETC</span></div>
-                  <div class="fi-desc">SN: ETC···882 · 04-21 09:15</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+                <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:7px;padding:6px 4px;text-align:center;">
+                  <div style="font-size:15px;font-weight:800;color:#52c41a;">90</div>
+                  <div style="font-size:8px;color:#52c41a;line-height:1.3;">📷 记录仪</div>
+                  <div style="font-size:8px;color:#888;">智能服务</div>
                 </div>
-                <div class="fi-amt" style="color:#1677ff;">+¥59.80</div>
-              </div>
-              <!-- 货车ETC条目 -->
-              <div class="fi-item" style="align-items:center;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#fa8c16;margin-right:10px;flex-shrink:0;"></div>
-                <div class="fi-left">
-                  <div class="fi-main" style="display:flex;align-items:center;gap:5px;">激活分润 <span class="tag t-orange" style="font-size:9px;padding:1px 5px;">货车ETC</span></div>
-                  <div class="fi-desc">华联店 · 重卡 · 04-20 16:40</div>
+                <div style="background:#fff7e6;border:1px solid #ffd591;border-radius:7px;padding:6px 4px;text-align:center;">
+                  <div style="font-size:15px;font-weight:800;color:#fa8c16;">55</div>
+                  <div style="font-size:8px;color:#fa8c16;line-height:1.3;">🚛 货车ETC</div>
+                  <div style="font-size:8px;color:#888;">设备激活</div>
                 </div>
-                <div class="fi-amt" style="color:#1677ff;">+¥120.00</div>
-              </div>
-              <!-- 记录仪条目2 -->
-              <div class="fi-item" style="align-items:center;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#722ed1;margin-right:10px;flex-shrink:0;"></div>
-                <div class="fi-left">
-                  <div class="fi-main" style="display:flex;align-items:center;gap:5px;">智能服务分润 <span class="tag t-purple" style="font-size:9px;padding:1px 5px;">记录仪</span></div>
-                  <div class="fi-desc">IMEI: 867···109 · 04-19 11:22</div>
+                <div style="background:#e6f4ff;border:1px solid #91caff;border-radius:7px;padding:6px 4px;text-align:center;">
+                  <div style="font-size:15px;font-weight:800;color:#1677ff;">21</div>
+                  <div style="font-size:8px;color:#1677ff;line-height:1.3;">🚌 客车ETC</div>
+                  <div style="font-size:8px;color:#888;">延保</div>
                 </div>
-                <div class="fi-amt" style="color:#1677ff;">+¥29.90</div>
-              </div>
-              <!-- 客车ETC条目2 -->
-              <div class="fi-item" style="align-items:center;border-bottom:none;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1677ff;margin-right:10px;flex-shrink:0;"></div>
-                <div class="fi-left">
-                  <div class="fi-main" style="display:flex;align-items:center;gap:5px;">延保服务分润 <span class="tag t-blue" style="font-size:9px;padding:1px 5px;">客车ETC</span></div>
-                  <div class="fi-desc">SN: ETC···441 · 04-18 10:05</div>
-                </div>
-                <div class="fi-amt" style="color:#1677ff;">+¥39.90</div>
               </div>
             </div>
+            <!-- 流水列表 -->
+            <div style="font-size:11px;font-weight:700;color:#555;padding:2px 14px 6px;">计费流水列表</div>
+            <div style="background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);">
+              <!-- 记录仪·智能服务 -->
+              <div class="mp-flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥29.9\n购买时间：2026-04-10 14:32\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
+                <div class="mp-fi-icon" style="background:#f6ffed;color:#52c41a;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm0 1.8a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm6.5-12.5h-2.17l-1.24-1.35A2 2 0 0 0 13.63 2h-3.26c-.56 0-1.1.24-1.46.65L7.67 4H5.5A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5v-11A2.5 2.5 0 0 0 18.5 4.5z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">智能服务订单</div>
+                  <div class="mp-fi-desc">智能服务 ¥29.9 · 2026-04-10 14:32</div>
+                  <span class="tag t-green" style="font-size:9px;">记录仪·订单</span>
+                </div>
+                <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥5.98</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
+              </div>
+              <!-- 货车ETC·轻卡 -->
+              <div class="mp-flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：轻卡普通货车\n激活时间：2026-04-10 11:05\n分润金额：¥8.00\n状态：正常')" style="cursor:pointer;">
+                <div class="mp-fi-icon" style="background:#fff7e6;color:#fa8c16;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">货车ETC</div>
+                  <div class="mp-fi-desc">轻卡普通货车 · 设备激活 · 04-10 11:05</div>
+                  <span class="tag t-orange" style="font-size:9px;">货车ETC·激活</span> <span style="padding:1px 4px;border-radius:8px;font-size:9px;font-weight:600;background:#fff2e8;color:#d4380d;border:1px solid #ffbb96;">轻卡</span>
+                </div>
+                <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥8.00</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
+              </div>
+              <!-- 货车ETC·重卡 -->
+              <div class="mp-flow-item" onclick="alert('计费详情\n产品：货车ETC\n车型：重卡普通货车\n激活时间：2026-04-09 18:20\n分润金额：¥15.00\n状态：正常')" style="cursor:pointer;">
+                <div class="mp-fi-icon" style="background:#fff7e6;color:#fa8c16;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">货车ETC</div>
+                  <div class="mp-fi-desc">重卡普通货车 · 设备激活 · 04-09 18:20</div>
+                  <span class="tag t-orange" style="font-size:9px;">货车ETC·激活</span> <span style="padding:1px 4px;border-radius:8px;font-size:9px;font-weight:600;background:#fff2e8;color:#d4380d;border:1px solid #ffbb96;">重卡</span>
+                </div>
+                <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#52c41a;">+¥15.00</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
+              </div>
+              <!-- 客车ETC·延保 -->
+              <div class="mp-flow-item" onclick="alert('计费详情\n类型：客车ETC-延保\n延保金额：¥29.9\n购买时间：2026-04-08 15:10\n分润金额：¥5.98\n状态：正常')" style="cursor:pointer;">
+                <div class="mp-fi-icon" style="background:#f9f0ff;color:#722ed1;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title">客车ETC·延保</div>
+                  <div class="mp-fi-desc">延保 ¥29.9 · 2026-04-08 15:10</div>
+                  <span class="tag" style="background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7;font-size:9px;">客车ETC-延保</span>
+                </div>
+                <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#722ed1;">+¥5.98</div><span class="tag t-green" style="font-size:9px;">正常</span></div>
+              </div>
+              <!-- 退款示例 -->
+              <div class="mp-flow-item" onclick="alert('计费详情\n产品：记录仪\n类型：智能服务 ¥19.9\n退款时间：2026-04-08 11:03\n分润已扣回：−¥3.98\n状态：已退款')" style="cursor:pointer;background:#fff8f8;">
+                <div class="mp-fi-icon" style="background:#fff1f0;color:#cf1322;"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
+                <div class="mp-fi-body">
+                  <div class="mp-fi-title" style="color:#cf1322;">智能服务订单·退款</div>
+                  <div class="mp-fi-desc">智能服务 ¥19.9 · 退款时间：04-08 11:03</div>
+                  <span class="tag t-green" style="font-size:9px;">记录仪·订单</span> <span class="tag t-red" style="font-size:9px;margin-left:3px;">已退款</span>
+                </div>
+                <div class="mp-fi-right"><div class="mp-fi-amt" style="color:#cf1322;">−¥3.98</div><span class="tag t-red" style="font-size:9px;">分润已扣回</span></div>
+              </div>
+            </div>
+            <div style="text-align:center;color:#bbb;font-size:11px;padding:4px 0 10px;">共 166 笔计费记录 · 上拉加载更多</div>
           </div>
           <div class="mp-tabbar">
             <button class="mp-tabbar-item" onclick="switchMpTab('account')">
@@ -444,7 +503,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
             <button class="mp-tabbar-item active" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              分润明细
+              计费
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -455,48 +514,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
 
         <!-- ▸ Tab：我的 -->
         <div id="mp-tab-mine" class="mp-page" style="display:none;">
-          <!-- 头部 + 头像 -->
-          <div style="background:linear-gradient(145deg,#0958d9,#1677ff);padding:14px 16px 32px;">
-            <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:12px;">个人中心</div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;">黄</div>
-              <div>
-                <div style="font-size:15px;font-weight:700;color:#fff;">黄石新捷顺名车</div>
-                <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;">139****9920</div>
-              </div>
+          <div style="background:linear-gradient(145deg,#0958d9,#1677ff);padding:14px 16px 16px;"></div>
+          <div class="mp-body" style="margin-top:0;">
+            <!-- 头像 + 渠道名 居中卡片 -->
+            <div style="text-align:center;padding:20px 0 14px;">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#1677ff,#4096ff);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px;">🏪</div>
+              <div style="font-size:16px;font-weight:800;color:#1a1a1a;margin-bottom:5px;">黄石新捷顺名车</div>
+              <span class="tag t-blue">一级代理</span>
             </div>
-          </div>
-          <div class="mp-body" style="margin-top:-18px;">
-            <!-- 认证签约入口（单行，点击打开内页） -->
-            <div onclick="openKycSheetMvp()" style="background:#fff;border-radius:14px;margin:0 12px 10px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;cursor:pointer;">
-              <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <div style="width:34px;height:34px;border-radius:10px;background:#e6f4ff;display:flex;align-items:center;justify-content:center;font-size:16px;">📋</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:700;color:#1a1a1a;">认证 / 签约</div>
-                    <div style="font-size:10px;color:#aaa;margin-top:2px;">灵工实名资料与电子签约</div>
-                  </div>
+            <!-- 认证/签约入口 -->
+            <div onclick="openKycSheetMvp()" style="background:#fff;border-radius:12px;margin:0 12px 10px;box-shadow:0 1px 6px rgba(0,0,0,.06);overflow:hidden;cursor:pointer;">
+              <div style="padding:13px 14px;display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:#333;">认证 / 签约</div>
+                  <div style="font-size:11px;color:#888;margin-top:2px;">灵工实名资料与电子签约</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span id="mvp-kyc-brief" style="font-size:11px;color:#fa8c16;font-weight:600;">未认证 · 未签约</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#bbb" stroke-width="2" stroke-linecap="round"/></svg>
+                <div style="text-align:right;">
+                  <div id="mvp-kyc-brief" style="font-size:11px;color:#fa8c16;font-weight:600;">未认证 · 未签约</div>
+                  <div style="font-size:16px;color:#bbb;margin-top:1px;">›</div>
                 </div>
               </div>
             </div>
-            <!-- 账号基本信息 -->
-            <div style="background:#fff;border-radius:14px;margin:0 12px 10px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;">
-              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f5f5f5;">
-                <span style="font-size:12px;color:#888;">登录手机号</span>
-                <span style="font-size:12px;font-weight:600;color:#333;font-family:monospace;">139****9920</span>
-              </div>
-              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f5f5f5;">
-                <span style="font-size:12px;color:#888;">所属渠道</span>
-                <span style="font-size:12px;color:#333;">黄石新捷顺名车</span>
-              </div>
-              <div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-size:12px;color:#888;">账号状态</span>
-                <span class="tag t-green" style="font-size:10px;">正常</span>
-              </div>
+            <!-- 账号信息卡片 -->
+            <div style="background:#fff;border-radius:12px;margin:0 12px 10px;box-shadow:0 1px 6px rgba(0,0,0,.06);overflow:hidden;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">登录手机号</span><span style="font-size:12px;font-weight:600;color:#333;font-family:monospace;">139****9920</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">代理渠道</span><span style="font-size:12px;color:#333;">黄石新捷顺名车</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">负责销售</span><span style="font-size:12px;color:#333;">张明</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">分润比例</span><span style="font-size:12px;font-weight:700;color:#1677ff;">20%</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">账号状态</span><span class="tag t-green" style="font-size:10px;">正常</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;"><span style="font-size:12px;color:#888;">系统版本</span><span style="font-size:12px;color:#bbb;">V1.0</span></div>
             </div>
           </div>
           <div class="mp-tabbar">
@@ -506,7 +552,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             </button>
             <button class="mp-tabbar-item" onclick="switchMpTab('profit')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><rect x="4" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="16" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-              分润明细
+              计费
             </button>
             <button class="mp-tabbar-item active" onclick="switchMpTab('mine')">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-bottom:2px;"><circle cx="12" cy="8" r="4" fill="currentColor" opacity=".7"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
