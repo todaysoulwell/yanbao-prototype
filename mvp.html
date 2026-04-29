@@ -592,151 +592,101 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           </div>
         </div>
 
-        <!-- ▸ 认证/签约 · 全屏内页（手机壳内覆盖层） -->
-        <div id="mvp-kyc-sheet" style="display:none;position:absolute;inset:0;z-index:80;background:#f7f8fa;flex-direction:column;border-radius:44px;overflow:hidden;">
+        <!-- ▸ 认证/签约 · 全屏内页 -->
+        <div id="mvp-kyc-sheet" style="display:none;position:absolute;inset:0;z-index:80;background:#f2f2f2;flex-direction:column;border-radius:44px;overflow:hidden;">
           <!-- 顶栏 -->
-          <div style="flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid #eee;">
-            <button type="button" onclick="closeKycSheetMvp()" style="border:none;background:#f0f2f5;color:#333;font-size:18px;width:34px;height:34px;border-radius:10px;cursor:pointer;line-height:1;">‹</button>
-            <div style="flex:1;">
-              <div style="font-size:14px;font-weight:800;color:#1a1a1a;">认证 / 签约</div>
-              <div style="font-size:10px;color:#888;margin-top:1px;">完成认证并签约后可申请提现</div>
-            </div>
+          <div style="flex-shrink:0;display:flex;align-items:center;padding:12px 14px 10px;background:#fff;">
+            <button type="button" onclick="closeKycSheetMvp()" style="border:none;background:none;font-size:22px;color:#333;padding:0 10px 0 0;cursor:pointer;line-height:1;">‹</button>
+            <div style="flex:1;text-align:center;font-size:16px;font-weight:700;color:#1a1a1a;margin-right:24px;">个人信息</div>
           </div>
-          <!-- 内容区 -->
-          <div style="flex:1;overflow-y:auto;padding:12px 12px 20px;">
-            <!-- 演示：内页状态切换 -->
-            <div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:10px;padding:8px 10px;margin-bottom:10px;">
-              <div style="font-size:10px;color:#ad8b00;margin-bottom:6px;">● 演示状态切换</div>
-              <div style="display:flex;gap:6px;">
-                <button id="mvp-demo-s1b" onclick="setKycStateMvp(false,false)"
-                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #1677ff;background:#1677ff;color:#fff;cursor:pointer;line-height:1.4;">
-                  ① 未认证<br>未签约
-                </button>
-                <button id="mvp-demo-s2b" onclick="setKycStateMvp(true,false)"
-                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
-                  ② 已认证<br>未签约
-                </button>
-                <button id="mvp-demo-s3b" onclick="setKycStateMvp(true,true)"
-                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
-                  ③ 已认证<br>已签约
-                </button>
+          <!-- 签约成功横幅（已签约时显示） -->
+          <div id="mvp-sign-done-bar" style="display:none;flex-shrink:0;background:#52c41a;padding:7px 14px;text-align:center;font-size:12px;font-weight:700;color:#fff;">签约成功，可正常提现</div>
+          <!-- 警告提示 -->
+          <div style="flex-shrink:0;background:#fff7e6;padding:8px 14px;display:flex;align-items:flex-start;gap:6px;border-bottom:1px solid #ffe58f;">
+            <span style="color:#fa8c16;font-size:13px;flex-shrink:0;">!</span>
+            <span style="font-size:11px;color:#d46b08;line-height:1.6;">注：登录手机号、身份证、银行卡办理人姓名必须保持一致，否则数据错误无效</span>
+          </div>
+          <!-- 演示切换条 -->
+          <div style="flex-shrink:0;background:#f7f7f7;padding:5px 14px;display:flex;align-items:center;gap:5px;border-bottom:1px solid #eee;">
+            <span style="font-size:9px;color:#bbb;flex-shrink:0;">演示</span>
+            <button id="mvp-demo-s1b" onclick="setKycStateMvp(false,false)" style="flex:1;font-size:9px;padding:3px 0;border-radius:5px;border:1px solid #1677ff;background:#1677ff;color:#fff;cursor:pointer;">①未认证</button>
+            <button id="mvp-demo-s2b" onclick="setKycStateMvp(true,false)"  style="flex:1;font-size:9px;padding:3px 0;border-radius:5px;border:1px solid #d9d9d9;background:#fff;color:#555;cursor:pointer;">②已认证</button>
+            <button id="mvp-demo-s3b" onclick="setKycStateMvp(true,true)"   style="flex:1;font-size:9px;padding:3px 0;border-radius:5px;border:1px solid #d9d9d9;background:#fff;color:#555;cursor:pointer;">③已签约</button>
+          </div>
+          <!-- 表单列表 -->
+          <div style="flex:1;overflow-y:auto;padding-bottom:80px;">
+            <div style="background:#fff;margin-top:10px;">
+              <!-- 姓名 -->
+              <div style="display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #f5f5f5;">
+                <span style="width:64px;font-size:13px;color:#555;flex-shrink:0;">姓名</span>
+                <input id="mvp-kyc-name" type="text" placeholder="与身份证一致"
+                  style="flex:1;border:none;outline:none;font-size:13px;color:#1a1a1a;background:transparent;" />
+              </div>
+              <!-- 门店（只读） -->
+              <div style="display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #f5f5f5;">
+                <span style="width:64px;font-size:13px;color:#555;flex-shrink:0;">门店</span>
+                <span style="flex:1;font-size:13px;color:#1a1a1a;">速递 · 清河门店</span>
+              </div>
+              <!-- 开户行 -->
+              <div style="display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #f5f5f5;">
+                <span style="width:64px;font-size:13px;color:#555;flex-shrink:0;">开户行</span>
+                <input id="mvp-kyc-bank" type="text" placeholder="例：中国银行××支行"
+                  style="flex:1;border:none;outline:none;font-size:13px;color:#1a1a1a;background:transparent;" />
+                <svg id="mvp-bank-edit" width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;color:#bbb;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+              </div>
+              <!-- 银行卡号 -->
+              <div style="display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid #f5f5f5;">
+                <span style="width:64px;font-size:13px;color:#555;flex-shrink:0;">银行卡号</span>
+                <input id="mvp-kyc-cardno" type="text" placeholder="请填写银行卡号"
+                  style="flex:1;border:none;outline:none;font-size:13px;color:#1a1a1a;background:transparent;" />
+                <svg id="mvp-card-edit" width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;color:#bbb;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+              </div>
+              <!-- 身份证号 -->
+              <div style="display:flex;align-items:center;padding:13px 14px;">
+                <span style="width:64px;font-size:13px;color:#555;flex-shrink:0;">身份证号</span>
+                <input id="mvp-kyc-idno" type="text" placeholder="请输入身份证号"
+                  style="flex:1;border:none;outline:none;font-size:13px;color:#1a1a1a;background:transparent;" />
               </div>
             </div>
-            <!-- 当前状态卡片 -->
-            <div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:8px;">当前状态</div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <span style="font-size:12px;color:#555;">认证状态</span>
-                <span id="mvp-tag-auth" class="tag t-orange" style="font-size:10px;">未认证</span>
-                <div style="width:1px;height:14px;background:#e8e8e8;"></div>
-                <span style="font-size:12px;color:#555;">签约状态</span>
-                <span id="mvp-tag-sign" class="tag t-orange" style="font-size:10px;">未签约</span>
-              </div>
-            </div>
-            <!-- 已全部完成（隐藏，完成后显示） -->
-            <div id="mvp-kyc-all-done" style="display:none;background:#f6ffed;border:1px solid #b7eb8f;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
-              <div style="font-size:13px;font-weight:700;color:#389e0d;margin-bottom:5px;">✅ 已完成认证与签约</div>
-              <div style="font-size:12px;color:#555;line-height:1.75;">您可前往「账户」页申请提现。提现仍须经运营审核及灵工打款流程。</div>
-            </div>
-            <!-- 实名认证表单（未认证时展示） -->
-            <div id="mvp-kyc-form-wrap" style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-              <div style="font-size:12px;font-weight:700;color:#1677ff;background:#f0f5ff;border-left:3px solid #1677ff;padding:4px 8px;border-radius:0 5px 5px 0;margin-bottom:12px;">实名信息</div>
-              <div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 姓名</div>
-                <input id="mvp-kyc-name" type="text" placeholder="与身份证一致" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box;"/>
-              </div>
-              <div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 开户行</div>
-                <input id="mvp-kyc-bank" type="text" placeholder="例：中国工商银行××支行" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box;"/>
-              </div>
-              <div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 银行卡号</div>
-                <input id="mvp-kyc-cardno" type="text" placeholder="请填写银行卡号" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box;"/>
-              </div>
-              <div style="margin-bottom:12px;">
-                <div style="font-size:11px;color:#666;margin-bottom:4px;"><span style="color:#ff4d4f;">*</span> 身份证号</div>
-                <input id="mvp-kyc-idno" type="text" placeholder="18位身份证号码" style="width:100%;padding:9px 10px;border:1px solid #e8e8e8;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box;"/>
-              </div>
-              <div style="font-size:11px;color:#666;margin-bottom:6px;font-weight:600;">身份证照片（<span style="color:#ff4d4f;">*</span>正反面）</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-                <div>
-                  <div style="font-size:10px;color:#888;margin-bottom:3px;">人像面</div>
-                  <div style="border:1px dashed #d9d9d9;border-radius:8px;padding:14px 8px;text-align:center;font-size:11px;color:#1677ff;cursor:pointer;background:#fafafa;">📷<br/>点击上传</div>
-                </div>
-                <div>
-                  <div style="font-size:10px;color:#888;margin-bottom:3px;">国徽面</div>
-                  <div style="border:1px dashed #d9d9d9;border-radius:8px;padding:14px 8px;text-align:center;font-size:11px;color:#1677ff;cursor:pointer;background:#fafafa;">📷<br/>点击上传</div>
-                </div>
-              </div>
-              <button type="button" onclick="submitKycFormMvp()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">提交认证资料</button>
-              <div id="mvp-kyc-err" style="display:none;margin-top:8px;font-size:11px;color:#ff4d4f;text-align:center;"></div>
-            </div>
-            <!-- 已认证信息展示（已认证时显示，替代表单） -->
-            <div id="mvp-kyc-info-view" style="display:none;background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                <div style="font-size:12px;font-weight:700;color:#389e0d;background:#f6ffed;border-left:3px solid #52c41a;padding:4px 8px;border-radius:0 5px 5px 0;">实名信息（已认证）</div>
-                <span class="tag t-green" style="font-size:10px;">审核通过</span>
-              </div>
-              <!-- 字段行 -->
-              <div style="border-radius:8px;overflow:hidden;border:1px solid #f0f0f0;">
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f5f5f5;background:#fafafa;">
-                  <span style="font-size:11px;color:#888;flex-shrink:0;width:56px;">姓　　名</span>
-                  <span style="font-size:13px;color:#1a1a1a;font-weight:600;" id="mvp-info-name">张　明</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f5f5f5;">
-                  <span style="font-size:11px;color:#888;flex-shrink:0;width:56px;">开　户　行</span>
-                  <span style="font-size:12px;color:#333;" id="mvp-info-bank">中国工商银行武汉汉阳支行</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #f5f5f5;background:#fafafa;">
-                  <span style="font-size:11px;color:#888;flex-shrink:0;width:56px;">银行卡号</span>
-                  <span style="font-size:13px;color:#333;letter-spacing:1px;font-family:monospace;" id="mvp-info-card">6222 **** **** 8831</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;">
-                  <span style="font-size:11px;color:#888;flex-shrink:0;width:56px;">身份证号</span>
-                  <span style="font-size:12px;color:#333;letter-spacing:.5px;" id="mvp-info-idno">420***********0014</span>
-                </div>
-              </div>
-              <!-- 身份证照片 -->
-              <div style="margin-top:12px;">
-                <div style="font-size:11px;color:#666;margin-bottom:8px;font-weight:600;">身份证照片</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                  <div>
-                    <div style="font-size:10px;color:#888;margin-bottom:4px;">人像面</div>
-                    <div style="border-radius:8px;overflow:hidden;background:#f5f5f5;height:72px;display:flex;align-items:center;justify-content:center;border:1px solid #e8e8e8;">
-                      <svg width="38" height="28" viewBox="0 0 38 28" fill="none">
-                        <rect width="38" height="28" rx="4" fill="#e0e0e0"/>
-                        <circle cx="14" cy="11" r="5" fill="#bdbdbd"/>
-                        <path d="M4 24c0-5 4.5-9 10-9s10 4 10 9" fill="#bdbdbd"/>
-                        <rect x="26" y="8" width="8" height="2" rx="1" fill="#bdbdbd"/>
-                        <rect x="26" y="12" width="8" height="2" rx="1" fill="#bdbdbd"/>
-                        <rect x="26" y="16" width="5" height="2" rx="1" fill="#bdbdbd"/>
-                      </svg>
-                    </div>
-                    <div style="font-size:9px;color:#52c41a;text-align:center;margin-top:3px;">✓ 已上传</div>
+            <!-- 身份证照片 -->
+            <div style="background:#fff;margin-top:10px;padding:14px;">
+              <div style="font-size:13px;color:#555;margin-bottom:10px;">办理身份证</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <!-- 人像面 -->
+                <div id="mvp-id-front-wrap">
+                  <div style="border:1px dashed #d9d9d9;border-radius:8px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;">
+                    <div style="font-size:26px;color:#d9d9d9;line-height:1;">+</div>
+                    <div style="font-size:10px;color:#aaa;margin-top:4px;text-align:center;">上传身份证<br>人像面</div>
                   </div>
-                  <div>
-                    <div style="font-size:10px;color:#888;margin-bottom:4px;">国徽面</div>
-                    <div style="border-radius:8px;overflow:hidden;background:#f5f5f5;height:72px;display:flex;align-items:center;justify-content:center;border:1px solid #e8e8e8;">
-                      <svg width="38" height="28" viewBox="0 0 38 28" fill="none">
-                        <rect width="38" height="28" rx="4" fill="#e0e0e0"/>
-                        <circle cx="19" cy="11" r="7" fill="none" stroke="#bdbdbd" stroke-width="2"/>
-                        <circle cx="19" cy="11" r="3" fill="#bdbdbd"/>
-                        <path d="M10 24c0-4 4-7 9-7s9 3 9 7" fill="#bdbdbd"/>
-                      </svg>
-                    </div>
-                    <div style="font-size:9px;color:#52c41a;text-align:center;margin-top:3px;">✓ 已上传</div>
+                  <div id="mvp-id-front-done" style="display:none;border-radius:8px;height:80px;background:#f0f9eb;border:1px solid #b7eb8f;display:none;align-items:center;justify-content:center;flex-direction:column;">
+                    <div style="font-size:22px;">🪪</div>
+                    <div style="font-size:10px;color:#52c41a;margin-top:2px;">✓ 已上传</div>
+                  </div>
+                </div>
+                <!-- 国徽面 -->
+                <div id="mvp-id-back-wrap">
+                  <div style="border:1px dashed #d9d9d9;border-radius:8px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#fafafa;">
+                    <div style="font-size:26px;color:#d9d9d9;line-height:1;">+</div>
+                    <div style="font-size:10px;color:#aaa;margin-top:4px;text-align:center;">上传身份证<br>国徽面</div>
+                  </div>
+                  <div id="mvp-id-back-done" style="display:none;border-radius:8px;height:80px;background:#f0f9eb;border:1px solid #b7eb8f;display:none;align-items:center;justify-content:center;flex-direction:column;">
+                    <div style="font-size:22px;">🪪</div>
+                    <div style="font-size:10px;color:#52c41a;margin-top:2px;">✓ 已上传</div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- 电子签约（认证通过后展示） -->
-            <div id="mvp-sign-block" style="display:none;background:#fff7e6;border:1px solid #ffd591;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
-              <div style="font-size:13px;font-weight:700;color:#873800;margin-bottom:8px;">下一步：电子签约</div>
-              <p style="font-size:12px;color:#873800;line-height:1.85;margin-bottom:12px;"><strong>签约后才可以提现。</strong>请前往灵工平台完成电子协议签署；签署完成后返回本页，点击下方确认状态。</p>
-              <button type="button" onclick="alert('演示：跳转灵工平台 H5 或小程序')" style="width:100%;padding:10px;background:#1677ff;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">前往灵工平台签约 →</button>
-              <button type="button" onclick="markSignedMvp()" style="width:100%;padding:10px;background:#fff;border:1px solid #ffd591;color:#d46b08;border-radius:8px;font-size:12px;cursor:pointer;">我已完成签约（演示）</button>
-            </div>
           </div>
+          <!-- 底部按钮（fixed inside sheet） -->
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px 22px;background:#fff;border-top:1px solid #f0f0f0;">
+            <button id="mvp-kyc-submit-btn" type="button" onclick="submitKycFormMvp()"
+              style="width:100%;padding:13px;background:#1677ff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">确认提交</button>
+            <div id="mvp-kyc-err" style="display:none;margin-top:6px;font-size:11px;color:#ff4d4f;text-align:center;"></div>
+          </div>
+          <!-- 隐藏的状态 ID（供 JS 读取，不展示） -->
+          <span id="mvp-tag-auth" style="display:none;">未认证</span>
+          <span id="mvp-tag-sign" style="display:none;">未签约</span>
+          <span id="mvp-kyc-brief"  style="display:none;">未认证 · 未签约</span>
         </div>
 
       </div>
@@ -1723,25 +1673,42 @@ var _mvpAuth = false, _mvpSign = false;
 
 /* 同步 KYC sheet 内部视图与当前状态 */
 function _syncKycSheetView() {
-  var form     = document.getElementById('mvp-kyc-form-wrap');
-  var infoView = document.getElementById('mvp-kyc-info-view');
-  var sign     = document.getElementById('mvp-sign-block');
-  var done     = document.getElementById('mvp-kyc-all-done');
+  var submitBtn  = document.getElementById('mvp-kyc-submit-btn');
+  var signDone   = document.getElementById('mvp-sign-done-bar');
+  var nameInput  = document.getElementById('mvp-kyc-name');
+  var bankInput  = document.getElementById('mvp-kyc-bank');
+  var cardInput  = document.getElementById('mvp-kyc-cardno');
+  var idInput    = document.getElementById('mvp-kyc-idno');
+
   if (_mvpAuth && _mvpSign) {
-    form.style.display     = 'none';
-    infoView.style.display = 'block';
-    sign.style.display     = 'none';
-    done.style.display     = 'block';
+    /* 已认证已签约：表单只读，显示签约成功横幅，禁用按钮 */
+    signDone.style.display = 'block';
+    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = true; el.style.color='#999'; });
+    submitBtn.disabled = true;
+    submitBtn.style.background = '#d9d9d9';
+    submitBtn.style.cursor = 'not-allowed';
+    submitBtn.textContent = '已完成认证与签约';
+    _showIdPhotoDone(true);
   } else if (_mvpAuth) {
-    form.style.display     = 'none';
-    infoView.style.display = 'block';
-    sign.style.display     = 'block';
-    done.style.display     = 'none';
+    /* 已认证未签约：表单只读，按钮变为"前往签约" */
+    signDone.style.display = 'none';
+    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = true; el.style.color='#999'; });
+    submitBtn.disabled = false;
+    submitBtn.style.background = '#1677ff';
+    submitBtn.style.cursor = 'pointer';
+    submitBtn.textContent = '前往签约';
+    submitBtn.onclick = function(){ _doSignMvp(); };
+    _showIdPhotoDone(true);
   } else {
-    form.style.display     = 'block';
-    infoView.style.display = 'none';
-    sign.style.display     = 'none';
-    done.style.display     = 'none';
+    /* 未认证：表单可编辑，按钮为"确认提交" */
+    signDone.style.display = 'none';
+    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = false; el.style.color='#1a1a1a'; });
+    submitBtn.disabled = false;
+    submitBtn.style.background = '#1677ff';
+    submitBtn.style.cursor = 'pointer';
+    submitBtn.textContent = '确认提交';
+    submitBtn.onclick = function(){ submitKycFormMvp(); };
+    _showIdPhotoDone(false);
   }
   _updateKycBriefMvp();
   /* 高亮演示按钮（两套）*/
@@ -1775,30 +1742,42 @@ function setKycStateMvp(auth, sign) {
   _syncKycSheetView();
 }
 
+/* 身份证照片已上传状态切换 */
+function _showIdPhotoDone(done) {
+  ['front','back'].forEach(function(side) {
+    var wrap     = document.getElementById('mvp-id-' + side + '-wrap');
+    if (!wrap) return;
+    var upload   = wrap.querySelector('div:first-child');
+    var donediv  = document.getElementById('mvp-id-' + side + '-done');
+    if (done) {
+      if (upload)  upload.style.display  = 'none';
+      if (donediv) { donediv.style.display = 'flex'; }
+    } else {
+      if (upload)  upload.style.display  = 'flex';
+      if (donediv) donediv.style.display = 'none';
+    }
+  });
+}
+
 function _updateKycBriefMvp() {
-  var brief = document.getElementById('mvp-kyc-brief');
+  var brief   = document.getElementById('mvp-kyc-brief');
   var tagAuth = document.getElementById('mvp-tag-auth');
   var tagSign = document.getElementById('mvp-tag-sign');
-  if (_mvpAuth && _mvpSign) {
-    brief.textContent = '已认证 · 已签约';
-    brief.style.color = '#52c41a';
-  } else if (_mvpAuth) {
-    brief.textContent = '已认证 · 未签约';
-    brief.style.color = '#fa8c16';
-  } else {
-    brief.textContent = '未认证 · 未签约';
-    brief.style.color = '#fa8c16';
-  }
-  tagAuth.textContent = _mvpAuth ? '已认证' : '未认证';
-  tagAuth.className = 'tag ' + (_mvpAuth ? 't-green' : 't-orange');
-  tagSign.textContent = _mvpSign ? '已签约' : '未签约';
-  tagSign.className = 'tag ' + (_mvpSign ? 't-green' : 't-orange');
+  var txt = _mvpAuth && _mvpSign ? '已认证 · 已签约'
+          : _mvpAuth             ? '已认证 · 未签约'
+                                 : '未认证 · 未签约';
+  var col = (_mvpAuth && _mvpSign) ? '#52c41a' : '#fa8c16';
+  if (brief)   { brief.textContent = txt; brief.style.color = col; }
+  if (tagAuth) tagAuth.textContent = _mvpAuth ? '已认证' : '未认证';
+  if (tagSign) tagSign.textContent = _mvpSign ? '已签约' : '未签约';
 }
+
+/* 填写数据并认证 */
 function submitKycFormMvp() {
-  var name = (document.getElementById('mvp-kyc-name').value || '').trim();
-  var bank = (document.getElementById('mvp-kyc-bank').value || '').trim();
+  var name = (document.getElementById('mvp-kyc-name').value   || '').trim();
+  var bank = (document.getElementById('mvp-kyc-bank').value   || '').trim();
   var card = (document.getElementById('mvp-kyc-cardno').value || '').trim();
-  var id   = (document.getElementById('mvp-kyc-idno').value || '').trim();
+  var id   = (document.getElementById('mvp-kyc-idno').value   || '').trim();
   var err  = document.getElementById('mvp-kyc-err');
   if (!name || !bank || !card || !id) {
     err.style.display = 'block';
@@ -1806,22 +1785,44 @@ function submitKycFormMvp() {
     return;
   }
   err.style.display = 'none';
-  /* 将填写值回填到已认证信息展示卡 */
-  document.getElementById('mvp-info-name').textContent = name;
-  document.getElementById('mvp-info-bank').textContent = bank;
-  /* 银行卡号脱敏：只保留后4位，前面替换为星号 */
-  var masked = card.length > 4
-    ? card.slice(0, 4) + ' **** **** ' + card.slice(-4)
-    : card;
-  document.getElementById('mvp-info-card').textContent = masked;
-  /* 身份证号脱敏：保留前3位和后4位 */
-  var maskedId = id.length > 7
-    ? id.slice(0, 3) + '***********' + id.slice(-4)
-    : id;
-  document.getElementById('mvp-info-idno').textContent = maskedId;
   _mvpAuth = true;
   _syncKycSheetView();
+  /* 认证完成弹窗 */
+  _showMpDialog({
+    icon: '🎉', type: 'success',
+    title: '认证完成，前往签约',
+    body: '签约完成才可进行提现',
+    buttons: [
+      { label: '签约', primary: true, onClick: function(){ _doSignMvp(); } },
+      { label: '稍后再说' }
+    ]
+  });
 }
+
+/* 模拟跳转签约 */
+function _doSignMvp() {
+  _showMpDialog({
+    icon: '📝', type: 'warn',
+    title: '即将跳转灵工平台',
+    body: '请在灵工平台完成电子签约后，返回本页点击"已完成签约"',
+    buttons: [
+      { label: '已完成签约', primary: true, onClick: function(){ markSignedMvp(); } },
+      { label: '签约失败', onClick: function(){
+          _showMpDialog({
+            icon: '❌', type: 'error',
+            title: '签约失败，需重新签约',
+            body: '签约完成才可进行提现',
+            buttons: [
+              { label: '重新签约', primary: true, onClick: function(){ _doSignMvp(); } },
+              { label: '稍后再试' }
+            ]
+          });
+        }
+      }
+    ]
+  });
+}
+
 function markSignedMvp() {
   _mvpSign = true;
   _syncKycSheetView();
