@@ -332,7 +332,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 <div style="font-size:11px;color:#666;margin-bottom:4px;">提现金额</div>
                 <input id="mvp-withdraw-amt" type="number" placeholder="0.00" value="1500.00" style="width:100%;border:none;border-bottom:2px solid #e8e8e8;font-size:22px;font-weight:700;color:#1a1a1a;padding:4px 0;outline:none;background:transparent;"/>
               </div>
-              <button onclick="showWithdrawApply()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(22,119,255,.3);">申请提现</button>
+              <button onclick="applyWithdrawMvp()" style="width:100%;padding:11px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(22,119,255,.3);">申请提现</button>
+              <!-- 校验 / 成功提示行 -->
+              <div id="mvp-withdraw-msg" style="display:none;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.6;"></div>
               <div style="font-size:10px;color:#888;margin-top:7px;line-height:1.7;">提现后 1-3 工作日到账 · <strong style="color:#d46b08;">须完成实名认证与电子签约后方可提现</strong></div>
               <!-- 演示按钮区 -->
               <div style="margin-top:10px;border-top:1px dashed #e8e8e8;padding-top:8px;">
@@ -1591,18 +1593,73 @@ function confirmSysCode() {
 }
 
 /* ── 提现申请 ── */
-function showWithdrawApply() {
-  document.getElementById('wa-amount').value = '';
-  document.getElementById('withdraw-apply-mask').style.display = 'flex';
+/* ── 申请提现：直接校验，无二次弹窗 ── */
+var _BALANCE = 3286.50;
+var _hasPendingWithdraw = false; /* 演示：是否存在待审核中的提现 */
+
+function _showWithdrawMsg(type, html) {
+  /* type: 'error' | 'warn' | 'success' */
+  var el = document.getElementById('mvp-withdraw-msg');
+  var styles = {
+    error:   'background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;',
+    warn:    'background:#fff7e6;color:#d46b08;border:1px solid #ffd591;',
+    success: 'background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;'
+  };
+  el.style.cssText = 'display:block;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.6;' + (styles[type] || styles.error);
+  el.innerHTML = html;
+  clearTimeout(el._timer);
+  if (type === 'success') {
+    el._timer = setTimeout(function(){ el.style.display = 'none'; }, 4000);
+  }
 }
-function closeWithdrawApply() { document.getElementById('withdraw-apply-mask').style.display = 'none'; }
-function submitWithdrawApply() {
-  var amt = parseFloat(document.getElementById('wa-amount').value||'0');
-  if (!amt || amt <= 0) { alert('请输入提现金额'); return; }
-  if (amt > 3680) { alert('提现金额不能超过可提现余额 ¥3,680.00，请修改后重试'); return; }
-  closeWithdrawApply();
-  alert('✅ 提现申请已提交！\n申请金额：¥' + amt.toFixed(2) + '\n预计 1-3 个工作日到账，审核结果将通过微信通知推送。');
+
+function applyWithdrawMvp() {
+  /* 1. 认证校验 */
+  if (!_mvpAuth) {
+    _showWithdrawMsg('error', '⚠️ <strong>尚未完成实名认证</strong><br>请前往「我的 → 认证/签约」完成认证后再申请提现。');
+    return;
+  }
+  /* 2. 签约校验 */
+  if (!_mvpSign) {
+    _showWithdrawMsg('warn', '⚠️ <strong>尚未完成电子签约</strong><br>请前往「我的 → 认证/签约」完成签约后再申请提现。');
+    return;
+  }
+  /* 3. 待审核校验 */
+  if (_hasPendingWithdraw) {
+    _showWithdrawMsg('warn', '⏳ <strong>已有提现申请待审核</strong><br>请等待当前申请审核完成后再次提交。');
+    return;
+  }
+  /* 4. 金额校验 */
+  var amt = parseFloat((document.getElementById('mvp-withdraw-amt').value || '0'));
+  if (!amt || amt <= 0) {
+    _showWithdrawMsg('error', '⚠️ <strong>请输入提现金额</strong>');
+    return;
+  }
+  if (amt > _BALANCE) {
+    _showWithdrawMsg('error', '⚠️ <strong>提现金额超出可提现余额</strong><br>最多可提现 ¥' + _BALANCE.toFixed(2) + '，请修改后重试。');
+    return;
+  }
+  /* 5. 校验通过 */
+  _showWithdrawMsg('success', '✅ <strong>提现申请已提交！</strong><br>申请金额：¥' + amt.toFixed(2) + ' · 预计 1-3 工作日到账，审核结果将通过微信通知推送。');
 }
+
+/* 演示按钮：强制触发各异常场景（不改变全局 KYC 状态） */
+function showAgentWithdrawGuard(scenario) {
+  if (scenario === 'auth') {
+    _showWithdrawMsg('error', '⚠️ <strong>尚未完成实名认证</strong><br>请前往「我的 → 认证/签约」完成认证后再申请提现。');
+  } else if (scenario === 'sign') {
+    _showWithdrawMsg('warn', '⚠️ <strong>尚未完成电子签约</strong><br>请前往「我的 → 认证/签约」完成签约后再申请提现。');
+  } else if (scenario === 'over-balance') {
+    _showWithdrawMsg('error', '⚠️ <strong>提现金额超出可提现余额</strong><br>最多可提现 ¥3,286.50，请修改后重试。');
+  } else if (scenario === 'pending') {
+    _showWithdrawMsg('warn', '⏳ <strong>已有提现申请待审核</strong><br>请等待当前申请审核完成后再次提交。');
+  }
+}
+
+/* 兼容旧调用（modal 不再使用） */
+function showWithdrawApply() { applyWithdrawMvp(); }
+function closeWithdrawApply() { document.getElementById('withdraw-apply-mask').style.display='none'; }
+function submitWithdrawApply() { applyWithdrawMvp(); }
 
 /* ── 认证/签约弹窗 ── */
 /* ── 认证/签约 内页 ── */
