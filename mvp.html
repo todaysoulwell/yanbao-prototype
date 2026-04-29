@@ -1147,14 +1147,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <span id="rdm-title" style="font-size:16px;font-weight:700;color:#fff;">退款操作</span>
       <button onclick="closeRefundDirectModal()" style="border:none;background:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:0 2px;">✕</button>
     </div>
-    <!-- 订单信息（灰色背景） -->
-    <div style="background:#f8f9fb;padding:12px 20px;border-bottom:1px solid #eee;font-size:13px;">
-      <span style="color:#888;">渠道：</span><span style="font-weight:600;" id="rdm-channel">—</span>
-      <span style="color:#888;margin-left:16px;">订单金额：</span><span style="font-weight:600;color:#1677ff;" id="rdm-order-amt">—</span>
-      <span id="rdm-profit-wrap"><span style="color:#888;margin-left:16px;" id="rdm-profit-label">分润金额：</span><span style="font-weight:600;color:#cf1322;" id="rdm-profit-amt"></span></span>
-    </div>
-    <!-- 提示条 -->
-    <div id="rdm-tip" style="font-size:12px;line-height:1.7;padding:8px 20px;border-bottom:1px solid #eee;display:none;"></div>
+    <!-- 隐藏的数据占位（供 JS 写入，不展示） -->
+    <span id="rdm-channel" style="display:none;"></span>
+    <span id="rdm-order-amt" style="display:none;"></span>
+    <span id="rdm-profit-wrap" style="display:none;"><span id="rdm-profit-label"></span><span id="rdm-profit-amt"></span></span>
+    <div id="rdm-tip" style="display:none;"></div>
     <!-- 表单 -->
     <div style="padding:20px 20px 16px;">
       <!-- 授权码 -->
