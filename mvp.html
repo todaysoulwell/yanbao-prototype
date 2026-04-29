@@ -278,7 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
               </div>
             </div>
             <button onclick="go('agent')" style="width:100%;padding:13px;background:#1677ff;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">登 录</button>
-            <div style="text-align:center;margin-top:16px;font-size:11px;color:#bbb;">登录即代表同意服务协议与隐私政策</div>
+            <div style="text-align:center;margin-top:16px;font-size:11px;color:#bbb;">登录即代表同意<span onclick="alert('演示：跳转用户协议页面')" style="color:#1677ff;cursor:pointer;">用户协议</span>与<span onclick="alert('演示：跳转隐私政策页面')" style="color:#1677ff;cursor:pointer;">隐私政策</span></div>
           </div>
         </div>
       </div>
@@ -292,6 +292,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <div class="req-rule-item"><span class="rk">未绑定手机号</span><span class="rv">提示「该手机号未绑定任何渠道，请联系运营配置」</span></div>
           <div class="req-rule-item"><span class="rk">验证码有效期</span><span class="rv">5 分钟；60 秒后可重新获取</span></div>
           <div class="req-rule-item"><span class="rk">登录后跳转</span><span class="rv">代理商账户首页（账户 Tab）</span></div>
+          <div class="req-rule-item"><span class="rk">协议入口</span><span class="rv">登录页展示“登录即代表同意用户协议与隐私政策”，其中“用户协议”“隐私政策”均可点击打开对应协议页面</span></div>
         </div>
       </details>
     </div>
@@ -1108,7 +1109,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             <tr style="background:#f0f7ff;">
               <td style="padding:5px 8px;border:1px solid #e8e8e8;">② 参与分润 · 未提现</td>
               <td style="padding:5px 8px;border:1px solid #e8e8e8;">订单已产生分润入账记录，但对应分润金额仍在代理「可提现余额」中（尚未提现）</td>
-              <td style="padding:5px 8px;border:1px solid #e8e8e8;">弹确认弹窗，展示订单金额、分润金额（将被扣除）；确认后<strong>直接退款</strong>，同时系统自动扣减代理可提现余额，小程序分润流水新增「退款扣回」条目（红色负数，标「退款」）；退款信息同步至小程序</td>
+              <td style="padding:5px 8px;border:1px solid #e8e8e8;">弹确认弹窗；确认后<strong>直接退款</strong>，同时系统自动扣减代理可提现余额，小程序分润流水新增「退款扣回」条目（红色负数，标「退款」）；退款信息同步至小程序</td>
             </tr>
             <tr>
               <td style="padding:5px 8px;border:1px solid #e8e8e8;">③ 参与分润 · 已提现</td>
