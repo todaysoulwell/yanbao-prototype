@@ -1158,19 +1158,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
   </div>
 </div>
 
-<!-- 退款弹窗 A：不参与分润 / 涉及分润未提现 → 直接退款 -->
-<div id="refund-direct-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1001;align-items:center;justify-content:center;" onclick="if(event.target===this)closeRefundDirectModal();">
-  <div style="background:#fff;border-radius:10px;padding:22px 24px;max-width:480px;width:100%;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.25);" onclick="event.stopPropagation();">
-    <div id="rdm-title" style="font-size:15px;font-weight:700;color:#1677ff;margin-bottom:14px;">退款确认</div>
-    <table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:12px;">
-      <tr><td style="color:#888;padding:6px 0;width:46%;vertical-align:top;">渠道名称</td><td style="padding:6px 0;font-weight:600;" id="rdm-channel">—</td></tr>
-      <tr><td style="color:#888;padding:6px 0;vertical-align:top;">订单金额</td><td style="padding:6px 0;font-weight:600;color:#1677ff;" id="rdm-order-amt">—</td></tr>
-      <tr><td style="color:#888;padding:6px 0;vertical-align:top;" id="rdm-profit-label">分润金额<i style="font-size:11px;color:#bbb;font-style:normal;">（将从余额扣除）</i></td><td style="padding:6px 0;font-weight:600;color:#cf1322;" id="rdm-profit-amt"></td></tr>
-    </table>
-    <div id="rdm-tip" style="font-size:12.5px;line-height:1.85;padding:12px 14px;border-radius:8px;margin-bottom:16px;"></div>
-    <div style="display:flex;gap:10px;">
-      <button type="button" onclick="closeRefundDirectModal()" style="flex:1;padding:10px;background:#f5f5f5;color:#555;border:none;border-radius:6px;font-size:13px;cursor:pointer;">取消</button>
-      <button type="button" onclick="confirmRefundDirect()" style="flex:2;padding:10px;background:#cf1322;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600;">确认退款</button>
+<!-- 退款弹窗 A：不参与分润 / 涉及分润未提现 → 退款操作 -->
+<div id="refund-direct-modal-mask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;align-items:center;justify-content:center;" onclick="if(event.target===this)closeRefundDirectModal();">
+  <div style="background:#fff;border-radius:8px;max-width:500px;width:100%;margin:16px;box-shadow:0 8px 40px rgba(0,0,0,.28);overflow:hidden;" onclick="event.stopPropagation();">
+    <!-- 蓝色标题栏 -->
+    <div style="background:#1890ff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+      <span id="rdm-title" style="font-size:16px;font-weight:700;color:#fff;">退款操作</span>
+      <button onclick="closeRefundDirectModal()" style="border:none;background:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:0 2px;">✕</button>
+    </div>
+    <!-- 订单信息（灰色背景） -->
+    <div style="background:#f8f9fb;padding:12px 20px;border-bottom:1px solid #eee;font-size:13px;">
+      <span style="color:#888;">渠道：</span><span style="font-weight:600;" id="rdm-channel">—</span>
+      <span style="color:#888;margin-left:16px;">订单金额：</span><span style="font-weight:600;color:#1677ff;" id="rdm-order-amt">—</span>
+      <span id="rdm-profit-wrap"><span style="color:#888;margin-left:16px;" id="rdm-profit-label">分润金额：</span><span style="font-weight:600;color:#cf1322;" id="rdm-profit-amt"></span></span>
+    </div>
+    <!-- 提示条 -->
+    <div id="rdm-tip" style="font-size:12px;line-height:1.7;padding:8px 20px;border-bottom:1px solid #eee;display:none;"></div>
+    <!-- 表单 -->
+    <div style="padding:20px 20px 16px;">
+      <!-- 授权码 -->
+      <div style="display:flex;align-items:center;margin-bottom:18px;">
+        <label style="width:76px;font-size:13px;color:#333;flex-shrink:0;"><span style="color:#ff4d4f;">*</span> 授权码</label>
+        <input id="rdm-auth-code" type="text" placeholder="请输入管理员授权码"
+          style="flex:1;padding:8px 12px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none;background:#fafafa;"/>
+      </div>
+      <!-- 退款原因 -->
+      <div style="display:flex;align-items:flex-start;margin-bottom:6px;">
+        <label style="width:76px;font-size:13px;color:#333;flex-shrink:0;padding-top:8px;"><span style="color:#ff4d4f;">*</span> 退款原因：</label>
+        <div style="flex:1;position:relative;">
+          <textarea id="rdm-reason" placeholder="请输入退款原因" maxlength="200" oninput="document.getElementById('rdm-reason-count').textContent=this.value.length"
+            style="width:100%;padding:8px 12px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none;resize:vertical;min-height:80px;box-sizing:border-box;background:#fafafa;font-family:inherit;"></textarea>
+          <span style="position:absolute;right:8px;bottom:6px;font-size:11px;color:#bbb;"><span id="rdm-reason-count">0</span>/200</span>
+        </div>
+      </div>
+      <div id="rdm-form-err" style="display:none;font-size:12px;color:#ff4d4f;text-align:right;margin-bottom:8px;"></div>
+    </div>
+    <!-- 底部按钮 -->
+    <div style="padding:0 20px 20px;display:flex;justify-content:center;gap:14px;">
+      <button type="button" onclick="confirmRefundDirect()"
+        style="padding:9px 32px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;">确认退款</button>
+      <button type="button" onclick="closeRefundDirectModal()"
+        style="padding:9px 32px;background:#fff;color:#555;border:1px solid #d9d9d9;border-radius:4px;font-size:14px;cursor:pointer;">取 消</button>
     </div>
   </div>
 </div>
@@ -1926,22 +1954,30 @@ function tryAdminRefund(scenario, data) {
   var set = function(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; };
   var show = function(id, visible) { var el = document.getElementById(id); if (el) el.style.display = visible ? '' : 'none'; };
   if (scenario === 'no-profit') {
-    set('rdm-title', '退款确认 · 该订单不参与分润');
+    set('rdm-title', '退款操作');
     set('rdm-channel', data.channelName || '直营/无分润渠道');
     set('rdm-order-amt', fmtMoney(data.orderAmount));
     set('rdm-profit-amt', '');
-    show('rdm-profit-label', false);
+    show('rdm-profit-wrap', false);
     var tip = document.getElementById('rdm-tip');
-    if (tip) { tip.style.background='#f6ffed'; tip.style.border='1px solid #b7eb8f'; tip.style.color='#389e0d'; tip.innerHTML='该订单<strong>不参与代理商分润</strong>，退款将直接通过原路退还给用户，退款信息同步至小程序。'; }
+    if (tip) {
+      tip.style.background='#f6ffed'; tip.style.border='1px solid #b7eb8f'; tip.style.color='#389e0d';
+      tip.innerHTML='该订单<strong>不参与代理商分润</strong>，退款后直接原路退还用户。';
+      tip.style.display = 'block';
+    }
     document.getElementById('refund-direct-modal-mask').style.display = 'flex';
   } else if (scenario === 'profit-not-withdrawn') {
-    set('rdm-title', '退款确认 · 分润未提现，可直接退款');
+    set('rdm-title', '退款操作');
     set('rdm-channel', data.channelName || '—');
     set('rdm-order-amt', fmtMoney(data.orderAmount));
     set('rdm-profit-amt', '−' + fmtMoney(data.profitAmount));
-    show('rdm-profit-label', true);
+    show('rdm-profit-wrap', true);
     var tip2 = document.getElementById('rdm-tip');
-    if (tip2) { tip2.style.background='#fffbe6'; tip2.style.border='1px solid #ffe58f'; tip2.style.color='#7c5800'; tip2.innerHTML='该订单参与代理商分润，但对应分润<strong>尚未被提现</strong>，可直接退款。<br>退款后系统将自动从代理「可提现余额」中扣除分润金额 <strong style="color:#cf1322;">' + fmtMoney(data.profitAmount) + '</strong>，并在小程序分润流水中生成「退款扣回」记录，退款信息同步至小程序。'; }
+    if (tip2) {
+      tip2.style.background='#fffbe6'; tip2.style.border='1px solid #ffe58f'; tip2.style.color='#7c5800';
+      tip2.innerHTML='分润<strong>尚未提现</strong>，退款后系统将从余额中自动扣除分润 <strong style="color:#cf1322;">' + fmtMoney(data.profitAmount) + '</strong>。';
+      tip2.style.display = 'block';
+    }
     document.getElementById('refund-direct-modal-mask').style.display = 'flex';
   } else if (scenario === 'profit-withdrawn') {
     set('rpm-channel', data.channelName || '—');
@@ -1954,10 +1990,36 @@ function tryAdminRefund(scenario, data) {
   }
 }
 function confirmRefundDirect() {
+  var code   = (document.getElementById('rdm-auth-code').value || '').trim();
+  var reason = (document.getElementById('rdm-reason').value   || '').trim();
+  var errEl  = document.getElementById('rdm-form-err');
+  if (!code) {
+    errEl.style.display = 'block';
+    errEl.textContent = '请输入管理员授权码';
+    return;
+  }
+  if (!reason) {
+    errEl.style.display = 'block';
+    errEl.textContent = '请输入退款原因';
+    return;
+  }
+  errEl.style.display = 'none';
   closeRefundDirectModal();
   alert('退款成功！\n退款信息已同步至代理端小程序，可提现余额已相应调整（如涉及分润扣回）。');
 }
-function closeRefundDirectModal() { var m = document.getElementById('refund-direct-modal-mask'); if (m) m.style.display = 'none'; }
+function closeRefundDirectModal() {
+  var m = document.getElementById('refund-direct-modal-mask');
+  if (m) m.style.display = 'none';
+  /* 清空表单 */
+  var c = document.getElementById('rdm-auth-code');
+  var r = document.getElementById('rdm-reason');
+  var cnt = document.getElementById('rdm-reason-count');
+  if (c) c.value = '';
+  if (r) r.value = '';
+  if (cnt) cnt.textContent = '0';
+  var err = document.getElementById('rdm-form-err');
+  if (err) err.style.display = 'none';
+}
 function closeRefundProfitModal() { var m = document.getElementById('refund-profit-modal-mask'); if (m) m.style.display = 'none'; }
 
 /* ── 图片从本机载入（退款截图区） ── */
