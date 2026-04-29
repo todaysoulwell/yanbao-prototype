@@ -776,7 +776,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="flow-arrow">→</div>
         <div class="flow-node fn-green">码验证通过<br/><small>变更立即生效</small></div>
       </div>
-      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话（分润不为空时）/ 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写/变更时，提交须输入6位系统审核码；码错误则不允许提交。演示模式下任意6位字符均通过。</div>
+      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话（分润不为空时）/ 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写/变更时，提交须输入4位系统审核码；码错误则不允许提交。演示模式下任意4位字符均通过。</div>
 
       <hr class="form-sep"/>
       <p style="margin-bottom:6px;font-weight:700;color:#333;">新增/修改弹窗字段详细说明</p>
@@ -1378,12 +1378,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <div class="form-row">
         <div class="form-label">审核码</div>
         <div class="form-ctrl">
-          <input id="sys-code-input" type="text" placeholder="请输入6位系统审核码" maxlength="6" style="letter-spacing:4px;font-size:16px;text-align:center;"/>
-          <div class="form-hint">演示模式：输入任意6位字符即可通过</div>
+          <input id="sys-code-input" type="text" placeholder="请输入4位系统审核码" maxlength="4" style="letter-spacing:4px;font-size:16px;text-align:center;"/>
+          <div class="form-hint">演示模式：输入任意4位字符即可通过</div>
         </div>
       </div>
       <div style="margin-top:4px;text-align:center;">
-        <button style="background:none;border:none;color:#1677ff;font-size:12px;cursor:pointer;" onclick="document.getElementById('sys-code-input').value='MVP001'">▸ 点击填入演示码 MVP001</button>
+        <button style="background:none;border:none;color:#1677ff;font-size:12px;cursor:pointer;" onclick="document.getElementById('sys-code-input').value='MVP0'">▸ 点击填入演示码 MVP0</button>
       </div>
     </div>
     <div class="modal-foot">
@@ -1549,7 +1549,7 @@ function openSysCodeModal(channelName) {
 function closeSysCodeModal() { document.getElementById('sys-code-mask').style.display = 'none'; }
 function confirmSysCode() {
   var code = (document.getElementById('sys-code-input').value||'').trim();
-  if (code.length < 6) { alert('请输入6位系统审核码'); return; }
+  if (code.length < 4) { alert('请输入4位系统审核码'); return; }
   closeSysCodeModal();
   alert('✅ 审核码验证通过！\n渠道「' + _pendingChannelName + '」变更已生效，分润配置立即启用。');
 }
