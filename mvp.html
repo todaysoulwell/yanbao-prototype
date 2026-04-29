@@ -535,6 +535,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
                 </div>
               </div>
             </div>
+            <!-- 演示：状态切换 -->
+            <div style="margin:0 12px 12px;background:#f8f8f8;border-radius:10px;padding:10px 12px;">
+              <div style="font-size:10px;color:#aaa;margin-bottom:7px;letter-spacing:.5px;">● 演示状态切换（点击后再进入认证/签约查看对应页面）</div>
+              <div style="display:flex;gap:6px;">
+                <button id="mvp-demo-s1" onclick="setKycStateMvp(false,false)"
+                  style="flex:1;font-size:10px;padding:6px 0;border-radius:8px;border:1px solid #1677ff;background:#1677ff;color:#fff;cursor:pointer;line-height:1.4;">
+                  ① 未认证<br>未签约
+                </button>
+                <button id="mvp-demo-s2" onclick="setKycStateMvp(true,false)"
+                  style="flex:1;font-size:10px;padding:6px 0;border-radius:8px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
+                  ② 已认证<br>未签约
+                </button>
+                <button id="mvp-demo-s3" onclick="setKycStateMvp(true,true)"
+                  style="flex:1;font-size:10px;padding:6px 0;border-radius:8px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
+                  ③ 已认证<br>已签约
+                </button>
+              </div>
+            </div>
             <!-- 账号信息卡片 -->
             <div style="background:#fff;border-radius:12px;margin:0 12px 10px;box-shadow:0 1px 6px rgba(0,0,0,.06);overflow:hidden;">
               <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">登录手机号</span><span style="font-size:12px;font-weight:600;color:#333;font-family:monospace;">139****9920</span></div>
@@ -572,6 +590,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           </div>
           <!-- 内容区 -->
           <div style="flex:1;overflow-y:auto;padding:12px 12px 20px;">
+            <!-- 演示：内页状态切换 -->
+            <div style="background:#fffbe6;border:1px solid #ffe58f;border-radius:10px;padding:8px 10px;margin-bottom:10px;">
+              <div style="font-size:10px;color:#ad8b00;margin-bottom:6px;">● 演示状态切换</div>
+              <div style="display:flex;gap:6px;">
+                <button id="mvp-demo-s1b" onclick="setKycStateMvp(false,false)"
+                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #1677ff;background:#1677ff;color:#fff;cursor:pointer;line-height:1.4;">
+                  ① 未认证<br>未签约
+                </button>
+                <button id="mvp-demo-s2b" onclick="setKycStateMvp(true,false)"
+                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
+                  ② 已认证<br>未签约
+                </button>
+                <button id="mvp-demo-s3b" onclick="setKycStateMvp(true,true)"
+                  style="flex:1;font-size:10px;padding:5px 0;border-radius:7px;border:1px solid #adc6ff;background:#f0f5ff;color:#1677ff;cursor:pointer;line-height:1.4;">
+                  ③ 已认证<br>已签约
+                </button>
+              </div>
+            </div>
             <!-- 当前状态卡片 -->
             <div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
               <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:8px;">当前状态</div>
@@ -1513,14 +1549,57 @@ function submitWithdrawApply() {
 /* ── 认证/签约弹窗 ── */
 /* ── 认证/签约 内页 ── */
 var _mvpAuth = false, _mvpSign = false;
+
+/* 同步 KYC sheet 内部视图与当前状态 */
+function _syncKycSheetView() {
+  var form   = document.getElementById('mvp-kyc-form-wrap');
+  var sign   = document.getElementById('mvp-sign-block');
+  var done   = document.getElementById('mvp-kyc-all-done');
+  if (_mvpAuth && _mvpSign) {
+    form.style.display = 'none';
+    sign.style.display = 'none';
+    done.style.display = 'block';
+  } else if (_mvpAuth) {
+    form.style.display = 'none';
+    sign.style.display = 'block';
+    done.style.display = 'none';
+  } else {
+    form.style.display = 'block';
+    sign.style.display = 'none';
+    done.style.display = 'none';
+  }
+  _updateKycBriefMvp();
+  /* 高亮演示按钮（两套）*/
+  [['mvp-demo-s1','mvp-demo-s2','mvp-demo-s3'],
+   ['mvp-demo-s1b','mvp-demo-s2b','mvp-demo-s3b']].forEach(function(group) {
+    group.forEach(function(id, i) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var active = (i === 0 && !_mvpAuth && !_mvpSign) ||
+                   (i === 1 && _mvpAuth && !_mvpSign) ||
+                   (i === 2 && _mvpAuth && _mvpSign);
+      el.style.background  = active ? '#1677ff' : '#f0f5ff';
+      el.style.color       = active ? '#fff'     : '#1677ff';
+      el.style.borderColor = active ? '#1677ff'  : '#adc6ff';
+    });
+  });
+}
+
 function openKycSheetMvp() {
-  var sheet = document.getElementById('mvp-kyc-sheet');
-  sheet.style.display = 'flex';
+  document.getElementById('mvp-kyc-sheet').style.display = 'flex';
+  _syncKycSheetView();
 }
 function closeKycSheetMvp() {
   document.getElementById('mvp-kyc-sheet').style.display = 'none';
   _updateKycBriefMvp();
 }
+
+/* 演示：直接切换到指定状态 */
+function setKycStateMvp(auth, sign) {
+  _mvpAuth = auth; _mvpSign = sign;
+  _syncKycSheetView();
+}
+
 function _updateKycBriefMvp() {
   var brief = document.getElementById('mvp-kyc-brief');
   var tagAuth = document.getElementById('mvp-tag-auth');
@@ -1553,15 +1632,11 @@ function submitKycFormMvp() {
   }
   err.style.display = 'none';
   _mvpAuth = true;
-  _updateKycBriefMvp();
-  document.getElementById('mvp-kyc-form-wrap').style.display = 'none';
-  document.getElementById('mvp-sign-block').style.display = 'block';
+  _syncKycSheetView();
 }
 function markSignedMvp() {
   _mvpSign = true;
-  _updateKycBriefMvp();
-  document.getElementById('mvp-sign-block').style.display = 'none';
-  document.getElementById('mvp-kyc-all-done').style.display = 'block';
+  _syncKycSheetView();
 }
 
 /* ── 提现审核操作 ── */
