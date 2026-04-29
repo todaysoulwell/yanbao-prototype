@@ -320,21 +320,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             <div style="padding:0 12px 12px;">
               <button onclick="showWithdrawApply()" style="width:100%;padding:12px;background:linear-gradient(90deg,#1677ff,#4096ff);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;box-shadow:0 4px 12px rgba(22,119,255,.35);">申请提现</button>
             </div>
-            <!-- 快捷入口 -->
-            <div style="display:flex;gap:8px;padding:0 12px 12px;">
-              <div onclick="switchMpTab('profit')" style="flex:1;background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-                <div style="font-size:18px;margin-bottom:4px;">📊</div>
-                <div style="font-size:10px;color:#555;font-weight:600;">分润明细</div>
-              </div>
-              <div onclick="switchMpTab('mine')" style="flex:1;background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-                <div style="font-size:18px;margin-bottom:4px;">📝</div>
-                <div style="font-size:10px;color:#555;font-weight:600;">认证签约</div>
-              </div>
-              <div onclick="switchMpTab('mine')" style="flex:1;background:#fff;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-                <div style="font-size:18px;margin-bottom:4px;">🔔</div>
-                <div style="font-size:10px;color:#555;font-weight:600;">通知授权</div>
-              </div>
-            </div>
             <!-- 提现记录 -->
             <div class="mp-section">
               <div class="mp-sec-title" style="display:flex;justify-content:space-between;align-items:center;">
@@ -623,7 +608,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <p style="margin-bottom:8px;font-weight:700;color:#333;">近期提现记录</p>
           <div class="req-rule-item"><span class="rk">状态类型</span><span class="rv">审核中（橙）/ 已到账（绿）/ 已驳回（红，附驳回原因）</span></div>
           <div class="req-rule-item"><span class="rk">展示条数</span><span class="rv">默认展示最近 3 条，"全部"跳转完整列表</span></div>
-          <div class="req-rule-item"><span class="rk">快捷入口</span><span class="rv">底部快捷图标可直达「分润明细」「认证签约」「通知授权」</span></div>
         </div>
       </details>
       <details class="req-block">
