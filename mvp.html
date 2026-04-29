@@ -1662,15 +1662,7 @@ function applyWithdrawMvp() {
     );
     return;
   }
-  /* 3. 待审核校验 */
-  if (_hasPendingWithdraw) {
-    _showWithdrawMsg('warn',
-      '已有提现申请待审核',
-      '请等待当前提现申请审核完成后，再次提交新的申请。'
-    );
-    return;
-  }
-  /* 4. 金额校验 */
+  /* 3. 金额校验 */
   var amt = parseFloat((document.getElementById('mvp-withdraw-amt').value || '0'));
   if (!amt || amt <= 0) {
     _showWithdrawMsg('error', '请输入提现金额', '提现金额不能为空，请填写后重试。');
