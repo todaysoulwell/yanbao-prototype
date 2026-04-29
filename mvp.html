@@ -773,7 +773,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="flow-arrow">→</div>
         <div class="flow-node fn-green">码验证通过<br/><small>变更立即生效</small></div>
       </div>
-      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话（分润不为空时）/ 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写/变更时，提交须输入4位系统审核码；码错误则不允许提交。演示模式下任意4位字符均通过。</div>
+      <div class="warn-box" style="margin-bottom:10px;">⚠ 敏感字段：代理商电话（分润不为空时）/ 智能服务分润比例 / 延保分润比例 / 货车分润金额（任一有值）。上述字段有填写/变更时，提交须输入6位系统审核码；码错误则不允许提交。演示模式下任意6位字符均通过。</div>
 
       <hr class="form-sep"/>
       <p style="margin-bottom:6px;font-weight:700;color:#333;">新增/修改弹窗字段详细说明</p>
@@ -784,7 +784,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">基础信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">渠道类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">电商 / 线上 / 线下 / 线下收费站ETC禁用 / 准前装</td></tr>
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">产品类型</td><td style="padding:5px 8px;border:1px solid #e8e8e8;color:#ff4d4f;">必填≥1</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">复选：客车ETC / 货车ETC / 记录仪；至少勾选一项</td></tr>
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">记录仪适配套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">设备型号 + 套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">设备类型（W1/W1-Z/ONE-11等）+ 套餐（直播720分钟/120分钟/3月300分钟/3月无限）两列联动，可添加多行；行填写不完整时不允许提交</td></tr>
-          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">速通免押日结 / 速通免押日结（电商版）</td></tr>
+          <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">货车产品套餐</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">1934517434533629954-速通免押日结 / 1934517434533629954-速通免押日结(电商版)</td></tr>
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商姓名</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">—</td></tr>
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商信息</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">代理商电话</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;"><strong style="color:#e67e00;">填写且分润字段不为空时 → 需输入系统审核码；手机号用于代理商登录小程序及提现</strong></td></tr>
           <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">模块① 智能服务分润</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">智能服务分润比例（%）</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">选填</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">0~80，超出弹出校验提示；<strong style="color:#e67e00;">填写或变更 → 触发系统审核码校验</strong></td></tr>
@@ -1248,8 +1248,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="form-ctrl">
           <select style="width:100%;padding:6px 10px;border:1px solid #d9d9d9;border-radius:5px;font-size:13px;outline:none;background:#fff;">
             <option value="">请选择货车产品套餐</option>
-            <option>速通免押日结</option>
-            <option>速通免押日结（电商版）</option>
+            <option value="1934517434533629954-1">1934517434533629954-速通免押日结</option>
+            <option value="1934517434533629954-2">1934517434533629954-速通免押日结(电商版)</option>
           </select>
         </div>
       </div>
@@ -1375,12 +1375,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <div class="form-row">
         <div class="form-label">审核码</div>
         <div class="form-ctrl">
-          <input id="sys-code-input" type="text" placeholder="请输入4位系统审核码" maxlength="4" style="letter-spacing:4px;font-size:16px;text-align:center;"/>
-          <div class="form-hint">演示模式：输入任意4位字符即可通过</div>
+          <input id="sys-code-input" type="text" placeholder="请输入6位系统审核码" maxlength="6" style="letter-spacing:4px;font-size:16px;text-align:center;"/>
+          <div class="form-hint">演示模式：输入任意6位字符即可通过</div>
         </div>
       </div>
       <div style="margin-top:4px;text-align:center;">
-        <button style="background:none;border:none;color:#1677ff;font-size:12px;cursor:pointer;" onclick="document.getElementById('sys-code-input').value='MVP0'">▸ 点击填入演示码 MVP0</button>
+        <button style="background:none;border:none;color:#1677ff;font-size:12px;cursor:pointer;" onclick="document.getElementById('sys-code-input').value='MVP001'">▸ 点击填入演示码 MVP001</button>
       </div>
     </div>
     <div class="modal-foot">
