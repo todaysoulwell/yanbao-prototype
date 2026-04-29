@@ -1675,19 +1675,29 @@ function _syncKycSheetView() {
   var cardInput  = document.getElementById('mvp-kyc-cardno');
   var idInput    = document.getElementById('mvp-kyc-idno');
 
+  /* 姓名、身份证号认证后只读；开户行、银行卡号任何状态均可修改 */
+  var fixedReadOnly = _mvpAuth;
+  [nameInput, idInput].forEach(function(el){
+    el.readOnly = fixedReadOnly;
+    el.style.color = fixedReadOnly ? '#999' : '#1a1a1a';
+  });
+  [bankInput, cardInput].forEach(function(el){
+    el.readOnly = false;
+    el.style.color = '#1a1a1a';
+  });
+
   if (_mvpAuth && _mvpSign) {
-    /* 已认证已签约：表单只读，显示签约成功横幅，禁用按钮 */
+    /* 已认证已签约：签约成功横幅，按钮为"保存修改" */
     signDone.style.display = 'block';
-    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = true; el.style.color='#999'; });
-    submitBtn.disabled = true;
-    submitBtn.style.background = '#d9d9d9';
-    submitBtn.style.cursor = 'not-allowed';
-    submitBtn.textContent = '已完成认证与签约';
+    submitBtn.disabled = false;
+    submitBtn.style.background = '#1677ff';
+    submitBtn.style.cursor = 'pointer';
+    submitBtn.textContent = '保存修改';
+    submitBtn.onclick = function(){ _saveBankInfoMvp(); };
     _showIdPhotoDone(true);
   } else if (_mvpAuth) {
-    /* 已认证未签约：表单只读，按钮变为"前往签约" */
+    /* 已认证未签约：按钮为"前往签约" */
     signDone.style.display = 'none';
-    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = true; el.style.color='#999'; });
     submitBtn.disabled = false;
     submitBtn.style.background = '#1677ff';
     submitBtn.style.cursor = 'pointer';
@@ -1695,9 +1705,8 @@ function _syncKycSheetView() {
     submitBtn.onclick = function(){ _doSignMvp(); };
     _showIdPhotoDone(true);
   } else {
-    /* 未认证：表单可编辑，按钮为"确认提交" */
+    /* 未认证：按钮为"确认提交" */
     signDone.style.display = 'none';
-    [nameInput, bankInput, cardInput, idInput].forEach(function(el){ el.readOnly = false; el.style.color='#1a1a1a'; });
     submitBtn.disabled = false;
     submitBtn.style.background = '#1677ff';
     submitBtn.style.cursor = 'pointer';
@@ -1821,6 +1830,25 @@ function _doSignMvp() {
 function markSignedMvp() {
   _mvpSign = true;
   _syncKycSheetView();
+}
+
+/* 已认证/已签约后保存开户行和银行卡号修改 */
+function _saveBankInfoMvp() {
+  var bank = (document.getElementById('mvp-kyc-bank').value   || '').trim();
+  var card = (document.getElementById('mvp-kyc-cardno').value || '').trim();
+  if (!bank || !card) {
+    var err = document.getElementById('mvp-kyc-err');
+    err.style.display = 'block';
+    err.textContent = '开户行和银行卡号不能为空';
+    return;
+  }
+  document.getElementById('mvp-kyc-err').style.display = 'none';
+  _showMpDialog({
+    icon: '✅', type: 'success',
+    title: '修改已保存',
+    body: '开户行及银行卡号已更新，后续提现将打入新银行卡。',
+    buttons: [{ label: '知道了', primary: true }]
+  });
 }
 
 /* ── 提现审核操作 ── */
