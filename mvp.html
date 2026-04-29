@@ -1733,16 +1733,22 @@ function closeKycSheetMvp() {
 /* 演示：直接切换到指定状态 */
 function setKycStateMvp(auth, sign) {
   _mvpAuth = auth; _mvpSign = sign;
-  /* 已认证状态预填 mock 数据 */
+  var n = document.getElementById('mvp-kyc-name');
+  var b = document.getElementById('mvp-kyc-bank');
+  var c = document.getElementById('mvp-kyc-cardno');
+  var i = document.getElementById('mvp-kyc-idno');
   if (auth) {
-    var n = document.getElementById('mvp-kyc-name');
-    var b = document.getElementById('mvp-kyc-bank');
-    var c = document.getElementById('mvp-kyc-cardno');
-    var i = document.getElementById('mvp-kyc-idno');
-    if (n && !n.value) n.value = '张　明';
-    if (b && !b.value) b.value = '中国工商银行武汉汉阳支行';
-    if (c && !c.value) c.value = '6222980012345678831';
-    if (i && !i.value) i.value = '420106198809120014';
+    /* 已认证：预填 mock 数据 */
+    if (n) n.value = '张　明';
+    if (b) b.value = '中国工商银行武汉汉阳支行';
+    if (c) c.value = '6222980012345678831';
+    if (i) i.value = '420106198809120014';
+  } else {
+    /* 未认证：清空表单 */
+    if (n) n.value = '';
+    if (b) b.value = '';
+    if (c) c.value = '';
+    if (i) i.value = '';
   }
   _syncKycSheetView();
 }
