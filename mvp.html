@@ -2134,8 +2134,7 @@ function doWithdrawApprove(channelName, signStatus) {
     openWithdrawReviewModal({
       title: '审核被拦截',
       icon: '⚠️',
-      body: '渠道「' + channelName + '」尚未完成实名认证，无法通过提现审核。
-请联系代理商前往「我的 — 认证/签约」完成实名认证及电子签约后再审核。',
+      body: '渠道「' + channelName + '」尚未完成实名认证，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成实名认证及电子签约后再审核。',
       buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
     });
     return;
@@ -2144,8 +2143,7 @@ function doWithdrawApprove(channelName, signStatus) {
     openWithdrawReviewModal({
       title: '审核被拦截',
       icon: '⚠️',
-      body: '渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。
-请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
+      body: '渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
       buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
     });
     return;
@@ -2153,8 +2151,7 @@ function doWithdrawApprove(channelName, signStatus) {
   openWithdrawReviewModal({
     title: '确认通过提现申请',
     icon: '✅',
-    body: '确认通过渠道「' + channelName + '」的提现申请？
-通过后将提交灵工平台打款，并下发微信通知。',
+    body: '确认通过渠道「' + channelName + '」的提现申请？\n通过后将提交灵工平台打款，并下发微信通知。',
     buttons: [
       { label:'取消', onClick: closeWithdrawReviewModal },
       { label:'确认通过', primary:true, onClick:function(){
