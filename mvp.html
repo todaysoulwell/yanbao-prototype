@@ -694,9 +694,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <summary>📋 账户 Tab · 产品需求<span class="hint">（点击展开）</span></summary>
         <div class="req-content">
           <p style="margin-bottom:8px;font-weight:700;color:#333;">余额卡</p>
-          <div class="req-rule-item"><span class="rk">待提现余额</span><span class="rv">= 累计分润入账 − 累计已提现，实时展示</span></div>
-          <div class="req-rule-item"><span class="rk">累计分润</span><span class="rv">所有已结算入账的分润总额，含记录仪/客车ETC/货车ETC三种渠道</span></div>
-          <div class="req-rule-item"><span class="rk">已提现</span><span class="rv">所有审核通过并到账的提现金额累计</span></div>
+          <div class="req-rule-item"><span class="rk">可提现余额</span><span class="rv">= 累计已入账分润 − 累计审核通过/已打款提现 − 退款扣回金额；金额实时展示，保留2位小数，无余额显示 ¥0.00</span></div>
+          <div class="req-rule-item"><span class="rk">本月新增</span><span class="rv">当前自然月内已入账的正向分润金额合计，按分润入账时间统计；不包含提现金额，不包含退款扣回负数</span></div>
+          <div class="req-rule-item"><span class="rk">累计提现</span><span class="rv">历史审核通过并完成打款的提现金额累计；审核中、已驳回不计入</span></div>
+          <div class="req-rule-item"><span class="rk">提现金额</span><span class="rv">代理手动输入本次申请金额；默认展示演示值，真实业务默认可为空；输入为空、≤0、超过可提现余额均弹窗拦截</span></div>
+          <div class="req-rule-item"><span class="rk">余额空态</span><span class="rv">无分润入账或全部提现/扣回后，可提现余额、本月新增、累计提现均按 ¥0.00 展示；申请提现按余额不足拦截</span></div>
           <hr class="form-sep"/>
           <p style="margin-bottom:8px;font-weight:700;color:#333;">申请提现前置校验（按顺序检查）</p>
           <div class="req-rule-item"><span class="rk">① 未实名认证</span><span class="rv">弹窗提示"尚未完成实名认证，请前往「我的 → 认证/签约」完成实名认证后再申请提现"，含「去认证」按钮引导</span></div>
@@ -707,6 +709,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <div class="req-rule-item"><span class="rk">状态类型</span><span class="rv">审核中（橙）/ 审核通过（绿）/ 已驳回（红，附驳回原因）</span></div>
           <div class="req-rule-item"><span class="rk">展示条数</span><span class="rv">默认展示全部提现记录</span></div>
           <div class="req-rule-item"><span class="rk">展示限制</span><span class="rv">审核通过和审核中记录不展示打款银行卡尾号、运营审核中文案；已驳回记录展示驳回原因</span></div>
+          <div class="req-rule-item"><span class="rk">记录字段</span><span class="rv">单条记录展示申请金额、状态、申请/审核时间；仅已驳回状态额外展示驳回原因</span></div>
+          <div class="req-rule-item"><span class="rk">列表空态</span><span class="rv">无提现记录时展示空态文案“暂无提现记录”，不展示空白卡片</span></div>
         </div>
       </details>
       <details class="req-block">
@@ -714,8 +718,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <div class="req-content">
           <p style="margin-bottom:8px;font-weight:700;color:#333;">页面概览</p>
           <div class="req-rule-item"><span class="rk">Tab 名称</span><span class="rv">底部 Tabbar 展示为「分润」，页面顶部展示「分润记录」及代理商名称</span></div>
-          <div class="req-rule-item"><span class="rk">顶部汇总</span><span class="rv">展示本月分润记录汇总：分润笔数、本月分润、退款订单</span></div>
-          <div class="req-rule-item"><span class="rk">分类汇总</span><span class="rv">展示记录仪智能服务、货车ETC设备激活、客车ETC延保三类对应分润金额；仅展示，不支持点击筛选</span></div>
+          <div class="req-rule-item"><span class="rk">顶部汇总</span><span class="rv">分润笔数=当前自然月分润流水条数；本月分润=当前自然月正向分润金额合计−退款扣回金额；退款订单=当前自然月退款扣回流水条数</span></div>
+          <div class="req-rule-item"><span class="rk">分类汇总</span><span class="rv">展示记录仪智能服务、货车ETC设备激活、客车ETC延保三类当前自然月对应分润金额；金额来自分润流水按产品类型汇总；仅展示，不支持点击筛选</span></div>
+          <div class="req-rule-item"><span class="rk">汇总空态</span><span class="rv">无当月数据时，分润笔数、退款订单显示 0，金额显示 ¥0.00；三类分类金额均显示 ¥0.00</span></div>
           <hr class="form-sep"/>
           <p style="margin-bottom:8px;font-weight:700;color:#333;">分润流水列表</p>
           <div class="req-rule-item"><span class="rk">列表范围</span><span class="rv">默认展示全部分润记录，底部展示总笔数与上拉加载提示</span></div>
@@ -723,6 +728,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <div class="req-rule-item"><span class="rk">单条信息</span><span class="rv">展示产品/业务名称、订单或激活信息、发生时间、标签、分润金额与状态</span></div>
           <div class="req-rule-item"><span class="rk">分润金额</span><span class="rv">正向分润显示「+¥金额」；退款扣回显示「−¥金额」并标注「分润已扣回」</span></div>
           <div class="req-rule-item"><span class="rk">排列顺序</span><span class="rv">按发生时间倒序，最新记录在最上方</span></div>
+          <div class="req-rule-item"><span class="rk">列表空态</span><span class="rv">无分润流水时展示“暂无分润记录”，顶部汇总仍展示 0 / ¥0.00</span></div>
         </div>
       </details>
       <details class="req-block">
@@ -742,6 +748,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <div class="req-rule-item"><span class="rk">认证后可修改</span><span class="rv">开户行、银行卡号认证/签约后仍可编辑，提交后生效；姓名、身份证号认证后只读</span></div>
           <div class="req-rule-item"><span class="rk">提交校验</span><span class="rv">所有必填字段均填写后方可提交；缺填则提示"请填写所有必填字段"</span></div>
           <div class="req-rule-item"><span class="rk">提交成功</span><span class="rv">认证状态切换为「已认证」；实名表单隐藏，显示电子签约区块</span></div>
+          <div class="req-rule-item"><span class="rk">认证空态</span><span class="rv">未认证状态下姓名、开户行、银行卡号、身份证号均为空；身份证正反面展示上传占位，不填充演示假数据</span></div>
+          <div class="req-rule-item"><span class="rk">已认证展示</span><span class="rv">已认证状态展示姓名、开户行、银行卡号、身份证号、身份证正反面已上传状态；开户行和银行卡号可编辑保存</span></div>
           <hr class="form-sep"/>
           <p style="margin-bottom:8px;font-weight:700;color:#333;">认证内页 · 电子签约（第二步，实名认证通过后才可发起）</p>
           <div class="req-rule-item"><span class="rk">签约方式</span><span class="rv">点击「前往灵工平台签约 →」跳转灵工平台 H5 / 小程序完成协议签署</span></div>
@@ -768,6 +776,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <div class="req-rule-item"><span class="rk">新增字段</span><span class="rv">总激活绑定率（总激活数/总进货数）/ 记录仪绑定率（激活数/进货数）/ 客车ETC激活率（激活数/进货数）/ 货车ETC激活率（激活数/进货数）/ 分润金额 / 销售人员姓名</span></div>
       <div class="req-rule-item"><span class="rk">绑定率说明</span><span class="rv">绑定率 = 激活绑定数 / 进货总数，格式：「XX%（激活数/进货数）」；不涉及该产品的渠道显示「—」</span></div>
       <div class="req-rule-item"><span class="rk">操作列</span><span class="rv">「修改」按钮：打开编辑弹窗回填当前数据</span></div>
+      <div class="req-rule-item"><span class="rk">列表空态</span><span class="rv">无渠道数据或筛选无结果时展示“暂无渠道数据”，不展示模拟空行；新增渠道仍可通过右上角按钮进入</span></div>
 
       <hr class="form-sep"/>
       <p style="margin-bottom:8px;font-weight:700;color:#333;">系统审核码机制（MVP 审核流简化方案）</p>
@@ -942,6 +951,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <p style="margin-bottom:8px;font-weight:700;color:#333;">页面数据说明</p>
       <div class="req-rule-item"><span class="rk">统计卡片</span><span class="rv">展示待审核、今日已通过、今日已驳回、今日已打款；来源于提现申请表按状态和审核/打款日期聚合，金额字段取审核通过后已提交打款的申请金额合计</span></div>
       <div class="req-rule-item"><span class="rk">待审核队列</span><span class="rv">展示待运营处理的提现申请，数据来源于代理商小程序提交的提现申请记录，默认按申请时间倒序</span></div>
+      <div class="req-rule-item"><span class="rk">队列空态</span><span class="rv">无待审核申请时，统计卡“待审核”显示 0，列表展示“暂无待审核提现申请”</span></div>
       <div class="req-rule-item"><span class="rk">列表字段</span><span class="rv">申请时间、渠道名称、代理商登录手机号（脱敏）、申请金额、可提现余额、认证状态、签约状态、操作</span></div>
       <div class="req-rule-item"><span class="rk">字段来源</span><span class="rv">申请时间/申请金额来自提现申请记录；渠道名称/手机号来自渠道管理；可提现余额来自代理账户余额；认证状态/签约状态来自实名认证与电子签约状态</span></div>
       <div class="req-rule-item"><span class="rk">审核场景</span><span class="rv">待审核队列需覆盖三类状态：未认证未签约、已认证未签约、已认证已签约；点击「通过」分别展示实名拦截、签约拦截、确认通过；未认证/未签约拦截弹窗内仅提供「驳回」按钮，点击后直接按「未认证」或「未签约」作为驳回原因</span></div>
@@ -1121,6 +1131,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
             <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">参考截图</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">套餐订单退款图、延保订单退款图</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">原型内 base64 图片，仅作现有后台入口说明，不从本地加载</td></tr>
             <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">演示列表</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">来源页面、订单号、所属渠道、分润情况、操作</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">订单系统 + 分润入账记录 + 渠道配置 + 提现关联状态</td></tr>
             <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">分润情况</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">不参与分润 / 涉及分润·未提现 / 涉及分润·已提现</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">依据订单是否命中分润规则，以及分润是否已进入完成状态提现批次判断</td></tr>
+            <tr><td style="padding:5px 8px;border:1px solid #e8e8e8;">列表空态</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">无可退款订单 / 查询无结果</td><td style="padding:5px 8px;border:1px solid #e8e8e8;">展示“暂无退款订单”，不展示退款按钮</td></tr>
           </tbody>
         </table>
         <p style="font-weight:700;color:#333;margin-bottom:6px;">退款判断逻辑（三分支）</p>
