@@ -947,9 +947,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <div class="req-rule-item"><span class="rk">待审核队列</span><span class="rv">展示待运营处理的提现申请，数据来源于代理商小程序提交的提现申请记录，默认按申请时间倒序</span></div>
       <div class="req-rule-item"><span class="rk">列表字段</span><span class="rv">申请时间、渠道名称、代理商登录手机号（脱敏）、申请金额、可提现余额、认证状态、签约状态、操作</span></div>
       <div class="req-rule-item"><span class="rk">字段来源</span><span class="rv">申请时间/申请金额来自提现申请记录；渠道名称/手机号来自渠道管理；可提现余额来自代理账户余额；认证状态/签约状态来自实名认证与电子签约状态</span></div>
+      <div class="req-rule-item"><span class="rk">审核场景</span><span class="rv">待审核队列需覆盖三类状态：未认证未签约、已认证未签约、已认证已签约；点击「通过」分别展示实名拦截、签约拦截、确认通过</span></div>
       <hr class="form-sep"/>
       <p style="margin-bottom:8px;font-weight:700;color:#333;">审核操作说明</p>
-      <div class="req-rule-item"><span class="rk">通过前置校验</span><span class="rv">运营点击「通过」前，系统自动校验代理商已完成<strong>实名认证</strong>且已完成<strong>电子签约</strong>；任一未完成则拦截并提示，不能通过</span></div>
+      <div class="req-rule-item"><span class="rk">通过前置校验</span><span class="rv">运营点击「通过」前，系统自动校验代理商已完成<strong>实名认证</strong>且已完成<strong>电子签约</strong>；覆盖未认证未签约、已认证未签约、已认证已签约三种场景，任一未完成则拦截并提示，不能通过</span></div>
       <div class="req-rule-item"><span class="rk">通过确认弹窗</span><span class="rv">通过时弹出确认提示，文案包含渠道名称；确认后状态变为审核通过，并下发「提现审核通过」微信通知，后续等待打款</span></div>
       <div class="req-rule-item"><span class="rk">驳回弹窗</span><span class="rv">驳回时弹出原因输入框；驳回原因必填，写入提现记录，并下发「提现审核未通过」微信通知</span></div>
       <div class="req-rule-item"><span class="rk">退款限制联动</span><span class="rv">提现通过后，与该提现批次关联的分润视为已提现；对应订单进入退款规则情形③，不支持线上自动退款</span></div>
@@ -959,7 +960,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
   <div style="font-size:12px;color:#888;margin-bottom:14px;">首页 › 后台管理 › <span style="color:#1677ff;">提现审核</span></div>
 
   <div class="stat-grid">
-    <div class="stat-card"><div class="stat-val" style="color:#fa8c16;">3</div><div class="stat-lbl">待审核</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#fa8c16;">4</div><div class="stat-lbl">待审核</div></div>
     <div class="stat-card"><div class="stat-val" style="color:#52c41a;">8</div><div class="stat-lbl">今日已通过</div></div>
     <div class="stat-card"><div class="stat-val" style="color:#ff4d4f;">1</div><div class="stat-lbl">今日已驳回</div></div>
     <div class="stat-card"><div class="stat-val" style="color:#1677ff;">¥24,600</div><div class="stat-lbl">今日已打款</div></div>
@@ -978,6 +979,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <th>操作</th>
       </tr>
       <tr>
+        <td style="font-size:12px;white-space:nowrap;">2026-04-28 11:05</td>
+        <td><strong>鑫通车服</strong><div style="font-size:11px;color:#999;">137****6601</div></td>
+        <td style="font-weight:700;color:#1677ff;">¥1,200.00</td>
+        <td>¥2,860.00</td>
+        <td><span class="tag t-orange">未认证</span></td>
+        <td><span class="tag t-orange">未签约</span></td>
+        <td>
+          <button class="btn btn-sm" style="background:#52c41a;color:#fff;border:none;margin-right:4px;" onclick="doWithdrawApprove('鑫通车服','unauth')">通过</button>
+          <button class="btn btn-sm btn-danger-ghost" onclick="doWithdrawReject()">驳回</button>
+        </td>
+      </tr>
+      <tr>
         <td style="font-size:12px;white-space:nowrap;">2026-04-28 10:22</td>
         <td><strong>黄石新捷顺名车</strong><div style="font-size:11px;color:#999;">139****9920</div></td>
         <td style="font-weight:700;color:#1677ff;">¥2,000.00</td>
@@ -985,7 +998,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
         <td><span class="tag t-green">已认证</span></td>
         <td><span class="tag t-orange">未签约</span></td>
         <td>
-          <button class="btn btn-sm" style="background:#52c41a;color:#fff;border:none;margin-right:4px;" onclick="doWithdrawApprove('黄石新捷顺名车','未签约')">通过</button>
+          <button class="btn btn-sm" style="background:#52c41a;color:#fff;border:none;margin-right:4px;" onclick="doWithdrawApprove('黄石新捷顺名车','unsigned')">通过</button>
           <button class="btn btn-sm btn-danger-ghost" onclick="doWithdrawReject()">驳回</button>
         </td>
       </tr>
@@ -2117,11 +2130,22 @@ function showWithdrawReviewResult(title, body, icon) {
 
 /* ── 提现审核操作 ── */
 function doWithdrawApprove(channelName, signStatus) {
-  if (signStatus !== 'ok') {
+  if (signStatus === 'unauth') {
     openWithdrawReviewModal({
       title: '审核被拦截',
       icon: '⚠️',
-      body: '渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
+      body: '渠道「' + channelName + '」尚未完成实名认证，无法通过提现审核。
+请联系代理商前往「我的 — 认证/签约」完成实名认证及电子签约后再审核。',
+      buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
+    });
+    return;
+  }
+  if (signStatus === 'unsigned') {
+    openWithdrawReviewModal({
+      title: '审核被拦截',
+      icon: '⚠️',
+      body: '渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。
+请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
       buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
     });
     return;
@@ -2129,7 +2153,8 @@ function doWithdrawApprove(channelName, signStatus) {
   openWithdrawReviewModal({
     title: '确认通过提现申请',
     icon: '✅',
-    body: '确认通过渠道「' + channelName + '」的提现申请？\n通过后将提交灵工平台打款，并下发微信通知。',
+    body: '确认通过渠道「' + channelName + '」的提现申请？
+通过后将提交灵工平台打款，并下发微信通知。',
     buttons: [
       { label:'取消', onClick: closeWithdrawReviewModal },
       { label:'确认通过', primary:true, onClick:function(){
