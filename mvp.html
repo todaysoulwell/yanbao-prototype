@@ -958,8 +958,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <hr class="form-sep"/>
       <p style="margin-bottom:8px;font-weight:700;color:#333;">审核操作说明</p>
       <div class="req-rule-item"><span class="rk">通过前置校验</span><span class="rv">运营点击「通过」前，系统自动校验代理商已完成<strong>实名认证</strong>且已完成<strong>电子签约</strong>；覆盖未认证未签约、已认证未签约、已认证已签约三种场景，任一未完成则拦截并提示，不能通过</span></div>
-      <div class="req-rule-item"><span class="rk">通过确认弹窗</span><span class="rv">通过时弹出确认提示，文案包含渠道名称；确认后状态变为审核通过，并下发「提现审核通过」微信通知，后续等待打款</span></div>
-      <div class="req-rule-item"><span class="rk">驳回弹窗</span><span class="rv">驳回时弹出原因输入框；驳回原因必填，写入提现记录，并下发「提现审核未通过」微信通知</span></div>
+      <div class="req-rule-item"><span class="rk">通过确认弹窗</span><span class="rv">通过时弹出确认提示，不展示渠道名称；确认后状态变为审核通过，后续等待打款</span></div>
+      <div class="req-rule-item"><span class="rk">驳回弹窗</span><span class="rv">人工点击「驳回」时弹出原因输入框且原因必填；未认证/未签约拦截弹窗点击「驳回」时系统自动写入「未认证」或「未签约」原因</span></div>
       <div class="req-rule-item"><span class="rk">退款限制联动</span><span class="rv">提现通过后，与该提现批次关联的分润视为已提现；对应订单进入退款规则情形③，不支持线上自动退款</span></div>
     </div>
   </details>
