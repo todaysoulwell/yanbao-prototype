@@ -947,7 +947,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
       <div class="req-rule-item"><span class="rk">待审核队列</span><span class="rv">展示待运营处理的提现申请，数据来源于代理商小程序提交的提现申请记录，默认按申请时间倒序</span></div>
       <div class="req-rule-item"><span class="rk">列表字段</span><span class="rv">申请时间、渠道名称、代理商登录手机号（脱敏）、申请金额、可提现余额、认证状态、签约状态、操作</span></div>
       <div class="req-rule-item"><span class="rk">字段来源</span><span class="rv">申请时间/申请金额来自提现申请记录；渠道名称/手机号来自渠道管理；可提现余额来自代理账户余额；认证状态/签约状态来自实名认证与电子签约状态</span></div>
-      <div class="req-rule-item"><span class="rk">审核场景</span><span class="rv">待审核队列需覆盖三类状态：未认证未签约、已认证未签约、已认证已签约；点击「通过」分别展示实名拦截、签约拦截、确认通过；未认证/未签约拦截弹窗内提供「驳回」按钮</span></div>
+      <div class="req-rule-item"><span class="rk">审核场景</span><span class="rv">待审核队列需覆盖三类状态：未认证未签约、已认证未签约、已认证已签约；点击「通过」分别展示实名拦截、签约拦截、确认通过；未认证/未签约拦截弹窗内提供「驳回」按钮，点击后直接按「未认证」或「未签约」作为驳回原因</span></div>
       <hr class="form-sep"/>
       <p style="margin-bottom:8px;font-weight:700;color:#333;">审核操作说明</p>
       <div class="req-rule-item"><span class="rk">通过前置校验</span><span class="rv">运营点击「通过」前，系统自动校验代理商已完成<strong>实名认证</strong>且已完成<strong>电子签约</strong>；覆盖未认证未签约、已认证未签约、已认证已签约三种场景，任一未完成则拦截并提示，不能通过</span></div>
@@ -2136,7 +2136,7 @@ function doWithdrawApprove(channelName, signStatus) {
       icon: '⚠️',
       body: '尚未完成实名认证，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成实名认证及电子签约后再审核。',
       buttons: [
-        { label:'驳回', onClick: doWithdrawReject },
+        { label:'驳回', onClick:function(){ showWithdrawReviewResult('已驳回', '驳回原因：未认证', '❌'); } },
         { label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }
       ]
     });
@@ -2148,7 +2148,7 @@ function doWithdrawApprove(channelName, signStatus) {
       icon: '⚠️',
       body: '尚未完成电子签约，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
       buttons: [
-        { label:'驳回', onClick: doWithdrawReject },
+        { label:'驳回', onClick:function(){ showWithdrawReviewResult('已驳回', '驳回原因：未签约', '❌'); } },
         { label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }
       ]
     });
