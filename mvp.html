@@ -278,7 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
               </div>
             </div>
             <button onclick="go('agent')" style="width:100%;padding:13px;background:#1677ff;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">登 录</button>
-            <div style="text-align:center;margin-top:16px;font-size:11px;color:#bbb;">登录即代表同意<span onclick="alert('演示：跳转用户协议页面')" style="color:#1677ff;cursor:pointer;">用户协议</span>与<span onclick="alert('演示：跳转隐私政策页面')" style="color:#1677ff;cursor:pointer;">隐私政策</span></div>
+            <div style="text-align:center;margin-top:16px;font-size:11px;color:#bbb;">登录即代表同意<span onclick="openAgreementPage('user')" style="color:#1677ff;cursor:pointer;">用户协议</span>与<span onclick="openAgreementPage('privacy')" style="color:#1677ff;cursor:pointer;">隐私政策</span></div>
           </div>
         </div>
       </div>
@@ -292,7 +292,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <div class="req-rule-item"><span class="rk">未绑定手机号</span><span class="rv">提示「该手机号未绑定任何渠道，请联系运营配置」</span></div>
           <div class="req-rule-item"><span class="rk">验证码有效期</span><span class="rv">5 分钟；60 秒后可重新获取</span></div>
           <div class="req-rule-item"><span class="rk">登录后跳转</span><span class="rv">代理商账户首页（账户 Tab）</span></div>
-          <div class="req-rule-item"><span class="rk">协议入口</span><span class="rv">登录页展示“登录即代表同意用户协议与隐私政策”，其中“用户协议”“隐私政策”均可点击打开对应协议页面</span></div>
+          <div class="req-rule-item"><span class="rk">协议入口</span><span class="rv">登录页展示“登录即代表同意用户协议与隐私政策”，其中“用户协议”“隐私政策”均可点击打开对应协议正文页面</span></div>
         </div>
       </details>
     </div>
@@ -557,11 +557,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
               <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">登录手机号</span><span style="font-size:12px;font-weight:600;color:#333;font-family:monospace;">139****9920</span></div>
               <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">代理渠道</span><span style="font-size:12px;color:#333;">黄石新捷顺名车</span></div>
               <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;"><span style="font-size:12px;color:#888;">负责销售</span><span style="font-size:12px;color:#333;">张明</span></div>
-              <div onclick="alert('演示：跳转用户协议页面')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer;">
+              <div onclick="openAgreementPage('user')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer;">
                 <span style="font-size:12px;color:#333;">用户协议</span>
                 <span style="font-size:14px;color:#bbb;">›</span>
               </div>
-              <div onclick="alert('演示：跳转隐私协议页面')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;cursor:pointer;">
+              <div onclick="openAgreementPage('privacy')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;cursor:pointer;">
                 <span style="font-size:12px;color:#333;">隐私协议</span>
                 <span style="font-size:14px;color:#bbb;">›</span>
               </div>
@@ -734,7 +734,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
           <p style="margin-bottom:8px;font-weight:700;color:#333;">个人资料展示</p>
           <div class="req-rule-item"><span class="rk">渠道名称</span><span class="rv">展示该代理商所属渠道名称，取后台渠道管理配置</span></div>
           <div class="req-rule-item"><span class="rk">登录手机号</span><span class="rv">脱敏展示（中间4位替换为 ****）</span></div>
-          <div class="req-rule-item"><span class="rk">用户协议 / 隐私协议</span><span class="rv">列表底部展示两条可点击链接，点击打开对应协议页面</span></div>
+          <div class="req-rule-item"><span class="rk">用户协议 / 隐私协议</span><span class="rv">列表底部展示两条可点击链接，点击打开对应协议正文页面</span></div>
           <hr class="form-sep"/>
           <p style="margin-bottom:8px;font-weight:700;color:#333;">认证/签约入口</p>
           <div class="req-rule-item"><span class="rk">入口样式</span><span class="rv">单行卡片，右侧实时展示当前状态摘要（未认证·未签约 / 已认证·未签约 / 已认证·已签约）</span></div>
@@ -1228,6 +1228,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
   </div>
 </div>
 
+
+<!-- ═══ 协议详情页：用户协议 / 隐私政策 ═══ -->
+<div class="modal-mask" id="agreement-page-mask" style="z-index:1200;" onclick="if(event.target===this)closeAgreementPage()">
+  <div class="modal-box" style="width:760px;max-width:92vw;" onclick="event.stopPropagation();">
+    <div class="modal-head">
+      <span class="modal-head-title" id="agreement-page-title">用户协议</span>
+      <button class="modal-close" onclick="closeAgreementPage()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px 22px;max-height:72vh;overflow:auto;background:#fff;">
+      <pre id="agreement-page-content" style="white-space:pre-wrap;word-break:break-word;margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;font-size:13px;line-height:1.9;color:#333;"></pre>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ 弹窗：提现审核通过 / 驳回 ═══ -->
+<div class="modal-mask" id="withdraw-review-modal-mask" style="z-index:1100;" onclick="if(event.target===this)closeWithdrawReviewModal()">
+  <div class="modal-box modal-box-sm" onclick="event.stopPropagation();">
+    <div class="modal-head">
+      <span class="modal-head-title" id="wrm-title">提现审核</span>
+      <button class="modal-close" onclick="closeWithdrawReviewModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="wrm-icon" style="font-size:28px;text-align:center;margin:4px 0 8px;">⚠️</div>
+      <div id="wrm-body" style="font-size:13px;color:#333;line-height:1.8;text-align:center;white-space:pre-wrap;margin-bottom:12px;"></div>
+      <div id="wrm-reason-wrap" style="display:none;margin-top:8px;">
+        <textarea id="wrm-reason" placeholder="请输入驳回原因" maxlength="120" style="width:100%;min-height:80px;box-sizing:border-box;padding:8px 10px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+        <div id="wrm-err" style="display:none;font-size:12px;color:#ff4d4f;margin-top:6px;">请填写驳回原因</div>
+      </div>
+    </div>
+    <div class="modal-foot" id="wrm-foot"></div>
+  </div>
+</div>
+
 <!-- ═══ 弹窗：渠道新增/修改 ═══ -->
 <div class="modal-mask" id="channel-modal-mask" onclick="if(event.target===this)closeChannelModal()">
   <div class="modal-box">
@@ -1482,6 +1516,144 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue'
 <script>
 /* ── 页面导航 ── */
 var _pages = ['intro','login','agent','channel-admin','store-mgmt','withdraw-admin','refund'];
+
+/* ── 协议详情页 ── */
+var AGREEMENT_CONTENTS = {
+  user: { title: '用户协议', body: `用户协议
+
+更新时间：2026年04月30日
+生效时间：2026年04月30日
+
+三川在线（杭州）信息技术有限公司，作为“代理渠道延保分润系统”及相关小程序服务的所有权人及相关知识产权的拥有者，为代理商用户提供渠道分润查询、分润记录展示、实名认证、电子签约、提现申请、提现进度查询、退款扣回记录展示等服务。
+
+用户在注册、登录、使用本平台，或在线点击、勾选“我已阅读并同意”“同意用户协议”等确认操作后，即视为用户已充分阅读、理解并接受本协议全部内容。
+
+一、相关定义
+1. 甲方：三川在线（杭州）信息技术有限公司。
+2. 乙方 / 用户：使用本平台代理商小程序、运营后台或相关服务的代理商、渠道方或经授权人员。
+3. 本平台：代理渠道延保分润系统、代理商小程序、运营后台及相关服务能力。
+4. 分润：乙方基于渠道关系，因记录仪智能服务、客车 ETC 延保服务、货车 ETC 设备激活等业务产生的可结算收益。
+5. 待提现余额：乙方已产生且尚未完成提现的分润金额，以平台展示和后台结算数据为准。
+6. 提现：乙方完成实名认证、电子签约等必要流程后，申请将可提现分润金额结算至指定账户的行为。
+7. 退款扣回：因订单退款导致对应分润需从乙方待提现余额中扣减，并在分润记录中形成负向流水的情形。
+
+二、服务内容
+本平台为乙方提供代理渠道分润相关服务，包括查看渠道信息、待提现余额、累计分润、已提现金额、分润记录、退款扣回记录；进行实名认证、银行卡信息提交及维护、电子签约；提交提现申请；查看提现审核状态；接收分润入账、提现审核、提现到账等相关通知。
+
+三、乙方的权利及义务
+1. 乙方应使用真实、合法、有效的信息注册、登录及使用本平台，并保证所提交信息真实、完整、准确、及时。
+2. 乙方应确保登录手机号与运营后台配置的代理商电话一致。因信息错误导致无法登录、无法提现、通知无法送达或其他损失的，由乙方自行承担。
+3. 乙方应妥善保管账号、验证码及相关身份认证信息。凡通过乙方账号、手机号验证码等方式完成的操作，均视为乙方本人或经乙方授权的操作。
+4. 乙方在申请提现前，应完成实名认证及电子签约。未完成实名认证或电子签约的，平台有权限制提现申请。
+5. 乙方应如实提交实名认证信息、银行卡信息、身份证件照片等资料。因乙方提交虚假、错误、不完整或过期资料导致认证失败、提现失败、资金延迟到账或其他损失的，由乙方自行承担。
+6. 乙方理解并同意，因订单退款、订单取消、异常交易、分润规则调整、重复入账、错误入账等原因，平台有权对乙方待提现余额进行相应调整或扣回。
+7. 如订单对应分润尚未提现，订单退款后平台可从乙方待提现余额中扣减对应分润，并在分润记录中展示退款扣回流水。
+8. 如订单对应分润已经提现，平台可能无法在线自动扣回该分润。乙方应配合甲方或运营人员进行线下退款、差额结算或其他合理处理。
+9. 乙方不得利用本平台从事虚假注册、冒用他人身份、骗取分润、恶意提现、扰乱系统秩序、上传违法违规资料等行为。
+
+四、甲方的权利及义务
+1. 甲方依法享有本平台内容、系统、页面、数据结构、商标、著作权及其他合法权益。
+2. 甲方应在合理范围内为乙方提供分润查询、提现申请、认证签约、退款扣回展示等服务。
+3. 甲方有权根据业务规则、渠道配置、订单状态、设备激活状态、分润比例或分润金额等数据计算乙方分润，具体结果以平台系统记录为准。
+4. 甲方有权根据业务运营、系统安全、合规要求对渠道分润规则、提现规则、退款规则等进行调整。
+5. 甲方有权对乙方提交的实名认证信息、银行卡信息、签约状态、提现申请等进行校验。未通过校验的，甲方有权拒绝或暂缓提现。
+6. 对异常分润、异常提现、疑似违规行为，甲方有权进行核查，并可在核查期间暂停相关提现或冻结相关金额。
+
+五、分润及提现规则
+1. MVP 分润链路包括记录仪智能服务、客车 ETC 延保、货车 ETC 设备激活三类。
+2. 分润金额、分润比例、绑定渠道、结算状态等以甲方系统记录为准。
+3. 乙方提现前须完成实名认证及电子签约，并确保提现金额不超过当前可提现余额。
+4. 提现申请提交后需经运营审核。审核通过后进入打款流程；审核驳回的，平台将展示驳回原因。
+5. 提现审核通过或打款完成后，相关分润可能被认定为已提现。已提现分润对应订单发生退款时，可能无法通过系统自动完成线上退款，需按平台退款规则线下处理。
+
+六、退款及扣回规则
+1. 若订单不参与分润，退款成功后不影响乙方待提现余额。
+2. 若订单已产生分润但对应分润尚未提现，订单退款后平台有权从乙方待提现余额中扣减对应分润，并生成退款扣回记录。
+3. 若订单对应分润已经提现，平台不支持自动线上退款。乙方应配合甲方、运营人员或相关合作方进行线下退款及差额处理。
+
+七、通知与消息
+乙方同意甲方可通过小程序消息、微信订阅通知、短信、电话、平台公告等方式向乙方发送与分润、提现、审核、退款、账户安全、协议变更相关的信息。未授权微信订阅通知不影响业务流程，但可能导致乙方无法及时收到状态提醒。
+
+八、违约责任
+乙方提交虚假信息、冒用他人身份、骗取分润、恶意提现、拒不配合退款扣回或从事其他违法违规行为的，甲方有权采取限制登录、暂停提现、冻结账户、追回款项、列入黑名单、向有权机关报案等措施。
+
+九、协议变更与服务调整
+甲方有权根据法律法规、监管要求、业务调整、系统升级等情况修改本协议或平台规则。乙方继续使用本平台服务的，视为接受修改后的协议。
+
+十、争议解决
+因本协议履行发生的任何争议，双方应友好协商解决。协商不成的，任何一方均可向三川在线（杭州）信息技术有限公司所在地有管辖权的人民法院提起诉讼。
+
+十一、其他
+本协议自乙方点击“同意”“我已阅读并同意”或实际使用本平台服务之日起生效，对双方均具有约束力。` },
+  privacy: { title: '隐私政策', body: `隐私政策
+
+更新时间：2026年04月30日
+生效时间：2026年04月30日
+
+三川在线（杭州）信息技术有限公司（以下简称“我们”）深知个人信息对您的重要性，并会尽力保护您的个人信息安全可靠。我们将按照合法、正当、必要、诚信的原则处理您的个人信息，并采取与业务场景相匹配的安全保护措施，保护您的个人信息及业务数据安全。
+
+本隐私政策适用于“代理渠道延保分润系统”及相关代理商小程序、运营后台服务。您在注册、登录、使用本平台，或在线点击、勾选“我已阅读并同意”“同意隐私政策”等确认操作后，即表示您已阅读、理解并同意本政策的全部内容。
+
+一、我们如何收集和使用您的个人信息
+
+（一）注册、登录及身份识别
+为识别您的代理商身份、完成小程序登录及渠道绑定，我们可能收集和使用手机号、短信验证码验证结果、登录时间、登录状态、所属渠道名称、渠道编号、与渠道管理中配置的代理商电话的匹配结果。
+
+（二）实名认证及电子签约
+为满足提现前的身份核验、合规结算及电子签约要求，我们可能收集和使用姓名、身份证号、身份证正反面照片、开户行、银行卡号、电子签约状态、签约时间、签约结果，以及灵工平台或其他合作签约服务方返回的签约状态信息。若您拒绝提供相关信息，可能无法申请提现或完成结算服务。
+
+（三）分润查询与账户余额
+为向您展示分润记录、待提现余额、累计分润、已提现金额及退款扣回记录，我们可能处理所属渠道、分润来源业务类型、订单号或业务流水号、设备标识信息（如 IMEI、SN 号）、分润金额、分润入账时间、分润状态、退款扣回金额、退款扣回时间、提现关联状态。
+
+（四）提现申请与提现审核
+为处理提现申请、运营审核及打款状态展示，我们可能收集和使用申请提现金额、提现申请时间、当前可提现余额、实名认证状态、电子签约状态、提现审核状态、驳回原因、打款状态、打款时间、收款银行卡尾号或必要银行卡信息、提现批次与分润流水关联关系。
+
+（五）退款及分润扣回
+订单发生退款时，我们可能处理订单号、订单金额、所属渠道、分润金额、分润是否已提现、退款金额、退款原因、退款时间、需线下退款金额、代理人姓名和手机号等必要联系信息，用于判断是否扣回分润、是否进入线下退款流程及处理争议对账。
+
+（六）消息通知
+为向您发送与分润、提现、审核、到账等相关的状态通知，我们可能使用微信订阅通知授权状态、手机号、分润入账金额、产品类型、入账时间、提现申请金额、审核结果、驳回原因、到账时间、通知发送状态。未授权微信订阅通知不影响业务流程，但可能无法及时收到提醒。
+
+（七）系统安全、风控及日志
+为保障系统安全、识别异常操作、防范欺诈、排查故障、改进服务，我们可能收集和使用设备型号、操作系统版本、网络状态、IP 地址、登录时间、操作日志、页面访问记录、点击行为、接口调用结果、异常报错信息、设备标识符或小程序运行环境信息。
+
+二、我们如何使用 Cookie、SDK 或类似技术
+本平台可能使用微信小程序基础能力、统计分析工具、短信服务、电子签约服务、消息通知服务、支付或打款相关服务等第三方 SDK 或接口。我们接入第三方服务时，将遵循合法、正当、必要原则，并要求第三方按照本政策及相关法律法规处理您的信息。
+
+三、我们如何共享、转让、公开披露您的个人信息
+我们不会向无关第三方共享您的个人信息，但在获得您的明确同意、根据法律法规或有权机关要求、为完成实名认证、电子签约、提现打款、短信验证码、微信订阅通知、订单退款、售后处理等必要服务时，可能与授权合作伙伴共享必要信息。合作方包括短信服务提供方、微信服务、灵工平台或电子签约服务提供方、银行/支付/打款服务提供方、订单/设备/延保/售后业务系统服务方、数据存储和安全风控服务方。
+
+四、我们如何保存您的个人信息
+我们将在实现本政策所述目的所必需的最短期限内保存您的个人信息。实名认证、电子签约、提现、分润、退款、财务结算等信息，可能因法律法规、税务监管、财务审计、争议处理需要保存较长时间。超出保存期限后，我们将依法删除或匿名化处理。
+
+五、我们如何保护您的个人信息
+我们将采用符合业界标准的安全保护措施保护您的个人信息，防止数据遭到未经授权访问、公开披露、使用、修改、损坏或丢失。我们会使用加密、访问控制、权限管理、日志审计、安全监控等措施保护您的个人信息和业务数据。请您妥善保管手机号、验证码、登录凭证、银行卡信息等，不要向他人泄露。
+
+六、您的权利
+在法律法规允许范围内，您有权查询、更正、补充、删除您的个人信息，撤回授权同意，注销账号或停止使用服务，获取个人信息副本，并进行投诉或举报。为保障账户安全，我们可能需要核验您的身份后再处理请求。
+
+七、未成年人保护
+本平台主要面向具备完全民事行为能力的代理商或经授权使用平台的人员。若您为未成年人，请在监护人同意和指导下使用本平台。
+
+八、隐私政策如何更新
+我们可能根据法律法规、监管要求、业务调整、系统升级等情况适时更新本隐私政策。若更新涉及您的重要权利或敏感个人信息处理方式变化，我们将以显著方式提示您。您继续使用本平台服务，即表示接受更新后的隐私政策。
+
+九、如何联系我们
+如您对本隐私政策或个人信息保护相关事项有任何疑问、意见、建议、投诉或举报，可通过平台运营人员、客服渠道联系。公司名称：三川在线（杭州）信息技术有限公司。
+
+十、其他
+本政策是《用户协议》的重要组成部分，与《用户协议》具有同等法律效力。本政策未尽事宜，按照法律法规、本平台规则及《用户协议》执行。` }
+};
+function openAgreementPage(type) {
+  var item = AGREEMENT_CONTENTS[type] || AGREEMENT_CONTENTS.user;
+  document.getElementById('agreement-page-title').textContent = item.title;
+  document.getElementById('agreement-page-content').textContent = item.body;
+  document.getElementById('agreement-page-mask').style.display = 'flex';
+}
+function closeAgreementPage() {
+  document.getElementById('agreement-page-mask').style.display = 'none';
+}
+
 function go(name) {
   _pages.forEach(function(p) {
     var el = document.getElementById('page-' + p);
@@ -1910,21 +2082,79 @@ function _saveBankInfoMvp() {
   });
 }
 
+
+/* ── 提现审核弹窗 ── */
+function _btn(label, primary, handler) {
+  var b = document.createElement('button');
+  b.textContent = label;
+  b.className = primary ? 'btn btn-primary' : 'btn btn-ghost';
+  b.onclick = handler;
+  return b;
+}
+function openWithdrawReviewModal(opts) {
+  document.getElementById('wrm-title').textContent = opts.title || '提现审核';
+  document.getElementById('wrm-icon').textContent = opts.icon || '⚠️';
+  document.getElementById('wrm-body').textContent = opts.body || '';
+  document.getElementById('wrm-reason-wrap').style.display = opts.reason ? 'block' : 'none';
+  document.getElementById('wrm-err').style.display = 'none';
+  document.getElementById('wrm-reason').value = '';
+  var foot = document.getElementById('wrm-foot');
+  foot.innerHTML = '';
+  (opts.buttons || [{ label:'我知道了', primary:true, onClick:closeWithdrawReviewModal }]).forEach(function(b){
+    foot.appendChild(_btn(b.label, !!b.primary, b.onClick || closeWithdrawReviewModal));
+  });
+  document.getElementById('withdraw-review-modal-mask').style.display = 'flex';
+}
+function closeWithdrawReviewModal() {
+  document.getElementById('withdraw-review-modal-mask').style.display = 'none';
+}
+function showWithdrawReviewResult(title, body, icon) {
+  openWithdrawReviewModal({
+    title: title, icon: icon || '✅', body: body,
+    buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
+  });
+}
+
 /* ── 提现审核操作 ── */
 function doWithdrawApprove(channelName, signStatus) {
   if (signStatus !== 'ok') {
-    alert('⚠️ 审核被拦截\n\n渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。\n\n请联系代理商前往「我的 — 认证/签约」完成签约后再审核。');
+    openWithdrawReviewModal({
+      title: '审核被拦截',
+      icon: '⚠️',
+      body: '渠道「' + channelName + '」尚未完成电子签约，无法通过提现审核。\n请联系代理商前往「我的 — 认证/签约」完成签约后再审核。',
+      buttons: [{ label:'我知道了', primary:true, onClick: closeWithdrawReviewModal }]
+    });
     return;
   }
-  if (confirm('确认通过渠道「' + channelName + '」的提现申请？\n通过后将提交灵工平台打款，并下发微信通知。')) {
-    alert('✅ 已通过（演示）\n已下发「提现审核通过」微信通知，待灵工平台打款。');
-  }
+  openWithdrawReviewModal({
+    title: '确认通过提现申请',
+    icon: '✅',
+    body: '确认通过渠道「' + channelName + '」的提现申请？\n通过后将提交灵工平台打款，并下发微信通知。',
+    buttons: [
+      { label:'取消', onClick: closeWithdrawReviewModal },
+      { label:'确认通过', primary:true, onClick:function(){
+          showWithdrawReviewResult('已通过', '已下发「提现审核通过」微信通知，待灵工平台打款。', '✅');
+        }
+      }
+    ]
+  });
 }
 function doWithdrawReject() {
-  var reason = prompt('请填写驳回原因（必填）：');
-  if (reason && reason.trim()) {
-    alert('已驳回（演示）\n驳回原因：' + reason.trim() + '\n已下发「提现审核未通过」微信通知。');
-  }
+  openWithdrawReviewModal({
+    title: '驳回提现申请',
+    icon: '❌',
+    body: '请填写驳回原因，原因将写入提现记录并通知代理商。',
+    reason: true,
+    buttons: [
+      { label:'取消', onClick: closeWithdrawReviewModal },
+      { label:'确认驳回', primary:true, onClick:function(){
+          var reason = (document.getElementById('wrm-reason').value || '').trim();
+          if (!reason) { document.getElementById('wrm-err').style.display = 'block'; return; }
+          showWithdrawReviewResult('已驳回', '驳回原因：' + reason + '\n已下发「提现审核未通过」微信通知。', '❌');
+        }
+      }
+    ]
+  });
 }
 
 /* ── 进销存详情 ── */
